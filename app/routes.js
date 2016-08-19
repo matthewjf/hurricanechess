@@ -1,6 +1,8 @@
 import React from 'react';
-import {Route} from 'react-router';
+import {IndexRoute, Route} from 'react-router';
 import App from './components/App';
+
+// import GameIndex from './components/games/index';
 import Home from './components/Home';
 
 export default (

@@ -1,0 +1,50 @@
+$dark-0: hsl(0,0%,15%);
+$dark-1: hsl(0,0%,18%);
+$dark-2: hsl(0,0%,26%);
+$dark-3: hsl(0,0%,36%);
+$primary-color: color("orange", "lighten-1");
+$secondary-color: color("red", "lighten-2");
+$success-color: color("green", "darken-2");
+$error-color: color("red", "lighten-1");
+$link-color: color("light-blue", "base");
+
+#game-index {
+  max-width: 800px;
+  width: 100%;
+
+  h2 {
+    margin: 1rem 0;
+    font-size: 1.5rem;
+    color: color('grey', 'darken-1');
+  }
+
+  #game-list {
+
+    li {
+      margin-bottom: 0;
+      opacity: 0;
+      animation: new-item-animation .3s ease forwards;
+    }
+    @keyframes new-item-animation {
+      from {
+        opacity: 0;
+        transform: translateY(-400px);
+      }
+      to {
+          opacity: 1;
+          transform : translateY(0);
+      }
+    }
+
+    .game {
+      background-color: $dark-2;
+      cursor: pointer;
+      display: block;
+      color: white;
+
+      &:hover {
+        background-color: hover($dark-2);
+      }
+    }
+  }
+}

@@ -1,1 +1,92 @@
+@import 'functions';
+@import 'components/_color';
+@import 'colors';
+$primary-color: color("orange", "lighten-1");
+$secondary-color: color("red", "lighten-2");
 @import 'materialize';
+$dark-0: hsl(0,0%,15%);
+$dark-1: hsl(0,0%,18%);
+$dark-2: hsl(0,0%,26%);
+$dark-3: hsl(0,0%,36%);
+$success-color: color("green", "darken-2");
+$error-color: color("red", "lighten-1");
+$link-color: color("light-blue", "base");
+
+@import 'header';
+@import 'games';
+
+* {
+  box-shadow: none !important;
+}
+
+html {
+  font-family: 'Open Sans', sans-serif;
+  background-color: $dark-1;
+  color: white;
+}
+
+main {
+  padding: 1rem;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  #game-index {
+    max-width: 800px;
+    width: 100%;
+  }
+}
+
+.split {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal {
+  background-color: hsl(0,0%,22%);
+  .modal-footer {
+    background-color: hsl(0,0%,22%);
+    padding: 24px;
+  }
+}
+
+form {
+  .input-field label {
+    display: block;
+  }
+}
+
+.btn-success {
+  background-color: $success-color;
+  &:hover {
+    background-color: lighten($success-color, 5%);
+  }
+}
+
+.btn-warning {
+  background-color: $error-color;
+  &:hover {
+    background-color: lighten($error-color, 5%);
+  }
+}
+
+.toast {
+  background-color: $dark-0;
+}
+
+.success-color {
+  color: $success-color;
+}
+
+.success-text {
+  color: $success-color;
+}
+
+.error-text {
+  color: $error-color;
+}
+
+.error-color {
+  background-color: $error-color;
+}

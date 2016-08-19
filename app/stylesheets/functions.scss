@@ -1,0 +1,7 @@
+@function hover($color) {
+  @return lighten($color, 2%);
+}
+
+@function click($color) {
+  @return darken($color, 4%);
+}
