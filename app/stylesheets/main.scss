@@ -15,10 +15,6 @@ $link-color: color("light-blue", "base");
 @import 'header';
 @import 'games';
 
-* {
-  box-shadow: none !important;
-}
-
 html {
   font-family: 'Open Sans', sans-serif;
   background-color: $dark-1;

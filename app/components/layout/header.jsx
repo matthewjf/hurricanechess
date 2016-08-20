@@ -1,7 +1,7 @@
 /* global Materialize */
 
 import React from 'react';
-import browserHistory from 'react-router';
+var browserHistory = require('react-router').browserHistory;
 
 // var UserApi = require('../../util/user_api');
 
@@ -10,6 +10,10 @@ class Header extends React.Component {
     super();
     // return {currentUser: this.props.currentUser};
     this.state = {currentUser: null};
+  }
+  
+  componentDidMount() {
+    $(".button-collapse").sideNav();
   }
 
   // componentWillReceiveProps(props) {
@@ -26,7 +30,7 @@ class Header extends React.Component {
   }
 
 	home() {
-    browserHistory.push('');
+    browserHistory.push('/');
 	}
 
   openLogin() {
