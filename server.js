@@ -33,6 +33,8 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// TODO: Add middleware for routes that require login
+
 // Database
 var mongoose = require('mongoose');
 
@@ -44,9 +46,11 @@ mongoose.connection.on('error', function() {
 // API routes
 var games = require('./controllers/games_controller');
 var users = require('./controllers/users_controller');
+var sessions = require('./controllers/sessions_controller');
 
 app.use('/api', games);
 app.use('/api', users);
+app.use('/api', sessions);
 
 // Non-API routes
 var React = require('react');
