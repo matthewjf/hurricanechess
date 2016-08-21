@@ -7,6 +7,10 @@
     "start": "node server.js",
     "watch": "nodemon server.js"
   },
+  "respository": {
+    "type": "git",
+    "url": "git@github.com:matthewjf/hurricanechess.git"
+  },
   "babel": {
     "presets": [
       "es2015",
