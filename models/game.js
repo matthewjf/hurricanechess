@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var gameSchema = new Schema({
+var Game = new Schema({
   name:     { type: String,  required: true, minlength: 6,      index: true },
   private:  { type: Boolean,                 default: false                 },
   password: { type: String                                                  },
   created:  { type: Date,    required: true, default: Date.now              },
-  whiteId:  { type: Number,                                     index: true },
-  blackId:  { type: Number,                                     index: true }
+  white:    {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  black:    {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Game', Game);

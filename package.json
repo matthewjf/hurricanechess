@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "watch": "nodemon server.js"
+    "watch": "nodemon server.js",
+    "postinstall": "bower install && gulp build"
   },
   "respository": {
     "type": "git",
@@ -24,12 +25,18 @@
     "alt": "^0.18.5",
     "body-parser": "^1.15.2",
     "compression": "^1.6.2",
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
+    "express-session": "^1.14.0",
     "mongoose": "^4.5.9",
     "morgan": "^1.7.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^4.0.0",
     "react": "^15.3.0",
     "react-dom": "^15.3.0",
     "react-router": "^2.6.1",
+    "redis": "^2.6.2",
     "socket.io": "^1.4.8",
     "swig": "^1.4.2",
     "underscore": "^1.8.3"
