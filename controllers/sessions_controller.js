@@ -3,7 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 
 router.route('/session').get(function(req, res) {
-  res.json({ user: req.user});
+  res.status(200).json({ user: req.user});
 });
 
 router.route('/session').post(passport.authenticate('local'), function(req, res) {
