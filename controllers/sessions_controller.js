@@ -1,9 +1,18 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models/user');
+var passport = require('passport');
 
 router.route('/session').get(function(req, res) {
-  res.send(JSON.stringify({ a: "session route" })); // test that the endpoint works
+  res.json({ user: req.user});
+});
+
+router.route('/session').post(passport.authenticate('local'), function(req, res) {
+  res.json('logged in');
+});
+
+router.route('/session').delete(function(req, res) {
+  req.logout();
+  res.jons('logged out');
 });
 
 module.exports = router;
