@@ -4,24 +4,33 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
 var swig  = require('swig');
 var app = express();
 var config = require('./config');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 
+// DATABASE
+var mongoose = require('mongoose');
+mongoose.connect(config.database);
+mongoose.connection.on('error', function() {
+  console.info('Error: Could not connect to MongoDB. Running `mongod`?');
+});
+
+// APP
 app.set('port', process.env.PORT || 3000);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(require('express-session')({
+app.use(session({
     secret: config.secret,
+    store: new MongoStore({mongooseConnection: mongoose.connection}),
     resave: false,
     saveUninitialized: false
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Auth
+// AUTHENTICATION
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('./models/user');
@@ -35,15 +44,7 @@ passport.deserializeUser(User.deserializeUser());
 
 // TODO: Add middleware for routes that require login
 
-// Database
-var mongoose = require('mongoose');
-
-mongoose.connect(config.database);
-mongoose.connection.on('error', function() {
-  console.info('Error: Could not connect to MongoDB. Running `mongod`?');
-});
-
-// API routes
+// API ROUTES
 var games = require('./controllers/games_controller');
 var users = require('./controllers/users_controller');
 var sessions = require('./controllers/sessions_controller');
@@ -52,7 +53,7 @@ app.use('/api', games);
 app.use('/api', users);
 app.use('/api', sessions);
 
-// Non-API routes
+// NON-API ROUTES
 var React = require('react');
 var ReactDOM = require('react-dom/server');
 var Router = require('react-router');

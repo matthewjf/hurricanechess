@@ -16,4 +16,12 @@ var User = new Schema({
 
 User.plugin(passportLocalMongoose);
 
+// CLASS METHODS
+User.statics.serialize = function(user) {
+  return {_id: user._id, username: user.username, __v: user.__v};
+};
+
+// INSTANCE METHODS
+// TODO: serialize user (id + username)?
+
 module.exports = mongoose.model('User', User);

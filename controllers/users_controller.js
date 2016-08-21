@@ -7,6 +7,7 @@ router.route('/users').get(function(req, res) {
   res.status(200).json({ a: "user route" });
 });
 
+// register user and create session
 router.route('/users/new').post(function(req, res) {
   User.register(
     new User({ username : req.body.username }),
@@ -21,10 +22,9 @@ router.route('/users/new').post(function(req, res) {
       passport.authenticate('local')(req, res, function() {
         req.session.save(function(err) {
           if (err) {
-            console.log(err);
             return next(err);
           }
-          res.status(200).json({user: user});
+          res.status(200).json({user: User.serialize(req.user)});
         });
       });
     }
