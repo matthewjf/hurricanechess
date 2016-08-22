@@ -1,11 +1,16 @@
 /* global Materialize */
-
 import React from 'react';
-// var UserApi = require('../../util/user_api');
+import UserApi from '../../api/user_api';
 
 class SignupForm extends React.Component {
   constructor() {
     super();
+    this.setUsername = this.setUsername.bind(this);
+    this.setPassword = this.setPassword.bind(this);
+    this.resetState = this.resetState.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.success = this.success.bind(this);
+    
     this.state = {username: '', password: ''};
   }
 
@@ -23,7 +28,7 @@ class SignupForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    // UserApi.signup(this.state, this.success);
+    UserApi.signup(this.state, this.success);
   }
 
   success(data) {

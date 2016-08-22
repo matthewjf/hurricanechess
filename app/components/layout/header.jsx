@@ -1,32 +1,33 @@
 /* global Materialize */
-
 import React from 'react';
-var browserHistory = require('react-router').browserHistory;
-
-// var UserApi = require('../../util/user_api');
+import {browserHistory} from 'react-router';
+import UserApi from '../../api/user_api';
 
 class Header extends React.Component {
-  constructor() {
-    super();
-    // return {currentUser: this.props.currentUser};
-    this.state = {currentUser: null};
+  constructor(props) {
+    super(props);
+    this.logout = this.logout.bind(this);
+    this.desktopLinks = this.desktopLinks.bind(this);
+    this.mobileLinks = this.mobileLinks.bind(this);
+    this.links = this.links.bind(this);
+
+    this.state = {currentUser: this.props.currentUser};
   }
-  
+
   componentDidMount() {
     $(".button-collapse").sideNav();
   }
 
-  // componentWillReceiveProps(props) {
-  //   this.setState({currentUser: props.currentUser});
-  //   this.setState({currentUser: null});
-  // }
+  componentWillReceiveProps(props) {
+    this.setState({currentUser: props.currentUser});
+  }
 
   logout(e) {
     e.preventDefault();
     this.home();
-    // UserApi.logout(function(){
-    //   Materialize.toast('Logged out', 2000, 'error-text');
-    // });
+    UserApi.logout(function(){
+      Materialize.toast('Logged out', 2000, 'error-text');
+    });
   }
 
 	home() {
