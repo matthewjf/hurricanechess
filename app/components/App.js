@@ -33,6 +33,7 @@ class App extends React.Component {
   }
 
   render() {
+    // all child routes have access to currentUser prop
     return (
       <div id='root'>
         <Header currentUser={this.state.currentUser} />
