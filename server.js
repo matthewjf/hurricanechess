@@ -43,8 +43,19 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.serializeUser(function(user, done) {
+    done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+    User.findOne(
+        {_id: id},
+        '-password',
+        function(err, user) {
+            done(err, user);
+        }
+    );
+});
 
 // TODO: Add middleware for routes that require login
 
@@ -93,6 +104,7 @@ io.use(sharedsession(sessionMiddleware)); // gives access to same session
 io.on('connection', function(socket){
   console.log('a user connected');
   console.log(socket.handshake.session); // where session data is stored
+  // `socket.handshake.session.passport.user` where the current user is provided
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
