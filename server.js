@@ -1,6 +1,7 @@
 require('babel-register');
-// app
+
 var express = require('express');
+var http = require('http');
 var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
@@ -75,22 +76,12 @@ app.use(function(req, res) {
   });
 });
 
-// SOCKET IO
-var http = require('http');
-// var server = http.createServer(app);
-// var io = require('socket.io').listen(server);
-
-// APP
-// app.listen(app.get('port'), function() {
-//   console.log('Express server listening on port ' + app.get('port'));
-// });
-
-// Fire it up (start our server)
+// SERVER
 var server = http.createServer(app).listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-// Initialize socket.io
+// SOCKET IO
 var io = require('socket.io').listen(server);
 
 io.on('connection', function(socket){
