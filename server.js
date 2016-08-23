@@ -18,7 +18,7 @@ mongoose.connection.on('error', function() {
 });
 
 // APP
-app.set('port', process.env.PORT || 3000);
+app.set('port', config.port);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -75,6 +75,27 @@ app.use(function(req, res) {
   });
 });
 
-app.listen(app.get('port'), function() {
+// SOCKET IO
+var http = require('http');
+// var server = http.createServer(app);
+// var io = require('socket.io').listen(server);
+
+// APP
+// app.listen(app.get('port'), function() {
+//   console.log('Express server listening on port ' + app.get('port'));
+// });
+
+// Fire it up (start our server)
+var server = http.createServer(app).listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
+});
+
+// Initialize socket.io
+var io = require('socket.io').listen(server);
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
 });

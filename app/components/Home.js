@@ -7,6 +7,10 @@ class Home extends React.Component {
     this.state = {currentUser: this.props.currentUser};
   }
 
+  componentDidMount() {
+    var socket = io.connect();
+  }
+
   componentWillReceiveProps(props) {
     this.setState({currentUser: props.currentUser});
   }
