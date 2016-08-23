@@ -18,18 +18,21 @@ mongoose.connection.on('error', function() {
   console.info('Error: Could not connect to MongoDB. Running `mongod`?');
 });
 
+// SESSIONS
+var sessionMiddleware = session({
+    secret: config.secret,
+    store: new MongoStore({mongooseConnection: mongoose.connection}),
+    resave: false,
+    saveUninitialized: false
+});
+
 // APP
 app.set('port', config.port);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({
-    secret: config.secret,
-    store: new MongoStore({mongooseConnection: mongoose.connection}),
-    resave: false,
-    saveUninitialized: false
-}));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(sessionMiddleware);
 
 // AUTHENTICATION
 var passport = require('passport');
@@ -83,9 +86,13 @@ var server = app.listen(app.get('port'), function() {
 
 // SOCKET IO
 var io = require('socket.io').listen(server);
+var sharedsession = require("express-socket.io-session");
+io.use(sharedsession(sessionMiddleware));
 
+// TODO: extract socket connection logic into separate file
 io.on('connection', function(socket){
   console.log('a user connected');
+  console.log(socket.handshake.session);
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
