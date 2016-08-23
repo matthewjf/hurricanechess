@@ -7,24 +7,9 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var swig  = require('swig');
 var app = express();
-var config = require('./config');
-var session = require('express-session');
-var MongoStore = require('connect-mongo')(session);
-
-// DATABASE
-var mongoose = require('mongoose');
-mongoose.connect(config.database);
-mongoose.connection.on('error', function() {
-  console.info('Error: Could not connect to MongoDB. Running `mongod`?');
-});
-
-// SESSIONS
-var sessionMiddleware = session({
-    secret: config.secret,
-    store: new MongoStore({mongooseConnection: mongoose.connection}),
-    resave: false,
-    saveUninitialized: false
-});
+var config = require('./config/config');
+var passport = require('./config/passport');
+var session = require('./config/session');
 
 // APP
 app.set('port', config.port);
@@ -32,32 +17,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(sessionMiddleware);
-
-// AUTHENTICATION
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var User = require('./models/user');
-
+app.use(session);
 app.use(passport.initialize());
 app.use(passport.session());
-
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(function(user, done) {
-    done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-    User.findOne(
-        {_id: id},
-        '-password',
-        function(err, user) {
-            done(err, user);
-        }
-    );
-});
-
-// TODO: Add middleware for routes that require login
 
 // API ROUTES
 var games = require('./controllers/games_controller');
@@ -98,7 +60,7 @@ var server = app.listen(app.get('port'), function() {
 // SOCKET IO
 var io = require('socket.io').listen(server);
 var sharedsession = require("express-socket.io-session");
-io.use(sharedsession(sessionMiddleware)); // gives access to same session
+io.use(sharedsession(session)); // gives access to same session
 
 // TODO: extract socket connection logic into separate file
 io.on('connection', function(socket){
