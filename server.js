@@ -69,7 +69,7 @@ app.use(function(req, res) {
       res.status(500).send(err.message);
     } else if (redirectLocation) {
       res.status(302).redirect(redirectLocation.pathname + redirectLocation.search);
-    } else if (renderProps) {
+    } else if (renderProps) { // route react components
       var html = ReactDOM.renderToString(React.createElement(Router.RouterContext, renderProps));
       var page = swig.renderFile('views/index.html', { html: html });
       res.status(200).send(page);
@@ -87,12 +87,12 @@ var server = app.listen(app.get('port'), function() {
 // SOCKET IO
 var io = require('socket.io').listen(server);
 var sharedsession = require("express-socket.io-session");
-io.use(sharedsession(sessionMiddleware));
+io.use(sharedsession(sessionMiddleware)); // gives access to same session
 
 // TODO: extract socket connection logic into separate file
 io.on('connection', function(socket){
   console.log('a user connected');
-  console.log(socket.handshake.session);
+  console.log(socket.handshake.session); // where session data is stored
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
