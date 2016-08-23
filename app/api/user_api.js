@@ -3,12 +3,12 @@ import UserActions from '../actions/user_actions';
 var UserApi = {
 	signup: (user, successCB, errorCB) => {
 		$.ajax({
-			url: "/api/user",
+			url: "/api/users/new",
 			type: "post",
 			data: user,
 			success: ((data) => {
 				UserActions.receiveCurrentUser(data);
-				if (successCB) { successCB(data); }
+				if (successCB) { successCB(data.user); }
 			}),
 			error: ((error) => {
 				UserActions.handleError(error);
