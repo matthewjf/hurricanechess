@@ -76,7 +76,7 @@ class Header extends React.Component {
       <nav>
         <div className='nav-wrapper' id='header'>
           <a onClick={this.home} className='brand-logo center' id='logo'>
-            Hurricane Chess
+            Chess X
           </a>
 
           <a href="#" data-activates="nav-mobile" className="button-collapse">

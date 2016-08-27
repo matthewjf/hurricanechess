@@ -1,8 +1,9 @@
+import Subscribe from '../utils/subscribe';
 
-var GameSubscription = {
+var GameIndexSocket = {
   subscribe() {
-    console.log('subscribing');
+    Subscribe("GameIndex");
   }
 };
 
-export default GameSubscription;
+export default GameIndexSocket;

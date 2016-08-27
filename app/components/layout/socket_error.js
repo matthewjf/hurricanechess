@@ -13,8 +13,9 @@ class SocketError extends React.Component {
     }.bind(this));
 
     socket.on('disconnect', function() {
+      console.log('socket disconnected');
       this.setState(
-        {socketError: "Lost connection to server. HUGE problem."}
+        {socketError: "LOST CONNECTION TO SERVER... BIG PROBLEMS."}
       );
     }.bind(this));
 

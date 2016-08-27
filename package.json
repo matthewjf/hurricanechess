@@ -1,5 +1,5 @@
 {
-  "name": "hurricanechess",
+  "name": "chessx",
   "version": "1.0.0",
   "description": "chess without turns",
   "main": "server.js",
@@ -10,7 +10,7 @@
   },
   "respository": {
     "type": "git",
-    "url": "git@github.com:matthewjf/hurricanechess.git"
+    "url": "git@github.com:matthewjf/chessx.git"
   },
   "babel": {
     "presets": [

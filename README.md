@@ -1,4 +1,4 @@
-# Hurricane Chess
+# Chess X
 ## Local setup
 
 1. Install and run MongoDB ([instructions](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/))
