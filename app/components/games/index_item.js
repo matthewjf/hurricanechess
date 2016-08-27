@@ -1,30 +1,25 @@
-var React = require('react'),
-    BrowserHistory = require('react-router').browserHistory;
+import React from 'react';
+import {browserHistory} from 'react-router';
 
-module.exports = React.createClass({
-  getInitialState: function() {
-    return {game: this.props.game};
-  },
+export class GameIndexItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+    this.playerCount = this.playerCount.bind(this);
 
-  componentWillReceiveProps: function(newProps) {
-    this.setState({game: newProps.game});
-  },
+    this.state = {game: this.props.game};
+  }
 
-  handleClick: function(e) {
+  componentWillReceiveProps(props) {
+    this.setState({game: props.game});
+  }
+
+  handleClick(e) {
     e.preventDefault();
     BrowserHistory.push('games/' + this.state.game.id);
-  },
+  }
 
-  playerCount: function() {
-    var count = 0;
-    if (this.state.game.white)
-      count += 1;
-    if (this.state.game.black)
-      count += 1;
-    return count;
-  },
-
-  render: function() {
+  render() {
     return(
       <li className="row">
         <a onClick={this.handleClick}>
@@ -43,4 +38,7 @@ module.exports = React.createClass({
       </li>
     );
   }
-});
+
+};
+
+export default GameIndexItem;

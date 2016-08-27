@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from './layout/header.jsx';
-import LoginForm from './layout/login_form.jsx';
-import SignupForm from './layout/signup_form.jsx';
-import SocketError from './layout/socket_error.jsx';
+import Header from './layout/header';
+import LoginForm from './layout/login_form';
+import SignupForm from './layout/signup_form';
+import SocketError from './layout/socket_error';
 import UserStore from '../stores/user_store';
 import UserApi from '../api/user_api';
 

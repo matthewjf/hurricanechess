@@ -13,7 +13,7 @@ class Home extends React.Component {
   componentDidMount() {
     if (socket) {
       socket.emit('subscribe', {room: "index"});
-      socket.on('welcome', function(data){alert(data);});
+      // socket.on('welcome', function(data){alert(data);});
       socket.on('reconnect', function(){
         socket.emit('subscribe', {room: "index"});
       });

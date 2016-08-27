@@ -1,63 +1,73 @@
-var React = require('react'),
-    BrowserHistory = require('react-router').browserHistory,
-    GameApi = require('../../util/game_api'),
-    ErrorUtil = require('../../util/error_util');
+import React from 'react';
+import {browserHistory} from 'react-router';
 
-module.exports = React.createClass({
-  blankAttrs: {
-    name: '',
-    private: false,
-    password: '',
-    errors: null
-  },
+export class NewGameForm extends React.Component {
+  constructor() {
+    super();
+    this.blankAttrs = {
+      name: '',
+      private: false,
+      password: '',
+      errors: null
+    };
 
-  getInitialState: function() {
-    return this.blankAttrs;
-  },
+    this.resetState = this.resetState.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handlePrivateChange = this.handlePrivateChange.bind(this);
+    this.handlePublicChange = this.handlePublicChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.submitError = this.submitError.bind(this);
+    this.submitSuccess = this.submitSuccess.bind(this);
+    this.setPassword = this.setPassword.bind(this);
+    this.renderErrors = this.renderErrors.bind(this);
 
-  resetState: function() {
-    return this.blankAttrs;
-  },
+    this.state = this.blankAttrs;
+  }
 
-  handleNameChange: function(e) {
+  resetState() {
+    this.setState(this.blankAttrs);
+  }
+
+  handleNameChange(e) {
     this.setState({ name: e.currentTarget.value, errors: null });
-  },
+  }
 
-  handlePrivateChange: function(e) {
+  handlePrivateChange(e) {
     this.setState({ private: true });
-  },
+  }
 
-  handlePublicChange: function(e) {
+  handlePublicChange(e) {
     this.setState({ private: false, password: '' });
-  },
+  }
 
-  handlePasswordChange: function(e) {
+  handlePasswordChange(e) {
     this.setState({ password: e.currentTarget.value });
-  },
+  }
 
-  handleSubmit: function(e) {
+  handleSubmit(e) {
     if(e) { e.preventDefault(); }
-    GameApi.createGame(this.state, this.submitSuccess, this.submitError);
-  },
+    // GameApi.createGame(this.state, this.submitSuccess, this.submitError);
+  }
 
-  submitError: function(error) {
+  submitError(error) {
     if (error.status === 401) {
       // not logged in
       $('#new-game-modal').closeModal();
-      ErrorUtil.loginRequired();
+      // ErrorUtil.loginRequired();
     } else if (error.status === 422) {
       this.setState({errors: error.responseJSON});
     } else {
       // unexpected error
     }
-  },
+  }
 
-  submitSuccess: function(game) {
+  submitSuccess(game) {
     $('#new-game-modal').closeModal();
-    BrowserHistory.push("games/" + game.id);
-  },
+    browserHistory.push("games/" + game.id);
+  }
 
-  setPassword: function() {
+  setPassword() {
     if (this.state.private) {
       return (
         <div className='input-field'>
@@ -72,9 +82,9 @@ module.exports = React.createClass({
     } else {
       return null;
     }
-  },
+  }
 
-  renderErrors: function(errors) {
+  renderErrors(errors) {
     if (errors) {
       return errors.map(function(error) {
         return <span className='error-text' key={error} >{error}</span>;
@@ -82,9 +92,9 @@ module.exports = React.createClass({
     } else {
       return null;
     }
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <div className='row'>
         <form onSubmit={this.handleSubmit} >
@@ -133,4 +143,6 @@ module.exports = React.createClass({
       </div>
     );
   }
-});
+};
+
+export default NewGameForm;
