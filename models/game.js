@@ -6,8 +6,8 @@ var Game = new Schema({
   private:  { type: Boolean,                 default: false                 },
   password: { type: String                                                  },
   created:  { type: Date,    required: true, default: Date.now              },
-  white:    {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-  black:    {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+  white:    {type: Schema.Types.ObjectId, ref: 'User'},
+  black:    {type: Schema.Types.ObjectId, ref: 'User'}
 });
 
 module.exports = mongoose.model('Game', Game);

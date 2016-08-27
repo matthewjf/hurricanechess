@@ -10,7 +10,7 @@ class SignupForm extends React.Component {
     this.resetState = this.resetState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.success = this.success.bind(this);
-    
+
     this.state = {username: '', password: ''};
   }
 

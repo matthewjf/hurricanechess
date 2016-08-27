@@ -58,25 +58,4 @@ var server = app.listen(app.get('port'), function() {
 });
 
 // SOCKET IO
-var io = require('socket.io').listen(server);
-var sharedsession = require("express-socket.io-session");
-io.use(sharedsession(session)); // gives access to same session
-
-// TODO: extract socket connection logic into separate file
-var User = require('./models/user');
-
-io.on('connection', function(socket){
-  console.log('a user connected');
-  var userData = socket.handshake.session.passport;
-
-  // `socket.handshake.session.passport.user` where the current user is provided
-  if (userData) {
-    User.findById(userData.user, function(err,user) {console.log(err,user);});
-  } else {
-    console.log('no user');
-  };
-
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
-});
+require('./sockets/connection')(server);

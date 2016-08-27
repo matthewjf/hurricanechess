@@ -4,11 +4,20 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.currentUser = this.currentUser.bind(this);
-    this.state = {currentUser: this.props.currentUser};
+
+    this.state = {
+      currentUser: this.props.currentUser
+    };
   }
 
   componentDidMount() {
-    var socket = io.connect();
+    if (socket) {
+      socket.emit('subscribe', {room: "index"});
+      socket.on('welcome', function(data){alert(data);});
+      socket.on('reconnect', function(){
+        socket.emit('subscribe', {room: "index"});
+      });
+    };
   }
 
   componentWillReceiveProps(props) {
@@ -16,11 +25,10 @@ class Home extends React.Component {
   }
 
   currentUser() {
-    if (this.state.currentUser) {
+    if (this.state.currentUser)
       return this.state.currentUser.username;
-    } else {
-      return '';
-    }
+    else
+      return null;
   }
 
   render() {

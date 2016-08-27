@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './layout/header.jsx';
 import LoginForm from './layout/login_form.jsx';
 import SignupForm from './layout/signup_form.jsx';
+import SocketError from './layout/socket_error.jsx';
 import UserStore from '../stores/user_store';
 import UserApi from '../api/user_api';
 
@@ -11,8 +12,7 @@ class App extends React.Component {
     this.updateUser = this.updateUser.bind(this);
 
     this.state = {
-      currentUser: UserStore.currentUser(),
-      userErrors: UserStore.errors()
+      currentUser: UserStore.currentUser()
     };
   }
 
@@ -39,10 +39,11 @@ class App extends React.Component {
         <Header currentUser={this.state.currentUser} />
         <LoginForm />
         <SignupForm />
+        <SocketError />
         <main>
           {React.cloneElement(
             this.props.children,
-            {currentUser: this.state.currentUser}
+            { currentUser: this.state.currentUser }
           )}
         </main>
       </div>

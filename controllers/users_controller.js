@@ -14,19 +14,19 @@ router.route('/users/new').post(function(req, res) {
     req.body.password,
     function(err, user) {
       if (err) {
-        return res.status(422).json('register', {
-          message: err.message,
-          error: err.errors
+        res.status(422).json({error: err, status: 422});
+      } else {
+        passport.authenticate('local')(req, res, function() {
+          req.session.save(function(err) {
+            if (err) {
+              return next(err);
+            }
+            User.findById(req.user, function(err,user) {
+              res.status(200).json({user: user});
+            });
+          });
         });
       }
-      passport.authenticate('local')(req, res, function() {
-        req.session.save(function(err) {
-          if (err) {
-            return next(err);
-          }
-          res.status(200).json({user: User.serialize(req.user)});
-        });
-      });
     }
   );
 });
