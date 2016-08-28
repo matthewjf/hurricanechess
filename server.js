@@ -10,6 +10,7 @@ var app = express();
 var config = require('./config/config');
 var passport = require('./config/passport');
 var session = require('./config/session');
+var redis = require('redis');
 
 // APP
 app.set('port', config.port);
@@ -20,6 +21,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session);
 app.use(passport.initialize());
 app.use(passport.session());
+
+// REDIS
+var redisclient = redis.createClient();
+
+redisclient.on("connect", function() {
+  console.log("redis connected");
+});
 
 // API ROUTES
 var games = require('./controllers/games_controller');

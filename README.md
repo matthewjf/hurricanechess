@@ -1,10 +1,11 @@
 # Chess X
 ## Local setup
 
-1. Install and run MongoDB ([instructions](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/))
-- Run `$ npm install`
-- Run `$ bower install`
-- Run `$ npm run watch`
+1. Install MongoDB & run ([instructions](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/))
+3. Install & run redis (`$ redis-server &`)
+- `$ npm install`
+- `$ bower install`
+- `$ npm run watch`
 - In a separate tab, run `$ gulp`
 
 ## Contributing
