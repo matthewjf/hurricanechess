@@ -1,9 +1,12 @@
-var socketio = require('socket.io');
-var session = require('../config/session');
-var sharedsession = require("express-socket.io-session");
+import socketio from 'socket.io';
+import session from '../config/session';
+import sharedsession from "express-socket.io-session";
 
-var User = require('../models/user');
-var Game = require('../models/game');
+import GameIndexConnection from './game_index_connection';
+import GameConnection from './game_connection';
+
+import User from '../models/user';
+import Game from '../models/game';
 
 module.exports = function(server) {
 
@@ -11,29 +14,24 @@ module.exports = function(server) {
   io.use(sharedsession(session)); // gives access to same session
 
   io.on('connection', function(client){
-    console.log('a user connected');
+    console.log('connection');
 
-    var userData = client.handshake.session.passport;
-    var currentRoom;
-
-    // `client.handshake.session.passport.user` where the current user is provided
-    if (userData) {
-      User.findById(userData.user, function(err,user) {console.log(err,user);});
-    } else {
-      console.log('no user');
+    var currentRoom, userId;
+    var joined = function(data) {
+      console.log('joined room: ' + data.room);
+      client.leave(currentRoom);
+      currentRoom = data.room;
+      client.emit('joined', {room: currentRoom});
     };
 
-    // JOIN ROOMS
-    client.on('subscribe', function(data){
-      if (currentRoom)
-        client.leave(currentRoom);
+    if (client.handshake.session.passport)
+       userId = client.handshake.session.passport.user;
+    User.findById(userId, function(err,user) {console.log('user: '+user);});
 
-      console.log('subscribing to ' + data.room);
-      client.join(data.room, function(){
-        currentRoom = data.room;
-        client.emit('welcome', "welcome to " + data.room);
-      });
-    });
+    // JOIN INDEX
+    GameIndexConnection(client, joined);
+    GameConnection(client, joined);
+
 
     client.on('disconnect', function(){
       console.log('user disconnected');

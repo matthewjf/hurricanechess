@@ -1,6 +1,6 @@
 import React from 'react';
 
-import GameIndexSocket from '../../sockets/game_index_socket';
+import GameIndexSubscription from '../../sockets/game_index_subscription';
 import GameIndexStore from '../../stores/game_index_store';
 
 import GameIndexItem from './index_item';
@@ -20,7 +20,7 @@ class GameIndex extends React.Component {
 
   componentDidMount() {
     this.gameIndexListener = GameIndexStore.addChangeListener(this.getGames);
-    GameIndexSocket.subscribe();
+    GameIndexSubscription.join();
   }
 
   componentWillUnmount() {
@@ -34,8 +34,7 @@ class GameIndex extends React.Component {
   gameList(games) {
     if (games) {
       return games.map(function(game) {
-        return null;
-        // return <GameIndexItem game={game} key={game.id} />;
+        return <GameIndexItem game={game} key={game._id} />;
       });
     } else {
       return null;

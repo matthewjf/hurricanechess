@@ -5,7 +5,7 @@ export class GameIndexItem extends React.Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);
-    this.playerCount = this.playerCount.bind(this);
+    // this.playerCount = this.playerCount.bind(this);
 
     this.state = {game: this.props.game};
   }
@@ -16,7 +16,7 @@ export class GameIndexItem extends React.Component {
 
   handleClick(e) {
     e.preventDefault();
-    BrowserHistory.push('games/' + this.state.game.id);
+    browserHistory.push('games/' + this.state.game._id);
   }
 
   render() {
@@ -28,7 +28,7 @@ export class GameIndexItem extends React.Component {
               {this.state.game.name}
             </div>
             <div className='col s2 right-align'>
-              {this.playerCount()}/2
+              {/* {this.playerCount()}/2 */}
             </div>
             <div className='col s3 right-align'>
               {this.state.game.status}

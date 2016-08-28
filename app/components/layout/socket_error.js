@@ -9,6 +9,7 @@ class SocketError extends React.Component {
 
   componentDidMount() {
     socket.on('connect', function(){
+      console.log("socket connected");
       this.setState({socketError: null});
     }.bind(this));
 
@@ -20,6 +21,7 @@ class SocketError extends React.Component {
     }.bind(this));
 
     socket.on('reconnect', function() {
+      console.log("socket reconnected");
       this.setState({socketError: null});
     }.bind(this));
   }

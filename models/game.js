@@ -5,9 +5,9 @@ var Game = new Schema({
   name:     { type: String,  required: true, minlength: 6,      index: true },
   private:  { type: Boolean,                 default: false                 },
   password: { type: String                                                  },
-  created:  { type: Date,    required: true, default: Date.now              },
-  white:    {type: Schema.Types.ObjectId, ref: 'User'},
-  black:    {type: Schema.Types.ObjectId, ref: 'User'}
-});
+  white:    { type: Schema.Types.ObjectId, ref: 'User' },
+  black:    { type: Schema.Types.ObjectId, ref: 'User' },
+  status:   { type: String,  required: true, default: 'pending', enum: ['pending', 'active', 'archived'] }
+}, {timestamps: true});
 
 module.exports = mongoose.model('Game', Game);

@@ -12,7 +12,7 @@ var User = new Schema({
   password: {
     type: String
   }
-});
+}, {timestamps: true});
 
 User.plugin(passportLocalMongoose);
 

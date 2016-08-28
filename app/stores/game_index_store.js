@@ -10,9 +10,9 @@ function _resetGames(games) {
   _games = {};
 
   games.forEach(function(game) {
-    _games[game.id] = game;
+    _games[game._id] = game;
   });
-  clearError();
+  _clearError();
 };
 
 function _setGame(game) {
@@ -42,9 +42,10 @@ class GameIndexStore extends EventEmitter {
       return _games[gameId];
     });
 
-    return games.sort(function(g1, g2){
-      return new Date(g2.updated_at) - new Date(g1.updated_at);
-    });
+    return games;
+    // return games.sort(function(g1, g2){
+    //   return new Date(g2.updated_at) - new Date(g1.updated_at);
+    // });
   }
 
   error() {

@@ -1,44 +1,42 @@
-var React = require('react'),
-    Error = require("../shared/error"),
-    ErrorUtil = require('../../util/error_util'),
-    CurrentUserState = require('../../mixins/current_user_state'),
-    GameSubscription = require('../../util/game_subscription'),
-    GameStore = require("../../stores/game_store");
+import React from 'react';
+import ErrorUtil from '../../utils/error_util';
 
-module.exports = React.createClass({
-  mixins: [CurrentUserState],
+class Game extends React.Component {
 
-  getInitialState: function() {
-    return {
+  constructor() {
+    super();
+    this.state = {
       id: this.props.params.gameId,
       error: null
     };
-  },
+  }
 
-  componentDidMount: function() {
-    this.gameListener = GameStore.addListener(this.getGame);
-    GameSubscription.subscribe(this.state.id, this.rejected);
-  },
+  componentDidMount() {
+    // this.gameListener = GameStore.addListener(this.getGame);
+    // GameSubscription.subscribe(this.state.id, this.rejected);
+  }
 
-  getGame: function() {
+  getGame() {
 
-  },
+  }
 
-  componentWillUnmount: function() {
-    this.gameListener.remove();
-    GameSubscription.unsubscribe();
-  },
+  componentWillUnmount() {
+    // this.gameListener.remove();
+    // GameSubscription.unsubscribe();
+  }
 
-  rejected: function() {
+  rejected() {
     if (this.state.currentUser)
       ErrorUtil.gameRejected();
     else
       ErrorUtil.loginRequired();
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <Error error={this.state.error} />
     );
   }
-});
+};
+
+export default Game;

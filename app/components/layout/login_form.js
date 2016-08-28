@@ -35,9 +35,7 @@ class LoginForm extends React.Component {
     this.resetState();
     $('#login-modal').closeModal();
     Materialize.toast(
-      'Welcome back, ' + data.username + '!',
-      2000,
-      'success-text'
+      'Welcome back, ' + data.username + '!', 2000, 'success-text'
     );
   }
 
