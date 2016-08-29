@@ -3,10 +3,10 @@ import ErrorUtil from '../../utils/error_util';
 
 class Game extends React.Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      id: this.props.params.gameId,
+      id: this.props.params.id,
       error: null
     };
   }
@@ -34,7 +34,7 @@ class Game extends React.Component {
 
   render() {
     return (
-      <Error error={this.state.error} />
+      <div/>
     );
   }
 };

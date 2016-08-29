@@ -31,7 +31,7 @@ module.exports = function(server) {
     // JOIN INDEX
     GameIndexConnection(client, joined);
     GameConnection(client, joined);
-    
+
     client.on('disconnect', function(){
       console.log('user disconnected');
     });
