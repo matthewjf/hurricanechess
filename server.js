@@ -29,11 +29,9 @@ redis.on("connect", function() {
 });
 
 // API ROUTES
-var games = require('./controllers/games_controller');
 var users = require('./controllers/users_controller');
 var sessions = require('./controllers/sessions_controller');
 
-app.use('/api', games);
 app.use('/api', users);
 app.use('/api', sessions);
 

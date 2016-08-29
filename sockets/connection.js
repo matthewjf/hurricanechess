@@ -9,14 +9,14 @@ import User from '../models/user';
 import Game from '../models/game';
 
 module.exports = function(server) {
-
   var io = socketio.listen(server);
-  io.use(sharedsession(session)); // gives access to same session
+  io.use(sharedsession(session)); // gives access to express session
 
   io.on('connection', function(client){
     console.log('connection');
-
     var currentRoom, userId;
+
+    // JOIN SUCCESS
     var joined = function(data) {
       console.log('joined room: ' + data.room);
       client.leave(currentRoom);
@@ -24,9 +24,12 @@ module.exports = function(server) {
       client.emit('joined', {room: currentRoom});
     };
 
+    // CURRENT USER
     if (client.handshake.session.passport)
-       userId = client.handshake.session.passport.user;
-    User.findById(userId, function(err,user) {console.log('user: '+user);});
+      userId = client.handshake.session.passport.user;
+    User.findById(userId, function(err,user) {
+      console.log('user: ' + user);
+    });
 
     // JOIN INDEX
     GameIndexConnection(client, joined);

@@ -8,8 +8,10 @@ export default function(client, success) {
 
           Game.find()
             .where('status').ne('archived')
+            .populate('white')
+            .populate('black')
             .exec(function(err, games) {
-              client.emit('allGames', {games: games});
+              client.emit('init', {games: games});
             });
       });
     }

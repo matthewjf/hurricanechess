@@ -1,9 +1,17 @@
 import SocketManager from './socket_manager';
-import GameIndexActions from '../actions/game_index_actions';
+import GameActions from '../actions/game_actions';
 
-var GameIndexSubscription = {
-  join() {
-    SocketManager.join("index");
+var GameSubscription = {
+  create(data) {
+    socket.on('created', (data) => {
+      // handle reconnect
+    });
+
+    socket.emit('create', data);
+  },
+
+  join(id) {
+    SocketManager.join(id);
 
     socket.on('init', (data) => {
       console.log("all games: ", data);
@@ -18,9 +26,9 @@ var GameIndexSubscription = {
 
   leave() {
     SocketManager.leave();
-    socket.off("init");
-    socket.off("message");
+    socket.off("created");
+    socket.off("joined");
   }
 };
 
-export default GameIndexSubscription;
+export default GameSubscription;

@@ -25,6 +25,7 @@ class GameIndex extends React.Component {
 
   componentWillUnmount() {
     GameIndexStore.removeChangeListener(this.getGames);
+    GameIndexSubscription.leave();
   }
 
   openNewGameForm() {
