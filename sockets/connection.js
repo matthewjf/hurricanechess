@@ -21,7 +21,7 @@ module.exports = function(server) {
       console.log('joined room: ' + data.room);
       client.leave(currentRoom);
       currentRoom = data.room;
-      client.emit('joined', {room: currentRoom});
+      client.emit('joined', data);
     };
 
     // CURRENT USER

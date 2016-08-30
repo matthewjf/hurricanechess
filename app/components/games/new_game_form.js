@@ -1,5 +1,6 @@
 import React from 'react';
 import {browserHistory} from 'react-router';
+import GameSubscription from '../../sockets/game_subscription';
 
 export class NewGameForm extends React.Component {
   constructor() {
@@ -8,14 +9,18 @@ export class NewGameForm extends React.Component {
       name: '',
       private: false,
       password: '',
+      black: false,
       errors: null
     };
 
     this.resetState = this.resetState.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleWhiteChange = this.handleWhiteChange.bind(this);
+    this.handleBlackChange = this.handleBlackChange.bind(this);
     this.handlePrivateChange = this.handlePrivateChange.bind(this);
     this.handlePublicChange = this.handlePublicChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.submitData = this.submitData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.submitError = this.submitError.bind(this);
     this.submitSuccess = this.submitSuccess.bind(this);
@@ -33,6 +38,14 @@ export class NewGameForm extends React.Component {
     this.setState({ name: e.currentTarget.value, errors: null });
   }
 
+  handleWhiteChange(e) {
+    this.setState({ black: false });
+  }
+
+  handleBlackChange(e) {
+    this.setState({ black: true });
+  }
+
   handlePrivateChange(e) {
     this.setState({ private: true });
   }
@@ -45,9 +58,20 @@ export class NewGameForm extends React.Component {
     this.setState({ password: e.currentTarget.value });
   }
 
+  submitData() {
+    return {
+      game: {
+        name: this.state.name,
+        private: this.state.private,
+        password: this.state.password
+      },
+      black: this.state.black
+    };
+  }
+
   handleSubmit(e) {
     if(e) { e.preventDefault(); }
-    // GameApi.createGame(this.state, this.submitSuccess, this.submitError);
+    GameSubscription.create(this.submitData());
   }
 
   submitError(error) {
