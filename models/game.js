@@ -19,31 +19,37 @@ Game.methods.isFull = function(){
 };
 
 Game.methods.isInGame = function(user) {
-  return this.white === user._id || this.black === user._id;
+  return user.equals(this.white) || user.equals(this.black);
 };
 
 Game.methods.join = function(user, color, callback){
-  console.log("trying to join");
+  console.log("trying to join a game");
+  // var userRef = mongoose.Types.ObjectId(user);
   if (this.isInGame(user)) {
     callback(null, this);
-  } else if (this.isEmpty) {
-    color = color || 'white';
-    this[color] = user._id;
+  } else if (this.isEmpty()) {
+    if (color === 'white')
+      this.white = user;
+    else
+      this.black = user;
   } else if (this.white) {
-    this.black = user._id;
+    this.black = user;
   } else {
-    this.white = user._id;
+    this.white = user;
   }
   this.save(callback);
 };
 
 Game.methods.leave = function(user, callback){
-  if (this.white === user._id)
-    this.white = undefined;
-  if (this.black === user._id)
-    this.black = undefined;
-
-  this.save(callback);
+  if (this.status === 'waiting' || this.status == 'starting') {
+    if (user.equals(this.white))
+      this.white = undefined;
+    if (user.equals(this.black))
+      this.black = undefined;
+    this.save(callback);
+  } else {
+    callback({error: "can't leave game"}, this);
+  }
 };
 
 Game.methods.players = function(){
@@ -54,12 +60,12 @@ Game.post('save', function(doc, next) {
   console.log("post save - is empty? ", doc.isEmpty());
   // wait 10 secs to allow reconnection
   setTimeout(function() {
-    if (doc.isEmpty()) {
-      console.log("game is empty, removing");
+    if (doc.isEmpty() && (doc.status === 'waiting' || doc.status === 'starting')) {
+      console.log("game is empty, removing it");
       doc.remove();
     }
-    next();
   }, 10000);
+  next();
 });
 
 module.exports = mongoose.model('Game', Game);
