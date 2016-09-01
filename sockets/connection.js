@@ -21,15 +21,7 @@ module.exports = function(server) {
       console.log('joined room: ' + data.room);
       client.leave(currentRoom);
       currentRoom = data.room;
-      client.emit('joined', data);
     };
-
-    // CURRENT USER
-    if (client.handshake.session.passport)
-      userId = client.handshake.session.passport.user;
-    User.findById(userId, function(err,user) {
-      console.log('user: ' + user);
-    });
 
     // JOIN INDEX
     GameIndexConnection(client, joined);

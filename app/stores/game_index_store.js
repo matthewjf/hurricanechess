@@ -16,11 +16,11 @@ function _resetGames(games) {
 };
 
 function _setGame(game) {
-  _games[game.id] = game;
+  _games[game._id] = game;
 };
 
 function _removeGame(game) {
-  delete _games[game.id];
+  delete _games[game._id];
 };
 
 function _setError(error) {

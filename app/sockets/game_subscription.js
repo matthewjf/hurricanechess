@@ -1,28 +1,33 @@
 import SocketManager from './socket_manager';
 import GameActions from '../actions/game_actions';
-
-// created, joined, update
+import {browserHistory} from 'react-router';
+const ROOM = 'game';
 
 var GameSubscription = {
-  create(data) {
-    socket.on('created', (data) => {
-      console.log("created: ", data);
+  create(data, successCB, errorCB) {
+    socket.on('created-game', (game) => {
+      console.log("created-game: ", game);
+      if (successCB)
+        successCB(game);
+      socket.off('created');
+      socket.off('errors');
+      browserHistory.push("games/" + game._id);
     });
 
-    socket.on("joined", (data) => {
-      console.log('joined: ', data);
+    socket.on('errors', (errors) => {
+      console.log('errors: ', errors);
+      if (errorCB)
+        errorCB(errors);
     });
 
-    socket.on('errors', (data) => {
-      console.log('errors: ', data);
-    });
-
-    socket.emit('create', data);
+    socket.emit('create-game', data);
   },
 
-  join(id) {
+  join(id, successCB, errorCB) {
     socket.on('errors', (data) => {
       console.log("errors: ", data);
+      if (errorCB)
+        errorCB(errorCB);
     });
 
     socket.on('message', (data) => {
@@ -30,11 +35,15 @@ var GameSubscription = {
       GameIndexActions.receiveGame(data.game);
     });
 
-    SocketManager.join(id);
+    SocketManager.join(ROOM, {id: id}, (data) => {
+      console.log('joined: ', data);
+      if (successCB)
+        successCB(data);
+    });
   },
 
   leave() {
-    SocketManager.leave();
+    SocketManager.leave('game');
     socket.off("errors");
     socket.off("created");
     socket.off("joined");

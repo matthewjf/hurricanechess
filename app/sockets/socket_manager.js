@@ -1,20 +1,22 @@
 var SocketManager = {
-  join(room, success){
-    socket.on('joined', (data) => {
-      console.log("joined room: " + data.room);
+  join(room, payload, successCB){
+    socket.on('joined-' + room, (data) => {
+      console.log("joined room: " + room);
+      if (successCB)
+        successCB(data);
     });
 
     socket.on('reconnect', () => {
       console.log('joining room: ' + room);
-      socket.emit('join', {room: room});
+      socket.emit('join-' + room, payload);
     });
 
-    socket.emit('join', {room: room});
+    socket.emit('join-' + room, payload);
   },
 
-  leave(){
+  leave(room){
     socket.off("reconnect");
-    socket.off("joined");
+    socket.off("joined-" + room);
   }
 };
 

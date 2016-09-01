@@ -1,6 +1,7 @@
 import React from 'react';
-import {browserHistory} from 'react-router';
 import GameSubscription from '../../sockets/game_subscription';
+import GameIndexSubscription from '../../sockets/game_index_subscription';
+import ErrorUtil from '../../utils/error_util';
 
 export class NewGameForm extends React.Component {
   constructor() {
@@ -71,24 +72,24 @@ export class NewGameForm extends React.Component {
 
   handleSubmit(e) {
     if(e) { e.preventDefault(); }
-    GameSubscription.create(this.submitData());
+    GameSubscription.create(this.submitData(), this.submitSuccess, this.submitError);
   }
 
   submitError(error) {
-    if (error.status === 401) {
+    debugger;
+    if (error.login) {
       // not logged in
       $('#new-game-modal').closeModal();
-      // ErrorUtil.loginRequired();
-    } else if (error.status === 422) {
-      this.setState({errors: error.responseJSON});
+      ErrorUtil.loginRequired();
+    } else if (error.name) {
+      this.setState({errors: error});
     } else {
       // unexpected error
     }
   }
 
-  submitSuccess(game) {
+  submitSuccess() {
     $('#new-game-modal').closeModal();
-    browserHistory.push("games/" + game.id);
   }
 
   setPassword() {

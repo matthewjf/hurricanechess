@@ -10,4 +10,22 @@ var Game = new Schema({
   status:   { type: String,  required: true, default: 'waiting', enum: ['waiting', 'starting', 'active', 'archived'] }
 }, {timestamps: true});
 
+Game.methods.isEmpty = function(){
+  return !(this.white || this.black);
+};
+
+Game.methods.isFull = function(){
+  return (this.white && this.black);
+};
+
+Game.methods.join = function(user, color, successCB, errorCB){
+  color = color || 'white';
+};
+
+Game.pre('save', function(next) {
+  if (this.isEmpty)
+    this.remove();
+  next();
+});
+
 module.exports = mongoose.model('Game', Game);

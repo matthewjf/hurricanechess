@@ -1,5 +1,3 @@
-
-
 var Game = require('../models/game');
 var User = require('../models/user');
 
@@ -23,14 +21,14 @@ module.exports = function(client, success) {
       if (user) {
         successCB(user);
       } else {
-        client.emit('errors', {message: "login required"});
+        client.emit('errors', {login: "login required"});
       }
     });
   };
 
   // TODO: clean up this code: emit from pre save hooks (maybe?)
 
-  client.on("create", function(data){
+  client.on("create-game", function(data){
     validateUser(userId, function(user){
       Game.create(gameData(data, user),
         function(err, game){
@@ -39,20 +37,29 @@ module.exports = function(client, success) {
             client.emit('errors', err.errors);
           } else {
             console.log('game: ', game);
-            client.emit('created', game);
-            var room = game._id;
-            client.join(room, function() {
-              success({room: room, game: game});
-            });
+            client.broadcast.in('index').send({game: game});
+            client.emit('created-game', game);
           }
         }
       );
     });
   });
 
-  client.on("join", function(data){
+  client.on("join-game", function(data){
     validateUser(userId, function(user){
-      // validate user can join game
+      console.log('valid user attempted to join game: ' + data.id);
+      Game.findById(data.id)
+        .populate('white')
+        .populate('black')
+        .exec(function(err, game){
+          if (err) {
+            client.emit('errors', err.errors);
+          } else {
+            // if user is already in game, move on
+
+            // else try to join game
+          }
+        });
     });
   });
 };
