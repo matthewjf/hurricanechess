@@ -13,22 +13,25 @@ module.exports = function(server) {
   io.use(sharedsession(session)); // gives access to express session
 
   io.on('connection', function(client){
-    console.log('connection');
+    console.log('socket connection');
     var currentRoom, userId;
 
     // JOIN SUCCESS
     var joined = function(data) {
       console.log('joined room: ' + data.room);
-      client.leave(currentRoom);
+      client.leave(currentRoom, function(){
+        // cleanup if in game
+      });
       currentRoom = data.room;
     };
+
+    client.on('disconnect', function(){
+      console.log('user disconnected');
+      // cleanup if in game
+    });
 
     // JOIN INDEX
     GameIndexConnection(client, joined);
     GameConnection(client, joined);
-
-    client.on('disconnect', function(){
-      console.log('user disconnected');
-    });
   });
 };

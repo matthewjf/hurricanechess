@@ -47,17 +47,29 @@ module.exports = function(client, success) {
 
   client.on("join-game", function(data){
     validateUser(userId, function(user){
-      console.log('valid user attempted to join game: ' + data.id);
-      Game.findById(data.id)
+      Game.findOne({_id: data.id})
         .populate('white')
         .populate('black')
         .exec(function(err, game){
           if (err) {
             client.emit('errors', err.errors);
           } else {
-            // if user is already in game, move on
-
-            // else try to join game
+            console.log("found game");
+            console.log(game);
+            game.join(user, null, function(err, game) {
+              console.log('mongoose: successful join');
+              console.log(err);
+              console.log(game);
+              if (err) {
+                client.emit('errors', err.errors);
+              } else {
+                console.log("successfully joined game: " + game._id);
+                success({room: game._id});
+                client.broadcast.in('index').send({game: game});
+                client.join(game._id);
+                client.emit('joined-game', {game: game});
+              }
+            });
           }
         });
     });

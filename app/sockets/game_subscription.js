@@ -30,10 +30,10 @@ var GameSubscription = {
         errorCB(errorCB);
     });
 
-    socket.on('message', (data) => {
-      console.log('message: ', data);
-      GameIndexActions.receiveGame(data.game);
-    });
+    // socket.on('message', (data) => {
+    //   console.log('message: ', data);
+    //   GameIndexActions.receiveGame(data.game);
+    // });
 
     SocketManager.join(ROOM, {id: id}, (data) => {
       console.log('joined: ', data);

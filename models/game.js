@@ -18,14 +18,48 @@ Game.methods.isFull = function(){
   return (this.white && this.black);
 };
 
-Game.methods.join = function(user, color, successCB, errorCB){
-  color = color || 'white';
+Game.methods.isInGame = function(user) {
+  return this.white === user._id || this.black === user._id;
 };
 
-Game.pre('save', function(next) {
-  if (this.isEmpty)
-    this.remove();
-  next();
+Game.methods.join = function(user, color, callback){
+  console.log("trying to join");
+  if (this.isInGame(user)) {
+    callback(null, this);
+  } else if (this.isEmpty) {
+    color = color || 'white';
+    this[color] = user._id;
+  } else if (this.white) {
+    this.black = user._id;
+  } else {
+    this.white = user._id;
+  }
+  this.save(callback);
+};
+
+Game.methods.leave = function(user, callback){
+  if (this.white === user._id)
+    this.white = undefined;
+  if (this.black === user._id)
+    this.black = undefined;
+
+  this.save(callback);
+};
+
+Game.methods.players = function(){
+  return [this.white, this.black];
+};
+
+Game.post('save', function(doc, next) {
+  console.log("post save - is empty? ", doc.isEmpty());
+  // wait 10 secs to allow reconnection
+  setTimeout(function() {
+    if (doc.isEmpty()) {
+      console.log("game is empty, removing");
+      doc.remove();
+    }
+    next();
+  }, 10000);
 });
 
 module.exports = mongoose.model('Game', Game);
