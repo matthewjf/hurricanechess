@@ -1,7 +1,7 @@
 var Game = require('../models/game');
 var User = require('../models/user');
 
-module.exports = function(client, success) {
+module.exports = function(client, joined) {
   var userId;
   if (client.handshake.session.passport)
     var userId = client.handshake.session.passport.user;
@@ -46,6 +46,7 @@ module.exports = function(client, success) {
   });
 
   client.on("join-game", function(data){
+    console.log('client attempted to join game');
     validateUser(userId, function(user){
       Game.findById(data.id)
         .populate('white')
@@ -59,9 +60,9 @@ module.exports = function(client, success) {
                 client.emit('errors', err.errors);
               } else {
                 console.log("successfully joined game: " + game._id);
-                success({room: game._id});
                 client.broadcast.in('index').send({game: game});
                 client.join(game._id);
+                joined({room: game._id});
                 client.emit('joined-game', {game: game});
               }
             });

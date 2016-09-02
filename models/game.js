@@ -26,7 +26,7 @@ Game.methods.join = function(user, color, callback){
   console.log("trying to join a game");
   // var userRef = mongoose.Types.ObjectId(user);
   if (this.isInGame(user)) {
-    callback(null, this);
+
   } else if (this.isEmpty()) {
     if (color === 'white')
       this.white = user;
