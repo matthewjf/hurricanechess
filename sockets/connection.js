@@ -1,6 +1,4 @@
-import socketio from 'socket.io';
-import session from '../config/session';
-import sharedsession from "express-socket.io-session";
+import io from '../config/socketio';
 
 import GameIndexConnection from './game_index_connection';
 import GameConnection from './game_connection';
@@ -8,61 +6,61 @@ import GameConnection from './game_connection';
 import User from '../models/user';
 import Game from '../models/game';
 
-module.exports = function(server) {
-  var io = socketio.listen(server);
-  io.use(sharedsession(session)); // gives access to express session
+io.on('connection', function(client){
+  console.log('socket connection');
+  var currentRoom, userId;
 
-  io.on('connection', function(client){
-    console.log('socket connection');
-    var currentRoom, userId;
-
-    // CLEANUP
-    var cleanupGame = function(gameId) {
-      var userId;
-      if (client.handshake.session.passport)
-        var userId = client.handshake.session.passport.user;
-      Game.findById(gameId)
-        .populate('white')
-        .populate('black')
-        .exec(function(err, game){
-          if (err) {
-            client.emit('errors', err.errors);
-          } else {
-            User.findById(id, function(_, user){
-              if (user)
-                game.leave(user, function(err, game){
-                  if (err)
-                    client.emit('errors', err.errors);
-                  else
-                    console.log('left game');
-                    client.emit('left-game', game);
-                });
-            });
-          }
-        });
-    };
-
-    // JOIN SUCCESS
-    var joined = function(data) {
-      console.log('joined room: ' + data.room);
-      console.log('leaving: ' + currentRoom);
-      client.leave(currentRoom, function(){
-        console.log("left: " + currentRoom);
-        if (currentRoom !== 'index') {
-          cleanupGame(currentRoom);
+  // CLEANUP
+  var cleanupGame = function(gameId) {
+    console.log("trying to cleanup game");
+    var userId;
+    if (client.handshake.session.passport)
+      var userId = client.handshake.session.passport.user;
+    Game.findById(gameId)
+      .populate('white')
+      .populate('black')
+      .exec(function(err, game){
+        if (err) {
+          client.emit('errors', err.errors);
+        } else {
+          console.log('found game to clean up');
+          User.findById(userId, function(_, user){
+            if (user)
+              console.log('found user');
+              game.leave(user, function(err, game){
+                if (err)
+                  client.emit('errors', err.errors);
+                else
+                  console.log('left game');
+                  client.emit('left-game', game);
+              });
+          });
         }
-        currentRoom = data.room;
       });
-    };
+  };
 
-    client.on('disconnect', function(){
-      console.log('user disconnected');
-      if (currentRoom !== 'index')
+  // JOIN SUCCESS
+  var joined = function(data) {
+    console.log('joined room: ' + data.room);
+    console.log('leaving: ' + currentRoom);
+    client.leave(currentRoom, function(){
+      console.log("left: " + currentRoom);
+      if (currentRoom && currentRoom !== 'index') {
         cleanupGame(currentRoom);
+      }
+      currentRoom = data.room;
     });
+  };
 
-    // JOIN INDEX
-    GameIndexConnection(client, joined);
-    GameConnection(client, joined);
+  client.on('disconnect', function(){
+    console.log('user disconnected');
+    if (currentRoom !== 'index')
+      cleanupGame(currentRoom);
   });
-};
+
+  // JOIN INDEX
+  GameIndexConnection(client, joined);
+  GameConnection(client, joined);
+});
+
+module.exports = io;

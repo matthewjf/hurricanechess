@@ -37,7 +37,6 @@ module.exports = function(client, joined) {
             client.emit('errors', err.errors);
           } else {
             console.log('game: ', game);
-            client.broadcast.in('index').send({game: game});
             client.emit('created-game', game);
           }
         }

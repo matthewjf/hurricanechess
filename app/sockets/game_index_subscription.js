@@ -4,9 +4,14 @@ const ROOM = 'index';
 var GameIndexSubscription = {
   join() {
     // listen to udpates
-    socket.on('message', (data) => {
-      console.log('message: ', data);
+    socket.on('game', (data) => {
+      console.log('receive game: ', data);
       GameIndexActions.receiveGame(data.game);
+    });
+
+    socket.on('remove', (data) => {
+      console.log('remove-game: ', data);
+      GameIndexActions.removeGame(data.game);
     });
 
     SocketManager.join(ROOM, {}, (data) => {

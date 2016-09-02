@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+import io from '../config/socketio';
+import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
 
 var Game = new Schema({
@@ -10,6 +11,15 @@ var Game = new Schema({
   status:   { type: String,  required: true, default: 'waiting', enum: ['waiting', 'starting', 'active', 'archived'] }
 }, {timestamps: true});
 
+// SERIALIZE WITHOUT PASSWORD
+Game.set('toJSON', {
+  transform: function(doc, ret, options) {
+    delete ret.password;
+    return ret;
+  }
+});
+
+// INSTANCE METHODS
 Game.methods.isEmpty = function(){
   return !(this.white || this.black);
 };
@@ -56,16 +66,30 @@ Game.methods.players = function(){
   return [this.white, this.black];
 };
 
-Game.post('save', function(doc, next) {
-  console.log("post save - is empty? ", doc.isEmpty());
+// TRANSACTION CALLBACKS
+Game.post('save', function(game, next) {
+  console.log("post save - is empty? ", game.isEmpty());
   // wait 10 secs to allow reconnection
   setTimeout(function() {
-    if (doc.isEmpty() && (doc.status === 'waiting' || doc.status === 'starting')) {
+    if (game.isEmpty() && (game.status === 'waiting' || game.status === 'starting')) {
       console.log("game is empty, removing it");
-      doc.remove();
+      game.remove().then(function(game){
+        console.log("removed");
+        io.to('index').emit('remove', {game: game});
+      });
     }
   }, 10000);
   next();
+});
+
+Game.post('save', function(game, next){
+  io.to('index').emit('game', {game: game});
+  io.to(game._id).emit('game', {game: game});
+  next();
+});
+
+Game.post('remove', function(game, next){
+  io.to('index').emit('remove', {game: game});
 });
 
 module.exports = mongoose.model('Game', Game);
