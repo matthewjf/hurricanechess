@@ -94,6 +94,14 @@ form {
   background-color: $error-color;
 }
 
+.primary-text {
+  color: $primary-color;
+}
+
+.primary-color {
+  background-color: $primary-color;
+}
+
 #socket-error {
   margin-left: auto;
   margin-right: auto;

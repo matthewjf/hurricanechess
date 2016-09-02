@@ -26,8 +26,6 @@ module.exports = function(client, joined) {
     });
   };
 
-  // TODO: clean up this code: emit from pre save hooks (maybe?)
-
   client.on("create-game", function(data){
     validateUser(userId, function(user){
       Game.create(gameData(data, user),

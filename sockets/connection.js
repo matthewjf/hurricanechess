@@ -22,7 +22,7 @@ io.on('connection', function(client){
       .exec(function(err, game){
         if (err) {
           client.emit('errors', err.errors);
-        } else {
+        } else if (game) {
           console.log('found game to clean up');
           User.findById(userId, function(_, user){
             if (user)

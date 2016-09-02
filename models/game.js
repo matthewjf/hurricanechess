@@ -2,7 +2,7 @@ import io from '../config/socketio';
 import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
 
-var Game = new Schema({
+var GameSchema = new Schema({
   name:     { type: String,  required: true, minlength: 6,      index: true },
   private:  { type: Boolean,                 default: false                 },
   password: { type: String                                                  },
@@ -12,7 +12,7 @@ var Game = new Schema({
 }, {timestamps: true});
 
 // SERIALIZE WITHOUT PASSWORD
-Game.set('toJSON', {
+GameSchema.set('toJSON', {
   transform: function(doc, ret, options) {
     delete ret.password;
     return ret;
@@ -20,19 +20,19 @@ Game.set('toJSON', {
 });
 
 // INSTANCE METHODS
-Game.methods.isEmpty = function(){
+GameSchema.methods.isEmpty = function(){
   return !(this.white || this.black);
 };
 
-Game.methods.isFull = function(){
+GameSchema.methods.isFull = function(){
   return (this.white && this.black);
 };
 
-Game.methods.isInGame = function(user) {
+GameSchema.methods.isInGame = function(user) {
   return user.equals(this.white) || user.equals(this.black);
 };
 
-Game.methods.join = function(user, color, callback){
+GameSchema.methods.join = function(user, color, callback){
   console.log("trying to join a game");
   // var userRef = mongoose.Types.ObjectId(user);
   if (this.isInGame(user)) {
@@ -50,7 +50,7 @@ Game.methods.join = function(user, color, callback){
   this.save(callback);
 };
 
-Game.methods.leave = function(user, callback){
+GameSchema.methods.leave = function(user, callback){
   if (this.status === 'waiting' || this.status == 'starting') {
     if (user.equals(this.white))
       this.white = undefined;
@@ -58,38 +58,55 @@ Game.methods.leave = function(user, callback){
       this.black = undefined;
     this.save(callback);
   } else {
-    callback({error: "can't leave game"}, this);
+    callback({errors: "can't leave game"}, this);
   }
 };
 
-Game.methods.players = function(){
+GameSchema.methods.isRemovable = function(){
+  if (this.isEmpty() && (this.status === 'waiting' || this.status === 'starting'))
+    return true;
+  else
+    return false;
+};
+
+GameSchema.methods.players = function(){
   return [this.white, this.black];
 };
 
 // TRANSACTION CALLBACKS
-Game.post('save', function(game, next) {
-  console.log("post save - is empty? ", game.isEmpty());
+var timeouts = {};
+
+GameSchema.pre('save', function(next) {
+  console.log("post save - is empty? ", this.isEmpty());
   // wait 10 secs to allow reconnection
-  setTimeout(function() {
-    if (game.isEmpty() && (game.status === 'waiting' || game.status === 'starting')) {
-      console.log("game is empty, removing it");
-      game.remove().then(function(game){
-        console.log("removed");
-        io.to('index').emit('remove', {game: game});
+  if (this.isRemovable()) {
+    console.log("setting a timeout");
+    setTimeout(function(){
+      console.log("inside timeout");
+      // TODO: store a ref and clear callback if someone joins
+      Game.findById(this._id, function(_, game){
+        if (game && game.isRemovable()) {
+          console.log("game is empty, removing it");
+          game.remove().then(function(game){
+            console.log("removed");
+            io.to('index').emit('remove', {game: game});
+          });
+        }
       });
-    }
-  }, 10000);
+    }.bind(this), 10000);
+  }
   next();
 });
 
-Game.post('save', function(game, next){
+GameSchema.post('save', function(game, next){
   io.to('index').emit('game', {game: game});
   io.to(game._id).emit('game', {game: game});
   next();
 });
 
-Game.post('remove', function(game, next){
+GameSchema.post('remove', function(game, next){
   io.to('index').emit('remove', {game: game});
 });
 
-module.exports = mongoose.model('Game', Game);
+var Game = mongoose.model('Game', GameSchema);
+module.exports = Game;

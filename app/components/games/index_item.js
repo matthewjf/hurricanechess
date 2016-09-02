@@ -6,6 +6,8 @@ export class GameIndexItem extends React.Component {
     super(props);
     this.handleClick = this.handleClick.bind(this);
     this.playerCount = this.playerCount.bind(this);
+    this.playerColor = this.playerColor.bind(this);
+    this.statusColor = this.statusColor.bind(this);
 
     this.state = {game: this.props.game};
   }
@@ -28,6 +30,31 @@ export class GameIndexItem extends React.Component {
     return count;
   }
 
+  playerColor() {
+    if (this.playerCount() === 0) {
+      return "error-text";
+    }
+  }
+
+  statusColor() {
+    switch (this.state.game.status){
+      case 'waiting':
+        return 'primary-text';
+        break;
+      case 'archived':
+        return 'grey-text';
+        break;
+      case 'active':
+        return 'light-green-text text-lighten-4';
+        break;
+      case 'starting':
+        return 'light-green-text text-lighten-2';
+        break;
+      default:
+        return '';
+    }
+  }
+
   render() {
     return(
       <li className="row">
@@ -36,10 +63,10 @@ export class GameIndexItem extends React.Component {
             <div className='col s7'>
               {this.state.game.name}
             </div>
-            <div className='col s2 right-align'>
+            <div className={this.playerColor() + ' col s2 right-align'}>
               {this.playerCount()}/2
             </div>
-            <div className='col s3 right-align'>
+            <div className={this.statusColor() + ' col s3 right-align'}>
               {this.state.game.status}
             </div>
           </div>
