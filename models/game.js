@@ -63,37 +63,84 @@ GameSchema.methods.leave = function(user, callback){
 };
 
 GameSchema.methods.isRemovable = function(){
-  if (this.isEmpty() && (this.status === 'waiting' || this.status === 'starting'))
-    return true;
-  else
+  return (this.isEmpty() && (this.status === 'waiting' || this.status === 'starting'));
+};
+
+GameSchema.methods.isStartable = function() {
+  return (this.isFull() && (this.status === 'waiting'));
+};
+
+GameSchema.methods.isActivatable = function() {
+  return (this.isFull() && (this.status === 'starting'));
+};
+
+GameSchema.methods.isUnstartable = function() {
+  return (!this.isFull() && (this.status === 'starting'));
+};
+
+GameSchema.methods.activate = function() {
+  if (this.isActivatable()) {
+    this.status = 'active';
+    return this.save();
+  } else {
     return false;
+  }
 };
 
 GameSchema.methods.players = function(){
   return [this.white, this.black];
 };
 
-// TRANSACTION CALLBACKS
 var timeouts = {};
 
+// TRANSACTION CALLBACKS
+var clearTimeouts = function(id) {
+  clearTimeout(timeouts[id]);
+};
+
+var delayedRemove = function(id){
+  clearTimeouts(id);
+  timeouts[id] = setTimeout(function(){
+    console.log("inside remove timeout");
+    // TODO: store a ref and clear callback if someone joins
+    Game.findById(id, function(_, game){
+      if (game && game.isRemovable()) {
+        console.log("game is empty, removing it");
+        game.remove().then(function(game){
+          console.log("removed");
+        });
+      }
+    });
+  }, 10000);
+};
+
+var delayedActivate = function(id){
+  clearTimeouts(id);
+  timeouts[id] = setTimeout(function(){
+    console.log("inside activate timeout");
+    // TODO: store a ref and clear callback if someone joins
+    Game.findById(id, function(_, game){
+      if (game && game.isActivatable()) {
+        game.activate().then(function(game){
+          console.log("removed");
+        });
+      }
+    });
+  }, 10000);
+};
+
 GameSchema.pre('save', function(next) {
-  console.log("post save - is empty? ", this.isEmpty());
-  // wait 10 secs to allow reconnection
+  console.log("pre save - is empty? ", this.isEmpty());
+  if (this.isStartable()) {
+    this.status = 'starting';
+    delayedActivate(this._id);
+  }
   if (this.isRemovable()) {
     console.log("setting a timeout");
-    setTimeout(function(){
-      console.log("inside timeout");
-      // TODO: store a ref and clear callback if someone joins
-      Game.findById(this._id, function(_, game){
-        if (game && game.isRemovable()) {
-          console.log("game is empty, removing it");
-          game.remove().then(function(game){
-            console.log("removed");
-            io.to('index').emit('remove', {game: game});
-          });
-        }
-      });
-    }.bind(this), 10000);
+    delayedRemove(this._id);
+  }
+  if (this.isUnstartable()) {
+    this.status = 'waiting';
   }
   next();
 });

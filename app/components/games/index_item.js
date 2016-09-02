@@ -45,10 +45,10 @@ export class GameIndexItem extends React.Component {
         return 'grey-text';
         break;
       case 'active':
-        return 'light-green-text text-lighten-4';
+        return 'light-green-text text-lighten-1';
         break;
       case 'starting':
-        return 'light-green-text text-lighten-2';
+        return 'secondary-text';
         break;
       default:
         return '';
