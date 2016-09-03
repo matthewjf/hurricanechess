@@ -1,13 +1,13 @@
-var Game = require('../models/game');
-var User = require('../models/user');
+const Game = require('../models/game');
+const User = require('../models/user');
 
-module.exports = function(client, joined) {
+module.exports = (client, joined) => {
   var userId;
   if (client.handshake.session.passport)
-    var userId = client.handshake.session.passport.user;
+    userId = client.handshake.session.passport.user;
 
 
-  var gameData = function(data, user) {
+  const gameData = (data, user) => {
     if (data.black)
       data.game.black = user._id;
     else
@@ -16,43 +16,39 @@ module.exports = function(client, joined) {
     return data.game;
   };
 
-  var validateUser = function(id, successCB) {
-    User.findById(id, function(_, user){
-      if (user) {
+  const validateUser = (id, successCB) => {
+    User.findById(id, (_, user) => {
+      if (user)
         successCB(user);
-      } else {
+      else
         client.emit('errors', {login: "login required"});
-      }
     });
   };
 
-  client.on("create-game", function(data){
-    validateUser(userId, function(user){
+  client.on("create-game", data => {
+    validateUser(userId, user => {
       Game.create(gameData(data, user),
-        function(err, game){
-          if (err) {
-            console.log('err: ', err.errors);
+        (err, game) => {
+          if (err)
             client.emit('errors', err.errors);
-          } else {
-            console.log('game: ', game);
+          else
             client.emit('created-game', game);
-          }
         }
       );
     });
   });
 
-  client.on("join-game", function(data){
+  client.on("join-game", data => {
     console.log('client attempted to join game');
-    validateUser(userId, function(user){
+    validateUser(userId, user => {
       Game.findById(data.id)
         .populate('white')
         .populate('black')
-        .exec(function(err, game){
+        .exec((err, game) => {
           if (err) {
             client.emit('errors', err.errors);
           } else {
-            game.join(user, null, function(err, game) {
+            game.join(user, null, (err, game) => {
               if (err) {
                 client.emit('errors', err.errors);
               } else {

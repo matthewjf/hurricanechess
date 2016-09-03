@@ -25,35 +25,5 @@
         background-color: hover($dark-2);
       }
     }
-
-    .index-item-appear {
-      opacity: 0.1;
-    }
-    .index-item-appear.index-item-appear-active {
-      opacity: 1;
-      transition: opacity 500ms ease;
-    }
-    .index-item-enter {
-      opacity: 0.1;
-      transform: translateY(-200px);
-    }
-    .index-item-enter.index-item-enter-active {
-      opacity: 1;
-      transform: translateY(0);
-      transition: all 500ms ease;
-    }
-    .index-item-item-leave {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .index-item-leave.index-item-leave-active {
-      opacity: 0.1;
-      transform: translateY(-200px);
-      transition: all 500ms ease;
-    }
-
-    .index-item {
-      transition: all 500ms ease;
-    }
   }
 }

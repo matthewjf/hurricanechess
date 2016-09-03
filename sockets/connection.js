@@ -6,12 +6,12 @@ import GameConnection from './game_connection';
 import User from '../models/user';
 import Game from '../models/game';
 
-io.on('connection', function(client){
+io.on('connection', client => {
   console.log('socket connection');
   var currentRoom, userId;
 
   // CLEANUP
-  var cleanupGame = function(gameId) {
+  const cleanupGame = gameId => {
     console.log("trying to cleanup game");
     var userId;
     if (client.handshake.session.passport)
@@ -40,7 +40,7 @@ io.on('connection', function(client){
   };
 
   // JOIN SUCCESS
-  var joined = function(data) {
+  const joined = data => {
     if (currentRoom !== data.room) {
       console.log('joined room: ' + data.room);
       console.log('leaving: ' + currentRoom);
@@ -54,7 +54,7 @@ io.on('connection', function(client){
     }
   };
 
-  client.on('disconnect', function(){
+  client.on('disconnect', () => {
     console.log('user disconnected');
     if (currentRoom !== 'index')
       cleanupGame(currentRoom);
