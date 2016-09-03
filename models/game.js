@@ -118,10 +118,10 @@ var delayedActivate = function(id){
   clearTimeouts(id);
   timeouts[id] = setTimeout(function(){
     console.log("inside activate timeout");
-    // TODO: store a ref and clear callback if someone joins
     Game.findById(id, function(_, game){
       if (game && game.isActivatable()) {
         game.activate().then(function(game){
+          // start game in redis
           console.log("removed");
         });
       }

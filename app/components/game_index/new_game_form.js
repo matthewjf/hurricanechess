@@ -76,15 +76,12 @@ export class NewGameForm extends React.Component {
   }
 
   submitError(error) {
-    debugger;
     if (error.login) {
       // not logged in
       $('#new-game-modal').closeModal();
       ErrorUtil.loginRequired();
-    } else if (error.name) {
-      this.setState({errors: error});
     } else {
-      // unexpected error
+      this.setState({errors: error});
     }
   }
 
@@ -111,8 +108,12 @@ export class NewGameForm extends React.Component {
 
   renderErrors(errors) {
     if (errors) {
-      return errors.map(function(error) {
-        return <span className='error-text' key={error} >{error}</span>;
+      return Object.keys(errors).map(function(key){
+        return (
+          <span className='error-text' key={key} >
+            {errors[key].message.replace('Path ', '')}
+          </span>
+        );
       });
     } else {
       return null;
