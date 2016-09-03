@@ -9,8 +9,8 @@ export default function(client, joined) {
           .populate('white')
           .populate('black')
           .exec(function(err, games) {
-            client.join('index');
             joined({room: 'index'});
+            client.join('index');
             client.emit('joined-index', {games: games});
           });
     });

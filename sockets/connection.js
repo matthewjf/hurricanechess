@@ -41,15 +41,17 @@ io.on('connection', function(client){
 
   // JOIN SUCCESS
   var joined = function(data) {
-    console.log('joined room: ' + data.room);
-    console.log('leaving: ' + currentRoom);
-    client.leave(currentRoom, function(){
-      console.log("left: " + currentRoom);
-      if (currentRoom && currentRoom !== 'index') {
-        cleanupGame(currentRoom);
-      }
-      currentRoom = data.room;
-    });
+    if (currentRoom !== data.room) {
+      console.log('joined room: ' + data.room);
+      console.log('leaving: ' + currentRoom);
+      client.leave(currentRoom, function(){
+        console.log("left: " + currentRoom);
+        if (currentRoom && currentRoom !== 'index') {
+          cleanupGame(currentRoom);
+        }
+        currentRoom = data.room;
+      });
+    }
   };
 
   client.on('disconnect', function(){

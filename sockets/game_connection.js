@@ -58,8 +58,8 @@ module.exports = function(client, joined) {
               } else {
                 console.log("successfully joined game: " + game._id);
                 client.broadcast.in('index').send({game: game});
-                client.join(game._id);
                 joined({room: game._id});
+                client.join(game._id);
                 client.emit('joined-game', {game: game});
               }
             });
