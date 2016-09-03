@@ -14,7 +14,7 @@ class Home extends React.Component {
     if (socket) {
       socket.emit('subscribe', {room: "index"});
       // socket.on('welcome', function(data){alert(data);});
-      socket.on('reconnect', function(){
+      socket.on('reconnect', () => {
         socket.emit('subscribe', {room: "index"});
       });
     };

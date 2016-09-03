@@ -3,7 +3,7 @@ var config = require('./config');
 
 mongoose.connect(config.database);
 mongoose.Promise = global.Promise;
-mongoose.connection.on('error', function() {
+mongoose.connection.on('error', () => {
   console.info('Error: Could not connect to MongoDB. Running `mongod`?');
 });
 

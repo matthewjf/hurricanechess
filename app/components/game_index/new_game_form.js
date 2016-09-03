@@ -108,7 +108,7 @@ export class NewGameForm extends React.Component {
 
   renderErrors(errors) {
     if (errors) {
-      return Object.keys(errors).map(function(key){
+      return Object.keys(errors).map(key =>{
         return (
           <span className='error-text' key={key} >
             {errors[key].message.replace('Path ', '')}

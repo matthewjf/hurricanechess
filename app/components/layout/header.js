@@ -25,7 +25,7 @@ class Header extends React.Component {
   logout(e) {
     e.preventDefault();
     this.home();
-    UserApi.logout(function(){
+    UserApi.logout(() => {
       Materialize.toast('Logged out', 2000, 'error-text');
     });
   }

@@ -13,26 +13,26 @@ var GameSchema = new Schema({
 
 // SERIALIZE WITHOUT PASSWORD
 GameSchema.set('toJSON', {
-  transform: function(doc, ret, options) {
+  transform: (doc, ret, options) => {
     delete ret.password;
     return ret;
   }
 });
 
 // INSTANCE METHODS
-GameSchema.methods.isEmpty = function(){
+GameSchema.methods.isEmpty = () => {
   return !(this.white || this.black);
 };
 
-GameSchema.methods.isFull = function(){
+GameSchema.methods.isFull = () => {
   return (this.white && this.black);
 };
 
-GameSchema.methods.isInGame = function(user) {
+GameSchema.methods.isInGame = (user) => {
   return user.equals(this.white) || user.equals(this.black);
 };
 
-GameSchema.methods.join = function(user, color, callback){
+GameSchema.methods.join = (user, color, callback) => {
   console.log("trying to join a game");
   // var userRef = mongoose.Types.ObjectId(user);
   if (this.isInGame(user)) {
@@ -50,7 +50,7 @@ GameSchema.methods.join = function(user, color, callback){
   this.save(callback);
 };
 
-GameSchema.methods.leave = function(user, callback){
+GameSchema.methods.leave = (user, callback) => {
   if (this.status === 'waiting' || this.status == 'starting') {
     if (user.equals(this.white))
       this.white = undefined;
@@ -62,23 +62,23 @@ GameSchema.methods.leave = function(user, callback){
   }
 };
 
-GameSchema.methods.isRemovable = function(){
+GameSchema.methods.isRemovable = () => {
   return (this.isEmpty() && (this.status === 'waiting' || this.status === 'starting'));
 };
 
-GameSchema.methods.isStartable = function() {
+GameSchema.methods.isStartable = () => {
   return (this.isFull() && (this.status === 'waiting'));
 };
 
-GameSchema.methods.isActivatable = function() {
+GameSchema.methods.isActivatable = () => {
   return (this.isFull() && (this.status === 'starting'));
 };
 
-GameSchema.methods.isUnstartable = function() {
+GameSchema.methods.isUnstartable = () => {
   return (!this.isFull() && (this.status === 'starting'));
 };
 
-GameSchema.methods.activate = function() {
+GameSchema.methods.activate = () => {
   if (this.isActivatable()) {
     this.status = 'active';
     return this.save();
@@ -87,26 +87,26 @@ GameSchema.methods.activate = function() {
   }
 };
 
-GameSchema.methods.players = function(){
+GameSchema.methods.players = () => {
   return [this.white, this.black];
 };
 
 var timeouts = {};
 
 // TRANSACTION CALLBACKS
-var clearTimeouts = function(id) {
+var clearTimeouts = (id) =>  {
   clearTimeout(timeouts[id]);
 };
 
-var delayedRemove = function(id){
+var delayedRemove = (id) => {
   clearTimeouts(id);
-  timeouts[id] = setTimeout(function(){
+  timeouts[id] = setTimeout(() => {
     console.log("inside remove timeout");
     // TODO: store a ref and clear callback if someone joins
-    Game.findById(id, function(_, game){
+    Game.findById(id, (_, game) => {
       if (game && game.isRemovable()) {
         console.log("game is empty, removing it");
-        game.remove().then(function(game){
+        game.remove().then((game) => {
           console.log("removed");
         });
       }
@@ -114,13 +114,13 @@ var delayedRemove = function(id){
   }, 10000);
 };
 
-var delayedActivate = function(id){
+var delayedActivate = (id) => {
   clearTimeouts(id);
-  timeouts[id] = setTimeout(function(){
+  timeouts[id] = setTimeout(() => {
     console.log("inside activate timeout");
-    Game.findById(id, function(_, game){
+    Game.findById(id, (_, game) => {
       if (game && game.isActivatable()) {
-        game.activate().then(function(game){
+        game.activate().then((game) => {
           // start game in redis
           console.log("removed");
         });
@@ -129,7 +129,7 @@ var delayedActivate = function(id){
   }, 10000);
 };
 
-GameSchema.pre('save', function(next) {
+GameSchema.pre('save', (next) => {
   console.log("pre save - is empty? ", this.isEmpty());
   if (this.isStartable()) {
     this.status = 'starting';
@@ -145,13 +145,13 @@ GameSchema.pre('save', function(next) {
   next();
 });
 
-GameSchema.post('save', function(game, next){
+GameSchema.post('save', (game, next) => {
   io.to('index').emit('game', {game: game});
   io.to(game._id).emit('game', {game: game});
   next();
 });
 
-GameSchema.post('remove', function(game, next){
+GameSchema.post('remove', (game, next) => {
   io.to('index').emit('remove', {game: game});
 });
 

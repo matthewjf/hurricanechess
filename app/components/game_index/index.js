@@ -34,7 +34,7 @@ class GameIndex extends React.Component {
 
   gameList(games) {
     if (games) {
-      return games.map(function(game) {
+      return games.map(game => {
         return <GameIndexItem game={game} key={game._id} />;
       });
     } else {
@@ -43,7 +43,7 @@ class GameIndex extends React.Component {
   }
 
   render() {
-    var games = this.state.games.map(function(game) {
+    var games = this.state.games.map(game => {
       return <GameIndexItem game={game} key={game._id} />;
     });
 
