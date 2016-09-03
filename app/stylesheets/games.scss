@@ -11,10 +11,9 @@
   }
 
   #game-list {
-    li {
-      margin-bottom: 0;
+    a {
+      color: white;
     }
-
     .game {
       background-color: $dark-2;
       cursor: pointer;

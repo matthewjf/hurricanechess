@@ -1,4 +1,5 @@
 import React from 'react';
+import {VelocityComponent, VelocityTransitionGroup} from 'velocity-react';
 
 import GameIndexSubscription from '../../sockets/game_index_subscription';
 import GameIndexStore from '../../stores/game_index_store';
@@ -38,17 +39,12 @@ class GameIndex extends React.Component {
         return <GameIndexItem game={game} key={game._id} />;
       });
     } else {
-      return null;
+      return;
     }
   }
 
   render() {
-    var games = this.state.games.map(game => {
-      return <GameIndexItem game={game} key={game._id} />;
-    });
-
     return(
-
       <div id='game-index'>
         <div className='split'>
           <h2>GAMES</h2>
@@ -64,7 +60,10 @@ class GameIndex extends React.Component {
         </div>
 
         <ul id='game-list'>
-          {games}
+          {/*TODO: fix error*/}
+          <VelocityTransitionGroup runOnMount={true} enter={{animation: 'slideDown'}} leave={{animation: 'slideUp'}}>
+            {this.gameList(this.state.games)}
+          </VelocityTransitionGroup>
         </ul>
       </div>
     );

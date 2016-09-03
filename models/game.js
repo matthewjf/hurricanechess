@@ -13,26 +13,26 @@ var GameSchema = new Schema({
 
 // SERIALIZE WITHOUT PASSWORD
 GameSchema.set('toJSON', {
-  transform: (doc, ret, options) => {
+  transform: function(doc, ret, options) {
     delete ret.password;
     return ret;
   }
 });
 
 // INSTANCE METHODS
-GameSchema.methods.isEmpty = () => {
+GameSchema.methods.isEmpty = function() {
   return !(this.white || this.black);
 };
 
-GameSchema.methods.isFull = () => {
+GameSchema.methods.isFull = function() {
   return (this.white && this.black);
 };
 
-GameSchema.methods.isInGame = (user) => {
+GameSchema.methods.isInGame = function(user) {
   return user.equals(this.white) || user.equals(this.black);
 };
 
-GameSchema.methods.join = (user, color, callback) => {
+GameSchema.methods.join = function(user, color, callback) {
   console.log("trying to join a game");
   // var userRef = mongoose.Types.ObjectId(user);
   if (this.isInGame(user)) {
@@ -50,7 +50,7 @@ GameSchema.methods.join = (user, color, callback) => {
   this.save(callback);
 };
 
-GameSchema.methods.leave = (user, callback) => {
+GameSchema.methods.leave = function(user, callback) {
   if (this.status === 'waiting' || this.status == 'starting') {
     if (user.equals(this.white))
       this.white = undefined;
@@ -62,23 +62,23 @@ GameSchema.methods.leave = (user, callback) => {
   }
 };
 
-GameSchema.methods.isRemovable = () => {
+GameSchema.methods.isRemovable = function() {
   return (this.isEmpty() && (this.status === 'waiting' || this.status === 'starting'));
 };
 
-GameSchema.methods.isStartable = () => {
+GameSchema.methods.isStartable = function() {
   return (this.isFull() && (this.status === 'waiting'));
 };
 
-GameSchema.methods.isActivatable = () => {
+GameSchema.methods.isActivatable = function() {
   return (this.isFull() && (this.status === 'starting'));
 };
 
-GameSchema.methods.isUnstartable = () => {
+GameSchema.methods.isUnstartable = function() {
   return (!this.isFull() && (this.status === 'starting'));
 };
 
-GameSchema.methods.activate = () => {
+GameSchema.methods.activate = function() {
   if (this.isActivatable()) {
     this.status = 'active';
     return this.save();
@@ -87,18 +87,18 @@ GameSchema.methods.activate = () => {
   }
 };
 
-GameSchema.methods.players = () => {
+GameSchema.methods.players = function() {
   return [this.white, this.black];
 };
 
 var timeouts = {};
 
 // TRANSACTION CALLBACKS
-var clearTimeouts = (id) =>  {
+var clearTimeouts = function(id) {
   clearTimeout(timeouts[id]);
 };
 
-var delayedRemove = (id) => {
+var delayedRemove = function(id) {
   clearTimeouts(id);
   timeouts[id] = setTimeout(() => {
     console.log("inside remove timeout");
@@ -129,7 +129,7 @@ var delayedActivate = (id) => {
   }, 10000);
 };
 
-GameSchema.pre('save', (next) => {
+GameSchema.pre('save', function(next) {
   console.log("pre save - is empty? ", this.isEmpty());
   if (this.isStartable()) {
     this.status = 'starting';

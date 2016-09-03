@@ -1,9 +1,7 @@
 @import 'functions';
-@import 'components/_color';
 @import 'colors';
 $primary-color: color("orange", "lighten-1");
 $secondary-color: color("red", "lighten-2");
-@import 'materialize';
 $dark-0: hsl(0,0%,15%);
 $dark-1: hsl(0,0%,18%);
 $dark-2: hsl(0,0%,26%);

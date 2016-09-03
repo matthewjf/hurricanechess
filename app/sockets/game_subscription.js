@@ -9,7 +9,7 @@ var GameSubscription = {
       console.log("created-game: ", game);
       if (successCB)
         successCB(game);
-      socket.off('created');
+      socket.off('created-game');
       socket.off('errors');
       browserHistory.push("games/" + game._id);
     });
@@ -45,8 +45,7 @@ var GameSubscription = {
   leave() {
     SocketManager.leave('game');
     socket.off("errors");
-    socket.off("created");
-    socket.off("joined");
+    socket.off("created-game");
   }
 };
 

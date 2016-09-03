@@ -22,7 +22,8 @@ var GameIndexSubscription = {
   leave() {
     SocketManager.leave(ROOM);
     socket.off("joined-index");
-    socket.off("message");
+    socket.off("remove");
+    socket.off("game");
   }
 };
 

@@ -20,7 +20,7 @@ var dependencies = [
   'react',
   'react-dom',
   'react-router',
-  'react-addons-css-transition-group',
+  'velocity-react',
   'underscore'
 ];
 
@@ -31,8 +31,6 @@ var dependencies = [
  */
 gulp.task('vendor', function() {
   return gulp.src([
-    'bower_components/jquery/dist/jquery.js',
-    'bower_components/materialize/dist/js/materialize.js'
   ]).pipe(concat('vendor.js'))
     .pipe(gulpif(production, uglify({ mangle: false })))
     .pipe(gulp.dest('public/js'));

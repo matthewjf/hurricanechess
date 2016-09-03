@@ -13,7 +13,7 @@ export class GameIndexItem extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    this.setState({game: props.game});
+    this.setState({game: this.props.game});
   }
 
   handleClick(e) {
@@ -57,18 +57,16 @@ export class GameIndexItem extends React.Component {
 
   render() {
     return(
-      <li className="row index-item">
+      <li className="row card-panel hoverable waves-effect game">
         <a onClick={this.handleClick}>
-          <div className="game card-panel hoverable waves-effect">
-            <div className='col s7'>
-              {this.state.game.name}
-            </div>
-            <div className={this.playerColor() + ' col s2 right-align'}>
-              {this.playerCount()}/2
-            </div>
-            <div className={this.statusColor() + ' col s3 right-align'}>
-              {this.state.game.status}
-            </div>
+          <div className='col s7'>
+            {this.state.game.name}
+          </div>
+          <div className={this.playerColor() + ' col s2 right-align'}>
+            {this.playerCount()}/2
+          </div>
+          <div className={this.statusColor() + ' col s3 right-align'}>
+            {this.state.game.status}
           </div>
         </a>
       </li>
