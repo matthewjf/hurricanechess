@@ -57,7 +57,7 @@ export class GameIndexItem extends React.Component {
 
   render() {
     return(
-      <li className="row">
+      <li className="row index-item">
         <a onClick={this.handleClick}>
           <div className="game card-panel hoverable waves-effect">
             <div className='col s7'>

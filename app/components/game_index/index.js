@@ -1,3 +1,4 @@
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 import GameIndexSubscription from '../../sockets/game_index_subscription';
@@ -43,7 +44,12 @@ class GameIndex extends React.Component {
   }
 
   render() {
+    var games = this.state.games.map(function(game) {
+      return <GameIndexItem game={game} key={game._id} />;
+    });
+
     return(
+
       <div id='game-index'>
         <div className='split'>
           <h2>GAMES</h2>
@@ -59,7 +65,11 @@ class GameIndex extends React.Component {
         </div>
 
         <ul id='game-list'>
-          { this.gameList(this.state.games) }
+          <ReactCSSTransitionGroup transitionName='index-item'
+                transitionAppear={true} transitionAppearTimeout={500}
+                transitionEnterTimeout={500} transitionLeaveTimeout={500}>
+            {games}
+          </ReactCSSTransitionGroup>
         </ul>
       </div>
     );
