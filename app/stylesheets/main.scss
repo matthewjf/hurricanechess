@@ -1,5 +1,4 @@
 @import 'functions';
-@import 'colors';
 @import './components/color';
 $primary-color: color("orange", "lighten-1");
 $secondary-color: color("red", "lighten-2");
@@ -13,6 +12,7 @@ $link-color: color("light-blue", "base");
 @import 'materialize';
 @import 'header';
 @import 'games';
+@import 'board';
 
 // TODO: decide on this
 // * {
@@ -119,4 +119,12 @@ form {
   margin-right: auto;
   width: 100%;
   max-width: 800px;
+}
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;
 }

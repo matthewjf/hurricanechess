@@ -1,0 +1,28 @@
+$white-square-color: color("yellow", "lighten-4");
+
+#board {
+  padding: 0;
+  flex-shrink: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  height: 512px;
+  width: 512px;
+
+  margin: 0;
+
+  .square {
+    box-sizing: border-box;
+    flex: 0 0 12.5%;
+    height: 12.5%;
+  }
+
+  .white-square {
+    background-color: $white-square-color;
+  }
+
+  .black-square {
+    background-color: #546E7A;
+  }
+}
