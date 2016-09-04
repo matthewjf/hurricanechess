@@ -1,0 +1,23 @@
+{
+  "name": "chessx",
+  "dependencies": {
+    "jquery": "^3.1.0",
+    "materialize": "^0.97.7",
+    "velocity": "^1.2.3"
+  },
+  "homepage": "https://github.com/matthewjf/chessx",
+  "authors": [
+    "matthew"
+  ],
+  "description": "chess without turns",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

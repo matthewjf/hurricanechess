@@ -4,40 +4,33 @@ import {browserHistory} from 'react-router';
 export class GameIndexItem extends React.Component {
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);
-    this.playerCount = this.playerCount.bind(this);
-    this.playerColor = this.playerColor.bind(this);
-    this.statusColor = this.statusColor.bind(this);
-
-    this.state = {game: this.props.game};
-  }
-
-  componentWillReceiveProps(props) {
-    this.setState({game: this.props.game});
+    this.handleClick = this.handleClick.bind(this);;
   }
 
   handleClick(e) {
     e.preventDefault();
-    browserHistory.push('games/' + this.state.game._id);
+    $("li").velocity('finishAll');
+    browserHistory.push('games/' + this.props.game._id);
   }
 
-  playerCount() {
+  playerCount(game) {
     var count = 0;
-    if (this.state.game.white)
+    if (game.white)
       count += 1;
-    if (this.state.game.black)
+    if (game.black)
       count += 1;
     return count;
   }
 
-  playerColor() {
-    if (this.playerCount() === 0) {
+  playerColor(game) {
+    if (this.playerCount(game) === 0)
       return "error-text";
-    }
+    else
+      return '';
   }
 
-  statusColor() {
-    switch (this.state.game.status){
+  statusColor(status) {
+    switch (status){
       case 'waiting':
         return 'primary-text';
         break;
@@ -56,19 +49,19 @@ export class GameIndexItem extends React.Component {
   }
 
   render() {
+    let game = this.props.game;
     return(
-      <li className="row card-panel hoverable waves-effect game">
-        <a onClick={this.handleClick}>
-          <div className='col s7'>
-            {this.state.game.name}
-          </div>
-          <div className={this.playerColor() + ' col s2 right-align'}>
-            {this.playerCount()}/2
-          </div>
-          <div className={this.statusColor() + ' col s3 right-align'}>
-            {this.state.game.status}
-          </div>
-        </a>
+      <li className="row card-panel hoverable waves-effect game"
+          onClick={this.handleClick}>
+        <div className='col s7'>
+          {game.name}
+        </div>
+        <div className={this.playerColor(game) + ' col s2 right-align'}>
+          {this.playerCount(game) + '/2'}
+        </div>
+        <div className={this.statusColor(game.status) + ' col s3 right-align'}>
+          {game.status}
+        </div>
       </li>
     );
   }

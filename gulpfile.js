@@ -20,8 +20,8 @@ var dependencies = [
   'react',
   'react-dom',
   'react-router',
-  'velocity-react',
-  'underscore'
+  'underscore',
+  'velocity-react'
 ];
 
 /*
@@ -31,6 +31,9 @@ var dependencies = [
  */
 gulp.task('vendor', function() {
   return gulp.src([
+    './bower_components/jquery/dist/jquery.js',
+    './bower_components/materialize/dist/js/materialize.js',
+    './bower_components/velocity/velocity.js'
   ]).pipe(concat('vendor.js'))
     .pipe(gulpif(production, uglify({ mangle: false })))
     .pipe(gulp.dest('public/js'));
@@ -106,8 +109,12 @@ gulp.task('browserify-watch', ['browserify-vendor'], function() {
 gulp.task('styles', function() {
   return gulp.src('app/stylesheets/**/*.scss')
     .pipe(plumber())
-    .pipe(sass())
-    .pipe(autoprefixer())
+    .pipe(sass({
+      style: 'compressed',
+      includePaths: [
+        __dirname + '/bower_components/materialize/sass'
+      ]
+    })).pipe(autoprefixer())
     .pipe(gulpif(production, cssmin()))
     .pipe(gulp.dest('public/css'));
 });

@@ -1,5 +1,6 @@
 @import 'functions';
 @import 'colors';
+@import './components/color';
 $primary-color: color("orange", "lighten-1");
 $secondary-color: color("red", "lighten-2");
 $dark-0: hsl(0,0%,15%);
@@ -9,7 +10,7 @@ $dark-3: hsl(0,0%,36%);
 $success-color: color("green", "darken-2");
 $error-color: color("red", "lighten-1");
 $link-color: color("light-blue", "base");
-
+@import 'materialize';
 @import 'header';
 @import 'games';
 
@@ -66,14 +67,14 @@ form {
 .btn-success {
   background-color: $success-color;
   &:hover {
-    background-color: lighten($success-color, 5%);
+    // background-color: lighten($success-color, 5%);
   }
 }
 
 .btn-warning {
   background-color: $error-color;
   &:hover {
-    background-color: lighten($error-color, 5%);
+    // background-color: lighten($error-color, 5%);
   }
 }
 

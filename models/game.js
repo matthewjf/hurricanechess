@@ -15,6 +15,8 @@ var GameSchema = new Schema({
 GameSchema.set('toJSON', {
   transform: function(doc, ret, options) {
     delete ret.password;
+    ret.white = ret.white || null;
+    ret.black = ret.black || null;
     return ret;
   }
 });
