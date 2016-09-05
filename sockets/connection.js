@@ -6,7 +6,11 @@ import GameConnection from './game_connection';
 import User from '../models/user';
 import Game from '../models/game';
 
+import redis from '../config/redis';
+import benchmark from './helpers/redis_benchmark';
+
 io.on('connection', client => {
+  benchmark();
   console.log('socket connection');
   var currentRoom, userId;
 

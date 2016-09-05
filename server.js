@@ -21,13 +21,6 @@ app.use(session);
 app.use(passport.initialize());
 app.use(passport.session());
 
-// REDIS
-var redis = require('redis').createClient();
-
-redis.on("connect", function() {
-  console.log("redis connected");
-});
-
 // API ROUTES
 var users = require('./controllers/users_controller');
 var sessions = require('./controllers/sessions_controller');
