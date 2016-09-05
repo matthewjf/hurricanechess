@@ -6,7 +6,6 @@ import GameStore from '../../stores/game_store';
 import Board from './board';
 
 class Game extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -42,9 +41,21 @@ class Game extends React.Component {
       ErrorUtil.loginRequired();
   }
 
+  openGameSettings() {
+    $('#game-settings-modal').openModal();
+  }
+
   render() {
     return (
-      <Board />
+      <section id='game'>
+        <div className='split settings'>
+          <a onClick={this.openGameSettings}
+             className="waves-effect waves-light btn modal-trigger settings-btn">
+            <i className="material-icons settings-icon">settings</i>
+          </a>
+        </div>
+        <Board />
+      </section>
     );
   }
 };

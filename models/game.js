@@ -76,7 +76,7 @@ GameSchema.methods.isActivatable = function() {
   return (this.isFull() && (this.status === 'starting'));
 };
 
-GameSchema.methods.isUnstartable = function() {
+GameSchema.methods.shouldWait = function() {
   return (!this.isFull() && (this.status === 'starting'));
 };
 
@@ -141,7 +141,7 @@ GameSchema.pre('save', function(next) {
     console.log("setting a timeout");
     delayedRemove(this._id);
   }
-  if (this.isUnstartable()) {
+  if (this.shouldWait()) {
     this.status = 'waiting';
   }
   next();

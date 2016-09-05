@@ -1,5 +1,5 @@
 import React from 'react';
-import {VelocityTransitionGroup} from 'velocity-react';
+import {VelocityTransitionGroup, VelocityComponent} from 'velocity-react';
 
 import GameIndexSubscription from '../../sockets/game_index_subscription';
 import GameIndexStore from '../../stores/game_index_store';
@@ -29,20 +29,24 @@ class GameIndex extends React.Component {
     GameIndexSubscription.leave();
   }
 
+  componentWillReceiveProps(props) {
+    this.setState({currentUser: props.currentUser});
+  }
+
   openNewGameForm() {
 		$('#new-game-modal').openModal();
   }
 
   gameList(games) {
     return games.map(game => {
-      return <GameIndexItem game={game} key={game._id} />;
+      return <GameIndexItem
+                game={game}
+                key={game._id}
+                currentUser={this.state.currentUser}/>;
     });
   }
 
   render() {
-    var games = this.state.games.map(game => {
-      return <GameIndexItem game={game} key={game._id} />;
-    });
     return(
       <div id='game-index'>
         <div className='split'>
@@ -60,7 +64,7 @@ class GameIndex extends React.Component {
 
         <ul id='game-list'>
           <VelocityTransitionGroup enter={{animation: "slideDown"}} leave={{animation: "slideUp"}} >
-            {games}
+            {this.gameList(this.state.games)}
           </VelocityTransitionGroup>
         </ul>
       </div>

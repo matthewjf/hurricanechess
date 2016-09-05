@@ -1,5 +1,6 @@
 import React from 'react';
 import {browserHistory} from 'react-router';
+import ErrorUtil from '../../utils/error_util';
 
 export class GameIndexItem extends React.Component {
   constructor(props) {
@@ -8,9 +9,14 @@ export class GameIndexItem extends React.Component {
   }
 
   handleClick(e) {
+    // TODO: add velocity component with bounce animation if not logged in
     e.preventDefault();
     $("li").velocity('finishAll');
-    browserHistory.push('games/' + this.props.game._id);
+    if (this.props.currentUser) {
+      browserHistory.push('games/' + this.props.game._id);
+    } else {
+      ErrorUtil.loginRequired();
+    }
   }
 
   playerCount(game) {

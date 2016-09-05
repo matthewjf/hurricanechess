@@ -1,0 +1,74 @@
+@import "colors";
+@import "functions";
+
+#game{
+
+  #board {
+    padding: 0;
+    flex-shrink: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    height: 512px;
+    width: 512px;
+
+    margin: 0;
+
+    .square {
+      box-sizing: border-box;
+      flex: 0 0 12.5%;
+      height: 12.5%;
+      background-color: $dark-1;
+    }
+
+    &.natural-board {
+      .white-square {
+        background-color: hsl(35, 30, 70);
+      }
+      .black-square {
+        background-color: hsl(20, 70, 38);
+      }
+    }
+
+    &.cool-board {
+      .white-square {
+        background-color: hsl(200, 15, 70);
+      }
+      .black-square {
+        background-color: hsl(200, 20, 38);
+      }
+    }
+
+    &.candy-board {
+      .white-square {
+        background-color: hsl(1, 50, 88);
+      }
+      .black-square {
+        background-color: hsl(1, 40, 50);
+      }
+    }
+  }
+
+  .split.settings {
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+
+  .btn.settings-btn {
+    padding: 0 1rem;
+    background-color: $dark-1;
+    &:hover {
+      background-color: hover($dark-1);
+    }
+  }
+
+  .settings-icon {
+    font-size: 2rem;
+    color: $primary-color;
+  }
+
+  #game-settings-modal {
+    max-width: 400px;
+  }
+}
