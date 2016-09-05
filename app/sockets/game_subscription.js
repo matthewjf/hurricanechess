@@ -30,13 +30,12 @@ var GameSubscription = {
         errorCB(errorCB);
     });
 
-    // socket.on('message', (data) => {
-    //   console.log('message: ', data);
-    //   GameIndexActions.receiveGame(data.game);
-    // });
+    socket.on('game', (game) => {
+      console.log('game: ', game);
+      // GameIndexActions.receiveGame(data.game);
+    });
 
     SocketManager.join(ROOM, {id: id}, (data) => {
-      console.log('joined: ', data);
       if (successCB)
         successCB(data);
     });
@@ -46,6 +45,7 @@ var GameSubscription = {
     SocketManager.leave('game');
     socket.off("errors");
     socket.off("created-game");
+    socket.off("game");
   }
 };
 

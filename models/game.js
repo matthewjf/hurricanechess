@@ -1,5 +1,6 @@
 import io from '../config/socketio';
 import mongoose from 'mongoose';
+import {setInitialState} from '../helpers/game_state';
 var Schema = mongoose.Schema;
 
 var GameSchema = new Schema({
@@ -123,8 +124,9 @@ var delayedActivate = (id) => {
     Game.findById(id, (_, game) => {
       if (game && game.isActivatable()) {
         game.activate().then((game) => {
-          // start game in redis
-          console.log("removed");
+          setInitialState(game, ()=>{
+            console.log('set state');
+          });
         });
       }
     });
@@ -148,6 +150,7 @@ GameSchema.pre('save', function(next) {
 });
 
 GameSchema.post('save', (game, next) => {
+  console.log("in post save");
   io.to('index').emit('game', {game: game});
   io.to(game._id).emit('game', {game: game});
   next();
