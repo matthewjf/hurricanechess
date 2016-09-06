@@ -39,3 +39,4 @@ public/js/*
 
 # Other config
 .eslintrc.json
+dump.rdb
