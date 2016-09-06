@@ -4,6 +4,7 @@ import ErrorUtil from '../../utils/error_util';
 import GameSubscription from '../../sockets/game_subscription';
 import GameStore from '../../stores/game_store';
 import Board from './board';
+import PositionTest from './position_test';
 
 class Game extends React.Component {
   constructor(props) {
@@ -55,6 +56,7 @@ class Game extends React.Component {
           </a>
         </div>
         <Board />
+        <PositionTest />
       </section>
     );
   }

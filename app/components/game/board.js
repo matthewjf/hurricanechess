@@ -23,7 +23,7 @@ class Board extends React.Component {
   setBoardColor(color) {
     this.setState({boardColor: color});
   }
-
+  
   render() {
     return <div id='board' className={this.state.boardColor + '-board card-panel'}>
       <GameSettings setBoardColor={this.setBoardColor}/>

@@ -7,7 +7,6 @@ import User from '../models/user';
 import Game from '../models/game';
 
 import redis from '../config/redis';
-import bench from './benchmark';
 
 io.on('connection', client => {
 
