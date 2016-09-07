@@ -58,7 +58,8 @@ var server = app.listen(app.get('port'), function() {
   console.log('Express server listening on port ' + app.get('port'));
 });
 
-module.exports = server;
+exports.server = server;
+exports.app = app;
 
 // SOCKET IO
 require('./sockets/connection');

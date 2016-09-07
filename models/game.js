@@ -1,6 +1,5 @@
 import io from '../config/socketio';
 import mongoose from 'mongoose';
-import {setInitialState} from '../helpers/game_state';
 var Schema = mongoose.Schema;
 
 var GameSchema = new Schema({

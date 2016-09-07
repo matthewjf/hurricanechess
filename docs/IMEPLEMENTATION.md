@@ -7,13 +7,10 @@ Need to store current game state while the game is being played.
 - Keep client game states in sync
 - Store move history without round-trips to server
 
-Chose to use Redis to handle this. Redis is fast. How to represent game state?
-
-###### Position List:
-- State is stored as a list of **positions** containing each piece
-- Fairly similar performance to storing a list of pieces with their positions
-- Storing a list of positions **and** pieces is slow
-- Why choose positions as the key over pieces?
-  - Sequence: client1 read, client2 read, client1 write, client2 write
-  - On client2 write, client2 has old data and may delete a piece that already moved
-  - Using positions, we overwrite pieces instead of deleting
+###### Server Memory
+- Pros
+  - It's fast
+  - Don't need to worry about asynchronous writes based on stale game state
+- Cons
+  - Memory limits: if this limit is reached, there will likely be other performance issues
+  - Volatile: could use redis to backup current game state in case of a crash
