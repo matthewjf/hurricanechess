@@ -24,16 +24,16 @@
 
     &.natural-board {
       .white-square {
-        background-color: hsl(35, 30, 70);
+        background-color: hsl(35, 30, 64);
       }
       .black-square {
-        background-color: hsl(20, 70, 38);
+        background-color: hsl(20, 70, 44);
       }
     }
 
     &.cool-board {
       .white-square {
-        background-color: hsl(200, 15, 70);
+        background-color: hsl(200, 15, 64);
       }
       .black-square {
         background-color: hsl(200, 20, 38);
@@ -42,10 +42,10 @@
 
     &.candy-board {
       .white-square {
-        background-color: hsl(1, 50, 88);
+        background-color: hsl(1, 50, 84);
       }
       .black-square {
-        background-color: hsl(1, 40, 50);
+        background-color: hsl(1, 32, 50);
       }
     }
   }

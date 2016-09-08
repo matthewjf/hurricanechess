@@ -1,5 +1,7 @@
 import io from '../config/socketio';
 import mongoose from 'mongoose';
+import GameState from '../state/game';
+
 var Schema = mongoose.Schema;
 
 var GameSchema = new Schema({
@@ -8,7 +10,8 @@ var GameSchema = new Schema({
   password: { type: String                                                  },
   white:    { type: Schema.Types.ObjectId, ref: 'User' },
   black:    { type: Schema.Types.ObjectId, ref: 'User' },
-  status:   { type: String,  required: true, default: 'waiting', enum: ['waiting', 'starting', 'active', 'archived'] }
+  status:   { type: String,  required: true, default: 'waiting', enum: ['waiting', 'starting', 'active', 'archived'] },
+  winner:   { type: String, enum: ['white', 'black']}
 }, {timestamps: true});
 
 // SERIALIZE WITHOUT PASSWORD
@@ -34,11 +37,14 @@ GameSchema.methods.isInGame = function(user) {
   return user.equals(this.white) || user.equals(this.black);
 };
 
+GameSchema.methods.isActive = function() {
+  return this.status === 'active';
+};
+
 GameSchema.methods.join = function(user, color, callback) {
   console.log("trying to join a game");
-  // var userRef = mongoose.Types.ObjectId(user);
   if (this.isInGame(user)) {
-
+    // do nothing
   } else if (this.isEmpty()) {
     if (color === 'white')
       this.white = user;
@@ -83,6 +89,7 @@ GameSchema.methods.shouldWait = function() {
 GameSchema.methods.activate = function() {
   if (this.isActivatable()) {
     this.status = 'active';
+    GameState.init(this); // TODO: handle exception
     return this.save();
   } else {
     return false;

@@ -6,8 +6,6 @@ import GameConnection from './game_connection';
 import User from '../models/user';
 import Game from '../models/game';
 
-import redis from '../config/redis';
-
 io.on('connection', client => {
 
   console.log('socket connection');
@@ -26,15 +24,12 @@ io.on('connection', client => {
         if (err) {
           client.emit('errors', err.errors);
         } else if (game) {
-          console.log('found game to clean up');
           User.findById(userId, function(_, user){
             if (user)
-              console.log('found user');
               game.leave(user, function(err, game){
                 if (err)
                   client.emit('errors', err.errors);
                 else
-                  console.log('left game');
                   client.emit('left-game', game);
               });
           });

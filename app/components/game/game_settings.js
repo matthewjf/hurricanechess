@@ -53,7 +53,7 @@ class BoardSettings extends React.Component {
     return (
       <div id="game-settings-modal" className="modal">
         <div className='row'>
-          <form onSubmit={this.handleSubmit} >
+          <form onSubmit={this.handleSubmit}>
             <div className="modal-content">
               <div className='row'>
                 <div className='input-field'>

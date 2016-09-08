@@ -63,4 +63,8 @@ module.exports = (client, joined) => {
         });
     });
   });
+
+  client.on("game-move", data => { // data format: {gameId: -, pieceId: -, posId: -}
+
+  });
 };
