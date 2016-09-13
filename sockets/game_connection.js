@@ -1,5 +1,6 @@
-const Game = require('../models/game');
-const User = require('../models/user');
+import Game from '../models/game';
+import User from '../models/user';
+import GameManager from '../state/manager';
 
 module.exports = (client, joined) => {
   var userId;
@@ -39,7 +40,6 @@ module.exports = (client, joined) => {
   });
 
   client.on("join-game", data => {
-    console.log('client attempted to join game');
     validateUser(userId, user => {
       Game.findById(data.id)
         .populate('white')
@@ -52,11 +52,12 @@ module.exports = (client, joined) => {
               if (err) {
                 client.emit('errors', err.errors);
               } else {
-                console.log("successfully joined game: " + game._id);
                 client.broadcast.in('index').send({game: game});
                 joined({room: game._id});
                 client.join(game._id);
-                client.emit('joined-game', {game: game});
+                client.emit('joined-game', {
+                  game: game, state: GameManager.getState(game._id)
+                });
               }
             });
           }
@@ -64,7 +65,7 @@ module.exports = (client, joined) => {
     });
   });
 
-  client.on("game-move", data => { // data format: {gameId: -, pieceId: -, posId: -}
-
+  client.on("game-move", data => {
+    GameManager.movePiece(data.gameId, userId, data.pieceId, data.posId);
   });
 };

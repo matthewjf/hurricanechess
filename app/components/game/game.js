@@ -14,7 +14,8 @@ class Game extends React.Component {
 
     this.state = {
       id: this.props.params.id,
-      game: GameStore.get(),
+      game: GameStore.get().game,
+      pieces: GameStore.get().pieces,
       error: null
     };
   }
@@ -25,7 +26,7 @@ class Game extends React.Component {
   }
 
   getGame() {
-    this.setState({game: GameStore.get()});
+    this.setState(GameStore.get());
   }
 
   componentWillUnmount() {
@@ -55,6 +56,7 @@ class Game extends React.Component {
           </a>
         </div>
         <Board />
+        <Pieces pieces={this.state.pieces} />
       </section>
     );
   }

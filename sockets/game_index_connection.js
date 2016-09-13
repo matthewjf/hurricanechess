@@ -1,4 +1,4 @@
-var Game = require('../models/game');
+import Game from '../models/game';
 
 export default function(client, joined) {
   client.on("join-index", function(_){

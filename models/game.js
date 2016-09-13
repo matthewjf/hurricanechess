@@ -1,6 +1,6 @@
 import io from '../config/socketio';
 import mongoose from 'mongoose';
-import GameState from '../state/game';
+import GameManager from '../state/manager';
 
 var Schema = mongoose.Schema;
 
@@ -11,7 +11,7 @@ var GameSchema = new Schema({
   white:    { type: Schema.Types.ObjectId, ref: 'User' },
   black:    { type: Schema.Types.ObjectId, ref: 'User' },
   status:   { type: String,  required: true, default: 'waiting', enum: ['waiting', 'starting', 'active', 'archived'] },
-  winner:   { type: String, enum: ['white', 'black']}
+  winner:   { type: String, enum: ['white', 'black', 'draw', 'none']}
 }, {timestamps: true});
 
 // SERIALIZE WITHOUT PASSWORD
@@ -41,8 +41,11 @@ GameSchema.methods.isActive = function() {
   return this.status === 'active';
 };
 
+GameSchema.methods.isArchived = function() {
+  return this.status === 'archived';
+};
+
 GameSchema.methods.join = function(user, color, callback) {
-  console.log("trying to join a game");
   if (this.isInGame(user)) {
     // do nothing
   } else if (this.isEmpty()) {
@@ -89,7 +92,7 @@ GameSchema.methods.shouldWait = function() {
 GameSchema.methods.activate = function() {
   if (this.isActivatable()) {
     this.status = 'active';
-    GameState.init(this); // TODO: handle exception
+    GameManager.init(this); // TODO: handle exception
     return this.save();
   } else {
     return false;
@@ -110,13 +113,9 @@ var clearTimeouts = function(id) {
 var delayedRemove = function(id) {
   clearTimeouts(id);
   timeouts[id] = setTimeout(() => {
-    console.log("inside remove timeout");
-    // TODO: store a ref and clear callback if someone joins
     Game.findById(id, (_, game) => {
       if (game && game.isRemovable()) {
-        console.log("game is empty, removing it");
         game.remove().then((game) => {
-          console.log("removed");
         });
       }
     });
@@ -126,27 +125,20 @@ var delayedRemove = function(id) {
 var delayedActivate = (id) => {
   clearTimeouts(id);
   timeouts[id] = setTimeout(() => {
-    console.log("inside activate timeout");
     Game.findById(id, (_, game) => {
       if (game && game.isActivatable()) {
-        game.activate().then((game) => {
-          setInitialState(game, ()=>{
-            console.log('set state');
-          });
-        });
+        game.activate();
       }
     });
   }, 10000);
 };
 
 GameSchema.pre('save', function(next) {
-  console.log("pre save - is empty? ", this.isEmpty());
   if (this.isStartable()) {
     this.status = 'starting';
     delayedActivate(this._id);
   }
   if (this.isRemovable()) {
-    console.log("setting a timeout");
     delayedRemove(this._id);
   }
   if (this.shouldWait()) {
@@ -156,7 +148,6 @@ GameSchema.pre('save', function(next) {
 });
 
 GameSchema.post('save', (game, next) => {
-  console.log("in post save");
   io.to('index').emit('game', {game: game});
   io.to(game._id).emit('game', {game: game});
   next();
@@ -167,4 +158,4 @@ GameSchema.post('remove', (game, next) => {
 });
 
 var Game = mongoose.model('Game', GameSchema);
-module.exports = Game;
+export default Game;

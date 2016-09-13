@@ -1,5 +1,5 @@
 module.exports = {
   size: 8,   // board size
-  delay: 10, // time in seconds between moves
-  speed: 1   // time to move a single tile
+  delay: 10000, // time in ms between moves
+  speed: 1000   // time to move a single tile
 };

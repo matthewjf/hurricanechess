@@ -3,11 +3,16 @@ import AppDispatcher from '../dispatcher/dispatcher.js';
 import GameConstants from '../constants/game_constants';
 
 var _game = {};
+var _pieces = {};
 var _error = null;
 var CHANGE_EVENT = 'change';
 
 function _setGame(game) {
   _game = game;
+};
+
+function _setPieces(pieces) {
+  _pieces = pieces ? pieces : {};
 };
 
 function _removeGame(game) {
@@ -29,7 +34,7 @@ class GameStore extends EventEmitter {
   }
 
   get() {
-    return _game;
+    return {game: _game, pieces: _pieces};
   }
 
   emitChange() {
@@ -46,8 +51,15 @@ class GameStore extends EventEmitter {
 
   dispatcherCallback(payload) {
     switch(payload.actionType) {
-      case GameConstants.GAME_JOINED:
-        _resetGames(payload.game);
+      case GameConstants.GAMESTATE_RECEIVED:
+        _setGame(payload.game);
+        _setPieces(payload.state.pieces);
+        break;
+      case GameConstants.GAME_RECEIVED:
+        _setGame(payload.game);
+        break;
+      case GameConstants.STATE_RECEIVED:
+        _setPieces(payload.state.pieces);
         break;
       case GameConstants.ERROR_RECEIVED:
         _setError(payload.error);

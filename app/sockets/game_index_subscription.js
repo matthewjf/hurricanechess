@@ -3,7 +3,6 @@ import GameIndexActions from '../actions/game_index_actions';
 const ROOM = 'index';
 var GameIndexSubscription = {
   join() {
-    // listen to udpates
     socket.on('game', (data) => {
       console.log('receive game: ', data);
       GameIndexActions.receiveGame(data.game);

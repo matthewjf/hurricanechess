@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models/user');
 var passport = require('passport');
+import User from '../models/user';
 
 router.route('/session').get((req, res) => {
   res.status(200).json({user: req.user});

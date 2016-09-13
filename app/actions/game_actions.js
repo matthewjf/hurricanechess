@@ -2,10 +2,25 @@ import GameConstants from '../constants/game_constants';
 import AppDispatcher from '../dispatcher/dispatcher';
 
 var GameActions = {
-  gameJoined: (game) => {
+  receiveGameState: (data) => {
     AppDispatcher.dispatch({
-      actionType: GameConstants.GAME_JOINED,
-      game: game
+      actionType: GameConstants.GAMESTATE_RECEIVED,
+      game: data.game,
+      state: data.state
+    });
+  },
+
+  receiveGame: (data) => {
+    AppDispatcher.dispatch({
+      actionType: GameConstants.GAME_RECEIVED,
+      game: data.game
+    });
+  },
+
+  receiveState: (data) => {
+    AppDispatcher.dispatch({
+      actionType: GameConstants.STATE_RECEIVED,
+      state: data.state
     });
   },
 
