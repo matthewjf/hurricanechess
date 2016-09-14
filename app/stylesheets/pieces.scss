@@ -1,0 +1,16 @@
+#pieces {
+  position: relative;
+  .piece {
+    background-color: transparent;
+    position: absolute;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+  }
+  .white-piece {
+    color: #f5f5f5;
+  }
+  .black-piece {
+    color: #222222;
+  }
+}

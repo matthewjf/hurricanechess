@@ -9,10 +9,10 @@ import Game from '../models/game';
 // import GameManager from '../state/manager';
 // var _isActive = function() {return true;};
 // var _isFull = function() {return true;};
-// var testGame = {_id: "57d49e8de623446ad2761b8b", isActive: _isActive, isFull: _isFull};
+// var testGame = {_id: "57d49e8de623446ad2761b8b", isActive: _isActive, isFull: _isFull, white: 1};
 // GameManager.init(testGame);
-// GameManager.movePiece(testGame._id, 1, 8, 24);
- 
+// GameManager.movePiece(testGame._id, 1, 8, [3,0]);
+
 io.on('connection', client => {
 
   console.log('socket connection');

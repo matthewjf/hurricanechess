@@ -2,7 +2,6 @@
 @import "functions";
 
 #game{
-
   #board {
     padding: 0;
     flex-shrink: 0;
@@ -24,28 +23,28 @@
 
     &.natural-board {
       .white-square {
-        background-color: hsl(35, 30, 64);
+        background-color: hsl(35, 32, 58);
       }
       .black-square {
-        background-color: hsl(20, 70, 44);
+        background-color: hsl(18, 54, 46);
       }
     }
 
     &.cool-board {
       .white-square {
-        background-color: hsl(200, 15, 64);
+        background-color: hsl(200, 14, 54);
       }
       .black-square {
-        background-color: hsl(200, 20, 38);
+        background-color: hsl(200, 20, 36);
       }
     }
 
     &.candy-board {
       .white-square {
-        background-color: hsl(1, 50, 84);
+        background-color: hsl(1, 28, 64);
       }
       .black-square {
-        background-color: hsl(1, 32, 50);
+        background-color: hsl(4, 32, 48);
       }
     }
   }

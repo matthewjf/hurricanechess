@@ -6,7 +6,6 @@ import Game from '../models/game';
 import Board from '../helpers/board';
 import MoveHistory from '../models/history';
 import InitialPieces from '../helpers/initial_pieces';
-import {toCoord, toPos} from '../helpers/pos';
 
 /*
   game starts
@@ -38,7 +37,8 @@ var init = function(game) {
       // 1000,
       _gameExpired
     );
-    io.to(game._id).emit('game-init', {state: state});
+    console.log(state.pieces);
+    io.to(game._id).emit('game-init', {pieces: state.pieces});
   } else {
     throw new Error('game cannot be initialized');
   }
@@ -48,24 +48,26 @@ var getState = function(gameId) {
   return cache.get(gameId);
 };
 
-var movePiece = function(gameId, userId, pieceId, targetId) {
+var movePiece = function(gameId, userId, pieceId, target) {
   var state = getState(gameId);
   if (!state) return new Error('no game found');
   if (!_isCorrectUser(userId, pieceId, state)) return new Error('incorrect user');
-  if (Board.canMovePiece(pieceId, targetId, state)) {
+  if (Board.canMovePiece(pieceId, target, state)) {
+    console.log('trying to move piece');
     // handle knight moves / castling / pawn promotion
-    _performMove(gameId, pieceId, targetId);
+    _performMove(gameId, pieceId, target);
   };
 };
 
 // PRIVATE
-var _performMove = function(gameId, pieceId, targetId) {
+var _performMove = function(gameId, pieceId, target) {
   console.log('performing move');
   var state = getState(gameId);
   var pieces = state.pieces;
 
   // at move end
-  if (pieces[pieceId].pos === targetId) {
+  var pos = pieces[pieceId].pos;
+  if (pos[0] === target[0] && pos[1] === target[1]) {
     setTimeout(() => {
       var state = getState(gameId);
       if (state.pieces[pieceId]) state.pieces[pieceId].onDelay = 0;
@@ -73,14 +75,14 @@ var _performMove = function(gameId, pieceId, targetId) {
     return;
   };
 
-  var newPos = Board.getNextPos(pieceId, targetId, state);
+  var newPos = Board.getNextPos(pieceId, target, state);
   if (newPos) {
-    var removeId = Board.getTarget(targetId, state);
+    var removeId = Board.getTarget(target, state);
     delete state.pieces[removeId];
 
     var moveData = {
       pieceId: pieceId,
-      pos: toPos(newPos),
+      pos: newPos,
       type: pieces[pieceId].type,
       removeId: removeId,
       createdAt: new Date()
@@ -95,7 +97,7 @@ var _performMove = function(gameId, pieceId, targetId) {
       _gameOver({_id: gameId, state: state});
     } else {
       setTimeout(() => {
-        _performMove(gameId, pieceId, targetId);
+        _performMove(gameId, pieceId, target);
       }, GameConfig.speed);
     }
   } else {
@@ -140,11 +142,10 @@ var _getWinner = function(state) {
     return 'none';
 };
 
-var _isCorrectUser = function() {return true;};
-// var _isCorrectUser = function(userId, pieceId, state) {
-//   let color = (pieceId < 8 ? 'white' : 'black');
-//   return state[color] === userId;
-// };
+var _isCorrectUser = function(userId, pieceId, state) {
+  let color = (pieceId < 16 ? 'white' : 'black');
+  return state[color] === userId;
+};
 
 export default {
   init: init,

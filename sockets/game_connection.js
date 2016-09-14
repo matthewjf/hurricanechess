@@ -2,7 +2,7 @@ import Game from '../models/game';
 import User from '../models/user';
 import GameManager from '../state/manager';
 
-module.exports = (client, joined) => {
+export default (client, joined) => {
   var userId;
   if (client.handshake.session.passport)
     userId = client.handshake.session.passport.user;
@@ -55,8 +55,9 @@ module.exports = (client, joined) => {
                 client.broadcast.in('index').send({game: game});
                 joined({room: game._id});
                 client.join(game._id);
+                var state = GameManager.getState(game._id);
                 client.emit('joined-game', {
-                  game: game, state: GameManager.getState(game._id)
+                  game: game, pieces: (state ? state.pieces : {})
                 });
               }
             });
@@ -66,6 +67,6 @@ module.exports = (client, joined) => {
   });
 
   client.on("game-move", data => {
-    GameManager.movePiece(data.gameId, userId, data.pieceId, data.posId);
+    GameManager.movePiece(data.gameId, userId, data.pieceId, data.pos);
   });
 };

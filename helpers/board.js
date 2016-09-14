@@ -1,4 +1,3 @@
-import {toCoord, toPos} from '../helpers/pos';
 import Piece from './piece';
 
 // module pattern with caching is faster
@@ -8,32 +7,33 @@ var _buildGrid = function(pieces) {
   for (var i = 0; i < 8; i++) {grid.push(new Array(8));};
   for (var pieceId in pieces) {
     if (pieces[pieceId]) {
-      let coord = toCoord(pieces[pieceId].pos);
-      grid[coord[0]][coord[1]] = pieceId;
+      let pos = pieces[pieceId].pos;
+      grid[pos[0]][pos[1]] = pieceId;
     }
   }
   return grid;
 };
 
-var _canMovePiece = function(pieceId, targetId, state) {
+var _canMovePiece = function(pieceId, target, state) {
   if (state.pieces[pieceId]) {
     var piece = new Piece(pieceId, state.pieces[pieceId], _buildGrid(state.pieces));
-    if (piece.canMoveTo(toCoord(targetId)) && !piece.onDelay) return true;
+    if (piece.canMoveTo(target) && !piece.onDelay) return true;
   }
   return false;
 };
 
-var _getNextPos = function(pieceId, targetId, state) {
+var _getNextPos = function(pieceId, target, state) {
   if (state.pieces[pieceId]) {
     var grid = _buildGrid(state.pieces);
     let piece = new Piece(pieceId, state.pieces[pieceId], grid);
-    return piece.getNextPos(toCoord(targetId));
+    return piece.getNextPos(target);
   }
 };
 
-var _getTarget = function(targetId, state) {
-  for (var id = 0; id < 8; id++) {
-    if (state.pieces[id][0] === targetId) return id;
+var _getTarget = function(target, state) {
+  for (var id = 0; id < 32; id++) {
+    var pos = state.pieces[id].pos;
+    if ( pos[0] === target[0] && pos[1] === target[1]) return id;
   }
 };
 

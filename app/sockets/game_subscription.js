@@ -1,5 +1,6 @@
 import SocketManager from './socket_manager';
 import GameActions from '../actions/game_actions';
+import PieceActions from '../actions/piece_actions';
 import {browserHistory} from 'react-router';
 const ROOM = 'game';
 
@@ -31,13 +32,12 @@ var GameSubscription = {
     });
 
     socket.on('game', (data) => {
-      console.log('game: ', data);
-      GameActions.receiveGame(data);
+      console.log('game: ', data.game);
+      GameActions.receiveGame(data.game);
     });
 
     socket.on('game-init', (data) => {
-      console.log('state: ', data);
-      GameActions.receiveState(data);
+      PieceActions.receivePieces(data.pieces);
     });
 
     socket.on('game-move', (moveData) => {
@@ -45,7 +45,8 @@ var GameSubscription = {
     });
 
     SocketManager.join(ROOM, {id: id}, (data) => {
-      GameActions.receiveGameState(data);
+      GameActions.receiveGame(data.game);
+      PieceActions.receivePieces(data.pieces);
       if (successCB)
         successCB(data);
     });
@@ -53,9 +54,11 @@ var GameSubscription = {
 
   leave() {
     SocketManager.leave('game');
-    socket.off("errors");
-    socket.off("created-game");
-    socket.off("game");
+    socket.off('errors');
+    socket.off('created-game');
+    socket.off('game');
+    socket.off('game-init');
+    socket.off('game-move');
   }
 };
 

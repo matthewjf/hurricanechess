@@ -9,7 +9,7 @@ const pieceTypeId = {king: 0, queen: 1, rook: 2, bishop: 3, knight: 4, pawn: 5};
 class Piece {
   constructor(id, data, grid) {
     this.id = id;
-    this.pos = toCoord(data.pos);
+    this.pos = data.pos;
     this.type = pieceTypes[data.type];
     this.hasMoved = data.hasMoved;
     this.color = (id < 16 ? 'white' : 'black');
@@ -21,7 +21,7 @@ class Piece {
     if (this.type === 'knight' && this.canMoveTo(endPos)) { // handle knight move
       return endPos;
     // handle castling
-    // } else if (this.type === 'king' && isCastleMove(endPos)) { 
+    // } else if (this.type === 'king' && isCastleMove(endPos)) {
     //   return;
     // handle pawn promotion
     // } else if (this.type === 'pawn' && endPos ) {

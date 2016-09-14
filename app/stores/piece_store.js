@@ -1,36 +1,40 @@
 import {EventEmitter} from 'events';
 import AppDispatcher from '../dispatcher/dispatcher.js';
-import GameConstants from '../constants/game_constants';
+import PieceConstants from '../constants/piece_constants';
 
-var _game = {};
+var _pieces = {};
 
 var _error = null;
 var CHANGE_EVENT = 'change';
 
-function _setGame(game) {
-  _game = game;
-};
+function _setPieces(pieces) {
+  _pieces = pieces;
+}
 
-function _removeGame(game) {
-  _game = {};
-};
+function _removePieces() {
+  _pieces = {};
+}
+
+function _removePiece(piece) {
+
+}
 
 function _setError(error) {
   _error = error;
-};
+}
 
 function _clearError() {
   _error = null;
-};
+}
 
-class GameStore extends EventEmitter {
+class PieceStore extends EventEmitter {
   constructor() {
     super();
     this.dispatchToken = AppDispatcher.register(this.dispatcherCallback.bind(this));
   }
 
   get() {
-    return _game;
+    return _pieces;
   }
 
   emitChange() {
@@ -47,18 +51,18 @@ class GameStore extends EventEmitter {
 
   dispatcherCallback(payload) {
     switch(payload.actionType) {
-      case GameConstants.GAME_RECEIVED:
-        _setGame(payload.game);
+      case PieceConstants.PIECES_RECEIVED:
+        _setPieces(payload.pieces);
         break;
-      case GameConstants.ERROR_RECEIVED:
+      case PieceConstants.ERROR_RECEIVED:
         _setError(payload.error);
         break;
-      case GameConstants.GAME_REMOVED:
-        _removeGame();
+      case PieceConstants.PIECES_REMOVED:
+        _removePieces();
         break;
     }
     this.emitChange();
   }
 }
 
-export default new GameStore();
+export default new PieceStore();

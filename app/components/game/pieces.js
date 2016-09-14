@@ -1,9 +1,5 @@
 import React from 'react';
-import {browserHistory} from 'react-router';
-import ErrorUtil from '../../utils/error_util';
-import GameSubscription from '../../sockets/game_subscription';
-import GameStore from '../../stores/game_store';
-import Board from './board';
+import Piece from './piece';
 
 class Pieces extends React.Component {
   constructor(props) {
@@ -12,8 +8,16 @@ class Pieces extends React.Component {
 
     this.state = {
       pieces: this.props.pieces,
+      userColor: this.props.userColor,
       errors: null
     };
+  }
+
+  componentWillReceiveProps(props) {
+    var newState = {};
+    if (props.pieces) newState.pieces = props.pieces;
+    if (props.userColor) newState.userColor = props.userColor;
+    this.setState(newState);
   }
 
   componentDidMount() {
@@ -22,20 +26,26 @@ class Pieces extends React.Component {
   componentWillUnmount() {
   }
 
-  // renderPiece(pieces) {
-  //   var pieceIds = Object.keys(pieces);
-  //   if (pieceIds.length) {
-  //     return pieceIds.map((pieceId) => {
-  //       return null;
-  //     });
-  //   } else {
-  //     return null;
-  //   }
-  // }
+  renderPieces(pieces) {
+    var pieceIds = Object.keys(pieces);
+    if (pieceIds.length) {
+      return pieceIds.map((pieceId) => {
+        return <Piece
+                  key={pieceId}
+                  pieceId={pieceId}
+                  data={pieces[pieceId]}
+                  userColor={this.state.userColor}/>;
+      });
+    } else {
+      return null;
+    }
+  }
 
   render() {
     return (
-      null
+      <div id='pieces'>
+        {this.renderPieces(this.state.pieces)}
+      </div>
     );
   }
 };
