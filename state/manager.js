@@ -18,27 +18,26 @@ import InitialPieces from '../helpers/initial_pieces';
 */
 
 var getInitialState = function(game) {
+  var pieces = InitialPieces();
   return ({
     white: game.white,
     black: game.black,
-    pieces: InitialPieces
+    pieces: pieces,
+    grid: Board.buildGrid(pieces)
   });
 };
 
 // PUBLIC API
 
 var init = function(game) {
-  console.log(game);
   if (game.isActive() && game.isFull() && !cache.get(game._id)) {
     let state = cache.put(
       game._id.toString(),
       getInitialState(game),
       1000 * 60 * 30, // 30 minutes max time
-      // 1000,
       _gameExpired
     );
-    console.log(state.pieces);
-    io.to(game._id).emit('game-init', {pieces: state.pieces});
+    io.to(game._id).emit('state-init', {pieces: state.pieces, grid: state.grid});
   } else {
     throw new Error('game cannot be initialized');
   }
@@ -48,61 +47,83 @@ var getState = function(gameId) {
   return cache.get(gameId);
 };
 
-var movePiece = function(gameId, userId, pieceId, target) {
+var movePiece = function(gameId, userId, pieceId, targetPos) {
   var state = getState(gameId);
-  if (!state) return new Error('no game found');
-  if (!_isCorrectUser(userId, pieceId, state)) return new Error('incorrect user');
-  if (Board.canMovePiece(pieceId, target, state)) {
-    console.log('trying to move piece');
+  if (!state) throw new Error('no game found');
+  if (!_isCorrectUser(userId, pieceId, state)) throw new Error('incorrect user');
+  if (Board.canMovePiece(pieceId, targetPos, state)) {
     // handle knight moves / castling / pawn promotion
-    _performMove(gameId, pieceId, target);
+    _performMove(gameId, pieceId, targetPos);
   };
 };
 
 // PRIVATE
-var _performMove = function(gameId, pieceId, target) {
-  console.log('performing move');
+var _performMove = function(gameId, pieceId, targetPos) {
   var state = getState(gameId);
   var pieces = state.pieces;
 
-  // at move end
-  var pos = pieces[pieceId].pos;
-  if (pos[0] === target[0] && pos[1] === target[1]) {
+  // moveEnd
+  var currPos = pieces[pieceId].pos;
+  console.log('currrpos: ', pieces[pieceId]);
+  if (currPos[0] === targetPos[0] && currPos[1] === targetPos[1]) {
     setTimeout(() => {
       var state = getState(gameId);
       if (state.pieces[pieceId]) state.pieces[pieceId].onDelay = 0;
+      // need to emit here
     }, GameConfig.delay);
     return;
   };
 
-  var newPos = Board.getNextPos(pieceId, target, state);
+  var newPos = Board.getNextPos(pieceId, targetPos, state);
   if (newPos) {
-    var removeId = Board.getTarget(target, state);
+    var removeId = Board.getTarget(newPos, state); // moveEnd
     delete state.pieces[removeId];
 
-    var moveData = {
-      pieceId: pieceId,
+    var pieceData = {
+      id: pieceId,
       pos: newPos,
       type: pieces[pieceId].type,
-      removeId: removeId,
-      createdAt: new Date()
+      hasMoved: 1,
+      onDelay: 1
     };
 
-    pieces[pieceId] = {pos: moveData.pos, type: moveData.type, hasMoved: 1, onDelay: 1}; // set new state
+    // var moveData = {
+    //   piece: pieceData,
+    //   removeId: removeId,
+    //   createdAt: new Date()
+    // };
 
-    io.to(gameId).emit('game-move', moveData); // emit to client
+    state.grid[currPos[0]][currPos[1]] = undefined;
+    state.grid[newPos[0]][newPos[1]] = pieceId;
+
+    pieces[pieceId] = pieceData;
+
+    io.to(gameId).emit('game-move', state); // emit to client
+
+    var moveData = {
+      state: state,
+      createdAt: new Date()
+    };
     redis.lpush(gameId, JSON.stringify(moveData)); // add to history
 
-    if (!state.pieces[28] || !state.pieces[4]) {
+    if (!pieces[28] || !pieces[4]) {
       _gameOver({_id: gameId, state: state});
     } else {
       setTimeout(() => {
-        _performMove(gameId, pieceId, target);
+        _performMove(gameId, pieceId, targetPos);
       }, GameConfig.speed);
     }
   } else {
     throw new Error('invalid move');
   }
+};
+
+var _updateState = function() {
+  // TODO: handle update logic
+};
+
+var _moveEnd = function() {
+  // TODO: send move end
 };
 
 var _gameExpired = function(id, state) {
@@ -144,7 +165,7 @@ var _getWinner = function(state) {
 
 var _isCorrectUser = function(userId, pieceId, state) {
   let color = (pieceId < 16 ? 'white' : 'black');
-  return state[color] === userId;
+  return state[color]._id.toString() === userId;
 };
 
 export default {

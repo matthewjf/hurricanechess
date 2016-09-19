@@ -1,54 +1,65 @@
 // Each piece is assigned an ID from 0-31 for redis storage
 // Uses an array to list pieces and their relevant information
-import {toCoord, toPos} from '../helpers/pos';
 import moves from './moves';
 
-const pieceTypes = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
-const pieceTypeId = {king: 0, queen: 1, rook: 2, bishop: 3, knight: 4, pawn: 5};
+// const pieceTypes = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
+// const pieceTypeId = {king: 0, queen: 1, rook: 2, bishop: 3, knight: 4, pawn: 5};
 
-class Piece {
-  constructor(id, data, grid) {
-    this.id = id;
-    this.pos = data.pos;
-    this.type = pieceTypes[data.type];
-    this.hasMoved = data.hasMoved;
-    this.color = (id < 16 ? 'white' : 'black');
-    this.grid = grid;
-  }
-
-  getNextPos(endPos) {
-    let currPos = this.pos;
-    if (this.type === 'knight' && this.canMoveTo(endPos)) { // handle knight move
-      return endPos;
-    // handle castling
-    // } else if (this.type === 'king' && isCastleMove(endPos)) {
-    //   return;
-    // handle pawn promotion
-    // } else if (this.type === 'pawn' && endPos ) {
-    //   return;
-    } else { // normal move
-      let rowDelta = endPos[0] - currPos[0];
-      let colDelta = endPos[1] - currPos[1];
-      let newPos = [this.pos[0] + rowDelta, this.pos[1] + colDelta];
-      if (this.canMoveTo(newPos)) {
-        return newPos;
-      }
+var _getNextPos = function(pieceId, targetPos, state) {
+  var piece = state.pieces[pieceId], currPos = piece.pos;
+  if (piece.type === 4 && _canMoveTo(pieceId, targetPos, state)) { // handle knight move
+    return endPos;
+  // handle castling
+  // } else if (this.type === 'king' && isCastleMove(endPos)) {
+  //   return;
+  // handle pawn promotion
+  // } else if (this.type === 'pawn' && endPos ) {
+  //   return;
+  } else { // normal move
+    var newPos = _getDiff(currPos, targetPos);
+    if (_canMoveTo(pieceId, newPos, state)) {
+      return newPos;
     }
-    return false;
   }
+};
 
-  canMoveTo(pos) {
-    var validMoves = moves(this);
-    for (var i = 0; i < validMoves.length; i++) {
-      var curr = validMoves[i];
-      if (curr[0] === pos[0] && curr[1] === pos[1]) return true;
-    }
-    return false;
+var _canMoveTo = function(pieceId, targetPos, state) {
+  var piece = state.pieces[pieceId];
+  var validMoves = moves({piece: piece, pieces: state.pieces, grid: state.grid});
+  for (var i = 0; i < validMoves.length; i++) {
+    var curr = validMoves[i];
+    if (curr[0] === targetPos[0] && curr[1] === targetPos[1]) return true;
   }
+  return false;
+};
 
-  _isCastleMove(endPos) {
+var _isCastleMove = function(endPos) {
 
-  }
-}
+};
+
+var _getDiff = function(curr, target) {
+  var rowDiff, colDiff;
+  if (target[0] > curr[0])
+    rowDiff = 1;
+  else if (target[0] < curr[0])
+    rowDiff = -1;
+  else
+    rowDiff = 0;
+
+  if (target[1] > curr[1])
+    colDiff = 1;
+  else if (target[1] < curr[1])
+    colDiff = -1;
+  else
+    colDiff = 0;
+
+  return [curr[0] + rowDiff, curr[1] + colDiff];
+};
+
+
+var Piece = {
+  getNextPos: _getNextPos,
+  canMoveTo: _canMoveTo
+};
 
 export default Piece;

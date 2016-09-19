@@ -1,25 +1,27 @@
-import {toCoord, toPos} from '../helpers/pos';
+// {id: 0, pos: [7,0], type: 2, hasMoved: 0, onDelay: 0}
+// const pieceTypes = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
+// const pieceTypeId = {king: 0, queen: 1, rook: 2, bishop: 3, knight: 4, pawn: 5};
 
-const moves = function(piece) {
-  _validatePos(piece.pos);
-  switch (piece.type){
-    case 'king':
-      return _kingMoves(piece);
+const moves = function(data) {
+  _validatePos(data.piece.pos);
+  switch (data.piece.type){
+    case 0: // king
+      return _kingMoves(data);
       break;
-    case 'queen':
-      return _straights(piece).concat(_diagonals(piece));
+    case 1: // queen
+      return _straights(data).concat(_diagonals(data));
       break;
-    case 'rook':
-      return _straights(piece);
+    case 2: // rook
+      return _straights(data);
       break;
-    case 'bishop':
-      return _diagonals(piece);
+    case 3: // bishop
+      return _diagonals(data);
       break;
-    case 'knight':
-      return _knightMoves(piece);
+    case 4: // knight
+      return _knightMoves(data);
       break;
-    case 'pawn':
-      return _pawnMoves(piece);
+    case 5: // pawn
+      return _pawnMoves(data);
       break;
     default:
       throw new Error('invalid piece type');
@@ -27,65 +29,67 @@ const moves = function(piece) {
 };
 
 // PIECE MOVES
-const _straights = function(piece) {
+const _straights = function(data) {
   var dirs = [[0,1], [0,-1], [1,0], [-1,0]];
-  return _slidingMoves(piece, dirs);
+  return _slidingMoves(data, dirs);
 };
 
-const _diagonals = function(piece) {
+const _diagonals = function(data) {
   var dirs = [[1,1], [-1,1], [1,-1], [-1,-1]];
-  return _slidingMoves(piece, dirs);
+  return _slidingMoves(data, dirs);
 };
 
-const _knightMoves = function(piece) {
+const _knightMoves = function(data) {
   var dirs = [[1,2],[-1,2],[1,-2],[-1,-2],[2,1],[-2,1],[2,-1],[-2,-1]];
-  return _steppingMoves(piece, dirs);
+  return _steppingMoves(data, dirs);
 };
 
-const _kingMoves = function(piece) {
+const _kingMoves = function(data) {
   let dirs = [[-1,-1],[1,1],[1,-1],[-1,1],[0,1],[0,-1],[1,0],[-1,0]];
-  var moves = _steppingMoves(piece, dirs);
-  // TODO: add castling - need more info
+  var moves = _steppingMoves(data, dirs);
+  // TODO: add castling
   return moves;
 };
 
-const _pawnMoves = function(piece) {
-  var moves = [];
-  var dir = piece.color === 'white' ? 1 : -1;
+const _pawnMoves = function(data) {
+  var moves = [], piece = data.piece;
+  var dir = piece.id < 16 ? -1 : 1;
   var next = [piece.pos[0] + dir, piece.pos[1]];
-  if (_inRangePos(next) && !piece.grid[next[0]][next[1]]) {
-    moves.push[next];
+  if (_inRangePos(next) && !data.grid[next[0]][next[1]]) {
+    moves.push(next);
+
     var next2 = [next[0] + dir, next[1]];
-    if (!piece.hasMoved && _inRangePos(next2) && !piece.grid[next2[0]][next2[1]])
+    if (!piece.hasMoved && _inRangePos(next2) && !data.grid[next2[0]][next2[1]])
       moves.push(next2);
   }
 
   var rDiag = [piece.pos[0] + dir, piece.pos[1] + 1];
   var lDiag = [piece.pos[0] + dir, piece.pos[1] - 1];
 
-  if (_inRangePos(rDiag) && _targetPos(piece, rDiag) && _canTakeTarget(piece, rDiag))
+  if (_inRangePos(rDiag) && _targetPos(rDiag, data.grid) && _canTakeTarget(piece, rDiag, data.grid))
     moves.push(rDiag);
-  if (_inRangePos(lDiag) && _targetPos(piece, lDiag) && _canTakeTarget(piece, lDiag))
+  if (_inRangePos(lDiag) && _targetPos(lDiag, data.grid) && _canTakeTarget(piece, lDiag, data.grid))
     moves.push(lDiag);
 
   return moves;
 };
 
 // MOVE HELPERS
-const _slidingMoves = function(piece, dirs) {
+const _slidingMoves = function(data, dirs) {
   var moves = [];
   dirs.forEach((dir) => {
-    moves.push.apply(moves, _slidingMoveDir(piece, dir));
+    moves.push.apply(moves, _slidingMovesDir(data, dir));
   });
   return moves;
 };
 
-const _slidingMoveDir = function(piece, dir) {
-  let newPos = [piece.pos[0] + dir[0], piece.pos[1] + dir[1]];
+const _slidingMovesDir = function(data, dir) {
+  var piece = data.piece;
+  var newPos = [piece.pos[0] + dir[0], piece.pos[1] + dir[1]];
   var moves = [];
   while (_inRangePos(newPos)) {
-    if (_targetPos(newPos)) {
-      if (_canTakeTarget(piece, newPos)) moves.push(newPos);
+    if (_targetPos(newPos, data.grid)) {
+      if (_canTakeTarget(piece, newPos, data.grid)) moves.push(newPos);
       break;
     } else {
       moves.push(newPos);
@@ -95,18 +99,19 @@ const _slidingMoveDir = function(piece, dir) {
   return moves;
 };
 
-const _steppingMoves = function(piece, dirs) {
+const _steppingMoves = function(data, dirs) {
   var moves = [];
   dirs.forEach((dir) => {
-    let newPos = _steppingMoveDir(piece, dir);
+    let newPos = _steppingMovesDir(data, dir);
     if (newPos) moves.push(newPos);
   });
   return moves;
 };
 
-const _steppingMoveDir = function(piece, dir) {
+const _steppingMovesDir = function(data, dir) {
+  var piece = data.piece;
   var newPos = [piece.pos[0] + dir[0], piece.pos[1] + dir[1]];
-  if (_canMoveTo(piece, newPos)) {
+  if (_canMoveTo(data, newPos)) {
     return newPos;
   };
 };
@@ -124,23 +129,25 @@ const _inRangePos = function(pos) {
   return (_inRangeNum(pos[0]) && _inRangeNum(pos[1]));
 };
 
-const _targetPos = function(piece, target) {
+const _targetPos = function(target, grid) {
   let [tarRow, tarCol] = target;
-  return piece.grid[tarRow][tarCol];
+  return grid[tarRow][tarCol];
 };
 
-const _canTakeTarget = function(piece, target) {
-  let targetId = _targetPos(piece, target);
+const _canTakeTarget = function(piece, target, grid) {
+  let targetId = _targetPos(target, grid);
   return targetId && _diffColor(piece.id, targetId);
 };
 
 const _diffColor = function(id1, id2) {
-  if (!id1 || !id2) return true;
-  return (id1 < 8 && id2 >= 8) || (id1 >= 8 && id2 < 8);
+  if (!Number.isInteger(id1) || !Number.isInteger(id2)) return true;
+  return (id1 < 16 && id2 >= 16) || (id1 >= 16 && id2 < 16);
 };
 
-const _canMoveTo = function(piece, target) {
-  return _inRangePos(target) && (!_targetPos(piece, target) || _canTakeTarget(piece, target));
+const _canMoveTo = function(data, target) {
+  return _inRangePos(target) && (
+    !_targetPos(target, data.grid) ||
+    _canTakeTarget(data.piece, target, data.grid));
 };
 
 export default moves;

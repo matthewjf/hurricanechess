@@ -2,10 +2,11 @@ import PieceConstants from '../constants/piece_constants';
 import AppDispatcher from '../dispatcher/dispatcher';
 
 var PieceActions = {
-  receivePieces: (pieces) => {
+  receiveState: (state) => {
     AppDispatcher.dispatch({
-      actionType: PieceConstants.PIECES_RECEIVED,
-      pieces: pieces
+      actionType: PieceConstants.STATE_RECEIVED,
+      pieces: state.pieces,
+      grid: state.grid
     });
   },
 
@@ -16,9 +17,9 @@ var PieceActions = {
     });
   },
 
-  removePieces: () => {
+  removeState: () => {
     AppDispatcher.dispatch({
-      actionType: PieceConstants.PIECES_REMOVED
+      actionType: PieceConstants.STATE_REMOVED
     });
   }
 };

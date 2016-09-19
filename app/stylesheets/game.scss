@@ -2,6 +2,12 @@
 @import "functions";
 
 #game{
+  .square {
+    box-sizing: border-box;
+    flex: 0 0 12.5%;
+    height: 12.5%;
+  }
+
   #board {
     padding: 0;
     flex-shrink: 0;
@@ -9,15 +15,9 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    height: 512px;
-    width: 512px;
-
     margin: 0;
 
     .square {
-      box-sizing: border-box;
-      flex: 0 0 12.5%;
-      height: 12.5%;
       background-color: $dark-1;
     }
 
@@ -69,5 +69,36 @@
 
   #game-settings-modal {
     max-width: 480px;
+  }
+
+  #click-handler {
+    padding: 0;
+    flex-shrink: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin: 0;
+    position: absolute;
+    .square {
+      background-color: transparent;
+      z-index: 10;
+    }
+    .select-overlay {
+      position: relative;
+      width: 100%; height: 100%;
+      background-color: transparent;
+      z-index: 1;
+      &.selected {
+        background-color: #4caf50;
+      }
+    }
+    .selected {
+      border: 4px solid #32cd32;
+    }
+    .highlight {
+      border: 4px solid #32cd32;
+      opacity: 0.5;
+    }
   }
 }

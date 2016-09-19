@@ -8,25 +8,24 @@ var _buildGrid = function(pieces) {
   for (var pieceId in pieces) {
     if (pieces[pieceId]) {
       let pos = pieces[pieceId].pos;
-      grid[pos[0]][pos[1]] = pieceId;
+      grid[pos[0]][pos[1]] = parseInt(pieceId);
     }
   }
   return grid;
 };
 
 var _canMovePiece = function(pieceId, target, state) {
-  if (state.pieces[pieceId]) {
-    var piece = new Piece(pieceId, state.pieces[pieceId], _buildGrid(state.pieces));
-    if (piece.canMoveTo(target) && !piece.onDelay) return true;
+  var grid = state.grid, pieces = state.pieces, piece = pieces[pieceId];
+  if (piece) {
+    if (Piece.canMoveTo(pieceId, target, state) && !piece.onDelay) return true;
   }
   return false;
 };
 
 var _getNextPos = function(pieceId, target, state) {
-  if (state.pieces[pieceId]) {
-    var grid = _buildGrid(state.pieces);
-    let piece = new Piece(pieceId, state.pieces[pieceId], grid);
-    return piece.getNextPos(target);
+  var grid = state.grid, pieces = state.pieces;
+  if (pieces[pieceId]) {
+    return Piece.getNextPos(pieceId, target, state);
   }
 };
 
@@ -38,6 +37,7 @@ var _getTarget = function(target, state) {
 };
 
 var Board = {
+  buildGrid: _buildGrid,
   canMovePiece: _canMovePiece,
   getNextPos: _getNextPos,
   getTarget: _getTarget

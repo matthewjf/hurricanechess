@@ -57,7 +57,7 @@ export default (client, joined) => {
                 client.join(game._id);
                 var state = GameManager.getState(game._id);
                 client.emit('joined-game', {
-                  game: game, pieces: (state ? state.pieces : {})
+                  game: game, state: (state ? state : {})
                 });
               }
             });
@@ -67,6 +67,7 @@ export default (client, joined) => {
   });
 
   client.on("game-move", data => {
+    console.log('received move request: ', data);
     GameManager.movePiece(data.gameId, userId, data.pieceId, data.pos);
   });
 };

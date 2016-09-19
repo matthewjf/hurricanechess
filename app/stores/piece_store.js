@@ -3,20 +3,22 @@ import AppDispatcher from '../dispatcher/dispatcher.js';
 import PieceConstants from '../constants/piece_constants';
 
 var _pieces = {};
+var _grid = [];
 
 var _error = null;
 var CHANGE_EVENT = 'change';
 
 function _setPieces(pieces) {
-  _pieces = pieces;
+  _pieces = pieces || {};
 }
 
-function _removePieces() {
+function _setGrid(grid) {
+  _grid = grid || [];
+}
+
+function _removeState() {
   _pieces = {};
-}
-
-function _removePiece(piece) {
-
+  _grid = [];
 }
 
 function _setError(error) {
@@ -34,7 +36,7 @@ class PieceStore extends EventEmitter {
   }
 
   get() {
-    return _pieces;
+    return {pieces: _pieces, grid: _grid};
   }
 
   emitChange() {
@@ -51,14 +53,16 @@ class PieceStore extends EventEmitter {
 
   dispatcherCallback(payload) {
     switch(payload.actionType) {
-      case PieceConstants.PIECES_RECEIVED:
+      case PieceConstants.STATE_RECEIVED:
+        console.log('pieces store state received', payload);
         _setPieces(payload.pieces);
+        _setGrid(payload.grid);
         break;
       case PieceConstants.ERROR_RECEIVED:
         _setError(payload.error);
         break;
-      case PieceConstants.PIECES_REMOVED:
-        _removePieces();
+      case PieceConstants.STATE_REMOVED:
+        _removeState();
         break;
     }
     this.emitChange();

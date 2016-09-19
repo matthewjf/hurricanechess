@@ -36,20 +36,27 @@ var GameSubscription = {
       GameActions.receiveGame(data.game);
     });
 
-    socket.on('game-init', (data) => {
-      PieceActions.receivePieces(data.pieces);
+    socket.on('state-init', (state) => {
+      console.log('state-init', state.pieces, state.grid);
+      PieceActions.receiveState(state);
     });
 
-    socket.on('game-move', (moveData) => {
-      console.log('moveData: ', moveData);
+    socket.on('game-move', (state) => {
+      console.log('moveData: ', state);
+      PieceActions.receiveState(state);
     });
 
     SocketManager.join(ROOM, {id: id}, (data) => {
+      console.log(data);
       GameActions.receiveGame(data.game);
-      PieceActions.receivePieces(data.pieces);
+      PieceActions.receiveState(data.state);
       if (successCB)
         successCB(data);
     });
+  },
+
+  requestMove(data) {
+    socket.emit('game-move', data);
   },
 
   leave() {

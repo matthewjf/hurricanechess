@@ -3,7 +3,6 @@ import {browserHistory} from 'react-router';
 import ErrorUtil from '../../utils/error_util';
 import GameSubscription from '../../sockets/game_subscription';
 import GameStore from '../../stores/game_store';
-import PieceStore from '../../stores/piece_store';
 import Board from './board';
 import Pieces from './pieces';
 
@@ -12,14 +11,12 @@ class Game extends React.Component {
     super(props);
 
     this.getGame = this.getGame.bind(this);
-    this.getPieces = this.getPieces.bind(this);
     this.rejected = this.rejected.bind(this);
-    this.color = this.color.bind(this);
+    this.isWhite = this.isWhite.bind(this);
 
     this.state = {
-      id: this.props.params.id,
+      gameId: this.props.params.id,
       game: GameStore.get(),
-      pieces: PieceStore.get(),
       error: null,
       currentUser: this.props.currentUser
     };
@@ -31,21 +28,15 @@ class Game extends React.Component {
 
   componentDidMount() {
     this.gameListener = GameStore.addChangeListener(this.getGame);
-    this.pieceListener = PieceStore.addChangeListener(this.getPieces);
-    GameSubscription.join(this.state.id, null,this.rejected);
+    GameSubscription.join(this.state.gameId, null,this.rejected);
   }
 
   getGame() {
     this.setState({game: GameStore.get()});
   }
 
-  getPieces() {
-    this.setState({pieces: PieceStore.get()});
-  }
-
   componentWillUnmount() {
     GameStore.removeChangeListener(this.getGame);
-    PieceStore.removeChangeListener(this.getPieces);
     GameSubscription.leave();
   }
 
@@ -61,12 +52,12 @@ class Game extends React.Component {
     $('#game-settings-modal').openModal();
   }
 
-  color() {
+  isWhite() {
     var game = this.state.game;
     if (game.white && game.white._id === this.state.currentUser._id)
-      return 'white';
-    else if (game.black && game.black._id === this.state.currentUser._id)
-      return 'black';
+      return true;
+    else
+      return false;
   }
 
   render() {
@@ -78,7 +69,7 @@ class Game extends React.Component {
             <i className="material-icons settings-icon">settings</i>
           </a>
         </div>
-        <Pieces pieces={this.state.pieces} userColor={this.color()}/>
+        <Pieces gameId={this.state.gameId} isWhite={this.isWhite()}/>
         <Board />
       </section>
     );

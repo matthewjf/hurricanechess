@@ -125,12 +125,16 @@ var delayedRemove = function(id) {
 var delayedActivate = (id) => {
   clearTimeouts(id);
   timeouts[id] = setTimeout(() => {
-    Game.findById(id, (_, game) => {
+    Game.findById(id)
+        .populate('white')
+        .populate('black')
+        .exec((_, game) => {
       if (game && game.isActivatable()) {
         game.activate();
       }
     });
-  }, 10000);
+  }, 1000);
+  // }, 10000);
 };
 
 GameSchema.pre('save', function(next) {
@@ -148,6 +152,7 @@ GameSchema.pre('save', function(next) {
 });
 
 GameSchema.post('save', (game, next) => {
+  console.log('post save: ',game);
   io.to('index').emit('game', {game: game});
   io.to(game._id).emit('game', {game: game});
   next();
