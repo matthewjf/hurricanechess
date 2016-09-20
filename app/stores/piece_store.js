@@ -54,7 +54,6 @@ class PieceStore extends EventEmitter {
   dispatcherCallback(payload) {
     switch(payload.actionType) {
       case PieceConstants.STATE_RECEIVED:
-        console.log('pieces store state received', payload);
         _setPieces(payload.pieces);
         _setGrid(payload.grid);
         break;

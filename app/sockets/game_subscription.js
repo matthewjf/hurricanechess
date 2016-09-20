@@ -37,17 +37,14 @@ var GameSubscription = {
     });
 
     socket.on('state-init', (state) => {
-      console.log('state-init', state.pieces, state.grid);
       PieceActions.receiveState(state);
     });
 
     socket.on('game-move', (state) => {
-      console.log('moveData: ', state);
       PieceActions.receiveState(state);
     });
 
     SocketManager.join(ROOM, {id: id}, (data) => {
-      console.log(data);
       GameActions.receiveGame(data.game);
       PieceActions.receiveState(data.state);
       if (successCB)

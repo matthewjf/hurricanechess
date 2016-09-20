@@ -31,7 +31,7 @@ var _getNextPos = function(pieceId, target, state) {
 
 var _getTarget = function(target, state) {
   for (var id = 0; id < 32; id++) {
-    var pos = state.pieces[id].pos;
+    if (state.pieces[id]) var pos = state.pieces[id].pos;
     if ( pos[0] === target[0] && pos[1] === target[1]) return id;
   }
 };

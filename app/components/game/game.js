@@ -69,7 +69,7 @@ class Game extends React.Component {
             <i className="material-icons settings-icon">settings</i>
           </a>
         </div>
-        <Pieces gameId={this.state.gameId} isWhite={this.isWhite()}/>
+        <Pieces gameId={this.state.gameId} isWhite={this.isWhite()} />
         <Board />
       </section>
     );
