@@ -152,7 +152,6 @@ GameSchema.pre('save', function(next) {
 });
 
 GameSchema.post('save', (game, next) => {
-  console.log('post save: ',game);
   io.to('index').emit('game', {game: game});
   io.to(game._id).emit('game', {game: game});
   next();

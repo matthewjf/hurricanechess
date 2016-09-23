@@ -2,7 +2,6 @@ import Game from '../models/game';
 
 export default function(client, joined) {
   client.on("join-index", function(_){
-    console.log('client attempted to join index');
     client.join("index", function() {
         Game.find()
           .where('status').ne('archived')

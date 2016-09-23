@@ -7,7 +7,6 @@ const ROOM = 'game';
 var GameSubscription = {
   create(data, successCB, errorCB) {
     socket.on('created-game', (game) => {
-      console.log("created-game: ", game);
       if (successCB)
         successCB(game);
       socket.off('created-game');
@@ -16,7 +15,6 @@ var GameSubscription = {
     });
 
     socket.on('errors', (errors) => {
-      console.log('errors: ', errors);
       if (errorCB)
         errorCB(errors);
     });
@@ -26,13 +24,11 @@ var GameSubscription = {
 
   join(id, successCB, errorCB) {
     socket.on('errors', (data) => {
-      console.log("errors: ", data);
       if (errorCB)
         errorCB(errorCB);
     });
 
     socket.on('game', (data) => {
-      console.log('game: ', data.game);
       GameActions.receiveGame(data.game);
     });
 

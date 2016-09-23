@@ -7,13 +7,10 @@ import User from '../models/user';
 import Game from '../models/game';
 
 io.on('connection', client => {
-
-  console.log('socket connection');
   var currentRoom, userId;
 
   // CLEANUP
   const cleanupGame = gameId => {
-    console.log("trying to cleanup game");
     var userId;
     if (client.handshake.session.passport)
       var userId = client.handshake.session.passport.user;
@@ -40,10 +37,7 @@ io.on('connection', client => {
   // JOIN SUCCESS
   const joined = data => {
     if (currentRoom !== data.room) {
-      console.log('joined room: ' + data.room);
-      console.log('leaving: ' + currentRoom);
       client.leave(currentRoom, function(){
-        console.log("left: " + currentRoom);
         if (currentRoom && currentRoom !== 'index') {
           cleanupGame(currentRoom);
         }
@@ -53,7 +47,6 @@ io.on('connection', client => {
   };
 
   client.on('disconnect', () => {
-    console.log('user disconnected');
     if (currentRoom !== 'index')
       cleanupGame(currentRoom);
   });

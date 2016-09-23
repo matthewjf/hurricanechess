@@ -4,12 +4,10 @@ const ROOM = 'index';
 var GameIndexSubscription = {
   join() {
     socket.on('game', (data) => {
-      console.log('receive game: ', data);
       GameIndexActions.receiveGame(data.game);
     });
 
     socket.on('remove', (data) => {
-      console.log('remove-game: ', data);
       GameIndexActions.removeGame(data.game);
     });
 

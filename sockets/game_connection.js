@@ -67,7 +67,6 @@ export default (client, joined) => {
   });
 
   client.on("game-move", data => {
-    console.log('received move request: ', data);
     GameManager.movePiece(data.gameId, userId, data.pieceId, data.pos);
   });
 };

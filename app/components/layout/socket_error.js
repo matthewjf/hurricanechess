@@ -9,19 +9,16 @@ class SocketError extends React.Component {
 
   componentDidMount() {
     socket.on('connect', () => {
-      console.log("socket connected");
       this.setState({socketError: null});
     });
 
     socket.on('disconnect', () => {
-      console.log('socket disconnected');
       this.setState(
         {socketError: "LOST CONNECTION TO SERVER... BIG PROBLEMS."}
       );
     });
 
     socket.on('reconnect', () => {
-      console.log("socket reconnected");
       this.setState({socketError: null});
     });
   }

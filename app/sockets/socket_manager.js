@@ -1,13 +1,11 @@
 var SocketManager = {
   join(room, payload, successCB){
     socket.on('joined-' + room, (data) => {
-      console.log("joined room: ", data);
       if (successCB)
         successCB(data);
     });
 
     socket.on('reconnect', () => {
-      console.log('joining room: ' + room);
       socket.emit('join-' + room, payload);
     });
 

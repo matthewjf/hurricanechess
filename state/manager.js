@@ -85,8 +85,6 @@ var _performMove = function(pieceId, targetPos, state) {
 
   _emitStateData('game-move', state);
 
-  _updateMoveHistory(state);
-
   if (Board.isGameOver(state)) {
     _gameOver(state);
   } else {
@@ -128,7 +126,6 @@ var _performCastleMove = function(kingId, targetPos, state) {
   _performImmediate(rookId, rookTargetPos, state);
 
   _emitStateData('game-move', state);
-  _updateMoveHistory(state);
 };
 
 var _performImmediate = function(pieceId, pos, state) {
@@ -195,6 +192,7 @@ var _isCorrectUser = function(userId, pieceId, state) {
 
 var _emitStateData = function(action, state) {
   io.to(state.gameId).emit(action, state);
+  _updateMoveHistory(state);
 };
 
 export default {
