@@ -8,6 +8,11 @@
     flex: 0 0 12.5%;
     height: 12.5%;
   }
+  #board-overlay {
+    background-color: #000;
+    opacity: 0.3;
+    position: absolute;
+  }
 
   #board {
     padding: 0;

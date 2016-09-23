@@ -64,8 +64,8 @@ class GameIndex extends React.Component {
 
         <ul id='game-list'>
           <VelocityTransitionGroup
-              enter={{animation: "slideDown"}}
-              leave={{animation: "slideUp"}} >
+              enter={{animation: 'slideDown', stagger: '100ms', duration: '100ms'}}
+              leave={'slideUp'} >
             {this.gameList(this.state.games)}
           </VelocityTransitionGroup>
         </ul>

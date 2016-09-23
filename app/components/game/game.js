@@ -5,6 +5,7 @@ import GameSubscription from '../../sockets/game_subscription';
 import GameStore from '../../stores/game_store';
 import Board from './board';
 import Pieces from './pieces';
+import Display from '../../utils/display';
 
 class Game extends React.Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class Game extends React.Component {
     this.rejected = this.rejected.bind(this);
     this.isWhite = this.isWhite.bind(this);
     this.isActive = this.isActive.bind(this);
+    this.renderOverlay = this.renderOverlay.bind(this);
 
     this.state = {
       gameId: this.props.params.id,
@@ -65,6 +67,11 @@ class Game extends React.Component {
     return this.state.game && this.state.game.status === 'active';
   }
 
+  renderOverlay() {
+    if (!this.isActive())
+      return <div id='board-overlay' style={{height: Display.gridSizePx, width: Display.gridSizePx}}/>;
+  }
+
   render() {
     return (
       <section id='game' className='no-select'>
@@ -74,6 +81,7 @@ class Game extends React.Component {
             <i className="material-icons settings-icon">settings</i>
           </a>
         </div>
+        {this.renderOverlay()}
         <Pieces isActive={this.isActive()} isWhite={this.isWhite()} />
         <Board />
       </section>

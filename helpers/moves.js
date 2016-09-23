@@ -55,11 +55,11 @@ const _kingMoves = function(data) {
     else
       var row = 0, lRook = data.pieces[24], rRook = data.pieces[31];
     if (lRook && !lRook.status && !lRook.hasMoved &&
-        !(_targetPos([row,1], data) || _targetPos([row,2], data) || _targetPos([row,3], data)
+        !(_hasPiece([row,1], data) || _hasPiece([row,2], data) || _hasPiece([row,3], data)
           || _ownReserved(piece,[row,1],data) || _ownReserved(piece,[row,2],data) || _ownReserved(piece,[row,3],data)))
       moves.push([row,2]);
     if (rRook && !rRook.status && !rRook.hasMoved &&
-        !(_targetPos([row,5], data) || _targetPos([row,6], data)
+        !(_hasPiece([row,5], data) || _hasPiece([row,6], data)
           || _ownReserved(piece,[row,5],data) || _ownReserved(piece,[row,6],data) ))
       moves.push([row,6]);
   }
@@ -70,20 +70,20 @@ const _pawnMoves = function(data) {
   var moves = [], piece = data.piece;
   var dir = piece.id < 16 ? -1 : 1;
   var next = [piece.pos[0] + dir, piece.pos[1]];
-  if (_inRangePos(next) && !_targetPos(next, data) && !_ownReserved(piece, next, data)) {
+  if (_inRangePos(next) && _isEmpty(next, data) && !_ownReserved(piece, next, data)) {
     moves.push(next);
 
     var next2 = [next[0] + dir, next[1]];
-    if (!piece.hasMoved && _inRangePos(next2) && !_targetPos(next2, data) && !_ownReserved(piece, next2, data))
+    if (!piece.hasMoved && _inRangePos(next2) && _isEmpty(next2, data) && !_ownReserved(piece, next2, data))
       moves.push(next2);
   }
 
   var rDiag = [piece.pos[0] + dir, piece.pos[1] + 1];
   var lDiag = [piece.pos[0] + dir, piece.pos[1] - 1];
 
-  if (_inRangePos(rDiag) && _targetPos(rDiag, data) && _canTakeTarget(piece, rDiag, data) && !_ownReserved(piece, rDiag, data))
+  if (_inRangePos(rDiag) && _hasPiece(rDiag, data) && _canTakeTarget(piece, rDiag, data) && !_ownReserved(piece, rDiag, data))
     moves.push(rDiag);
-  if (_inRangePos(lDiag) && _targetPos(lDiag, data) && _canTakeTarget(piece, lDiag, data) && !_ownReserved(piece, lDiag, data))
+  if (_inRangePos(lDiag) && _hasPiece(lDiag, data) && _canTakeTarget(piece, lDiag, data) && !_ownReserved(piece, lDiag, data))
     moves.push(lDiag);
 
   return moves;
@@ -105,7 +105,7 @@ const _slidingMovesDir = function(data, dir) {
   while (_inRangePos(newPos)) {
     if (_ownReserved(piece, newPos, data)) {
       break;
-    } else if (_targetPos(newPos, data)) {
+    } else if (_hasPiece(newPos, data)) {
       if (_canTakeTarget(piece, newPos, data)) moves.push(newPos);
       break;
     } else {
@@ -153,7 +153,7 @@ const _targetPos = function(target, state) {
 
 const _canTakeTarget = function(piece, target, state) {
   let targetId = _targetPos(target, state);
-  return !targetId || _diffColor(piece.id, targetId);
+  return _isEmpty(target, state) || _diffColor(piece.id, targetId);
 };
 
 const _reservedPos = function(target, state) {
@@ -171,13 +171,21 @@ const _diffColor = function(id1, id2) {
   return (id1 < 16 && id2 >= 16) || (id1 >= 16 && id2 < 16);
 };
 
+const _hasPiece = function(target, state) {
+  return Number.isInteger(_targetPos(target, state));
+};
+
+const _isEmpty = function(target, state) {
+  return !_hasPiece(target,state);
+};
+
 const _sameColor = function(id1, id2) {
   return !_diffColor(id1, id2);
 };
 
 const _canMoveTo = function(data, target) {
   return _inRangePos(target) && (
-    !_targetPos(target, data) ||
+    _isEmpty(target, data) ||
     _canTakeTarget(data.piece, target, data));
 };
 

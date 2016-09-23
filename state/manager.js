@@ -76,8 +76,8 @@ var _performMove = function(pieceId, targetPos, state) {
   var removeId = Board.getTarget(newPos, state);
   delete state.pieces[removeId];
 
-  state.grid[currPos[0]][currPos[1]] = undefined;
-  state.grid[newPos[0]][newPos[1]] = pieceId;
+  _clearTarget(currPos, state);
+  _setTarget(pieceId, newPos, state);
 
   var pieceData = { pos: newPos, hasMoved: 1, status: 1 };
 
@@ -96,31 +96,30 @@ var _performMove = function(pieceId, targetPos, state) {
 
 var _performKnightMove = function(pieceId, targetPos, state) {
   let currPos = state.pieces[pieceId].pos;
-  state.grid[currPos[0]][currPos[1]] = undefined;
+  _clearTarget(currPos, state);
   state.reserved[targetPos[0]][targetPos[1]] = pieceId;
   Object.assign(state.pieces[pieceId], { pos: targetPos, hasMoved: 1, status: -1 });
   _emitStateData('game-move', state);
 
-  if (Board.isGameOver(state)) {
-    _gameOver(state);
-  } else {
-    setTimeout(() => {
-      var removeId = Board.getTarget(targetPos, state);
-      delete state.pieces[removeId];
-      state.grid[targetPos[0]][targetPos[1]] = pieceId;
-      state.reserved[targetPos[0]][targetPos[1]] = undefined;
-      _emitStateData('game-move', state);
-
+  setTimeout(() => {
+    var removeId = Board.getTarget(targetPos, state);
+    delete state.pieces[removeId];
+    _setTarget(pieceId, targetPos, state);
+    state.reserved[targetPos[0]][targetPos[1]] = undefined;
+    _emitStateData('game-move', state);
+    if (Board.isGameOver(state)) {
+      _gameOver(state);
+    } else {
       setTimeout(()=>{_moveEnd(pieceId, state);}, GameConfig.speed);
-    }, GameConfig.speed);
-  }
+    }
+  }, GameConfig.speed);
 };
 
 var _performCastleMove = function(kingId, targetPos, state) {
-  let rookRow = kingId < 16 ? 7 : 0;
-  let [rookCol, rookTargetCol] = targetPos[1] === 6 ? [7, 5] : [0, 3];
-  let rookTargetPos = [rookRow, rookTargetCol];
-  let rookId = state.grid[rookRow][rookCol];
+  var rookRow = kingId < 16 ? 7 : 0;
+  var [rookCol, rookTargetCol] = targetPos[1] === 6 ? [7, 5] : [0, 3];
+  var rookTargetPos = [rookRow, rookTargetCol];
+  var rookId = Board.getTarget([rookRow, rookCol], state);
 
   _performImmediate(kingId, targetPos, state);
   _performImmediate(rookId, rookTargetPos, state);
@@ -131,8 +130,8 @@ var _performCastleMove = function(kingId, targetPos, state) {
 var _performImmediate = function(pieceId, pos, state) {
   var currPos = state.pieces[pieceId].pos;
   delete state.pieces[Board.getTarget(pos, state)];
-  state.grid[currPos[0]][currPos[1]] = undefined;
-  state.grid[pos[0]][pos[1]] = pieceId;
+  _clearTarget(currPos, state);
+  _setTarget(pieceId, pos, state);
   Object.assign(state.pieces[pieceId], { pos: pos, hasMoved: 1, status: 1 });
   setTimeout(() => {_moveEnd(pieceId, state);}, GameConfig.speed);
 };
@@ -155,6 +154,14 @@ var _moveEnd = function(pieceId, state) {
       _emitStateData('game-move', state);
     }
   }, GameConfig.delay);
+};
+
+var _setTarget = function(pieceId, target, state) {
+  state.grid[target[0]][target[1]] = pieceId;
+};
+
+var _clearTarget = function(target, state) {
+  _setTarget(undefined, target, state);
 };
 
 var _gameExpired = function(id, state) {
