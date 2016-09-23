@@ -10,10 +10,12 @@ import InitialPieces from '../helpers/initial_pieces';
 var getInitialState = function(game) {
   var pieces = InitialPieces();
   return ({
+    gameId: game._id,
     white: game.white,
     black: game.black,
     pieces: pieces,
-    grid: Board.buildGrid(pieces)
+    grid: Board.buildGrid(pieces),
+    reserved: Board.buildGrid({})
   });
 };
 
@@ -27,7 +29,8 @@ var init = function(game) {
       1000 * 60 * 30, // 30 minutes max time
       _gameExpired
     );
-    io.to(game._id).emit('state-init', {pieces: state.pieces, grid: state.grid});
+
+    _emitStateData('state-init', state);
   } else {
     throw new Error('game cannot be initialized');
   }
@@ -42,90 +45,135 @@ var movePiece = function(gameId, userId, pieceId, targetPos) {
   if (!state) throw new Error('no game found');
   if (!_isCorrectUser(userId, pieceId, state)) throw new Error('incorrect user');
   if (Board.canMovePiece(pieceId, targetPos, state)) {
-    // handle knight moves / castling / pawn promotion
-    _performMove(gameId, pieceId, targetPos);
+    var type = state.pieces[pieceId].type;
+    if (type === 4)
+      _performKnightMove(pieceId, targetPos, state);
+    else if ( type === 0 && Board.isCastleMove(pieceId, targetPos, state))
+      _performCastleMove(pieceId, targetPos, state);
+    else
+      _performMove(pieceId, targetPos, state);
   };
 };
 
 // PRIVATE
-var _performMove = function(gameId, pieceId, targetPos) {
-  var state = getState(gameId);
+var _performMove = function(pieceId, targetPos, state) {
+  var gameId = state.gameId;
   var pieces = state.pieces;
   if (!pieces[pieceId]) return; // piece is not available
 
   var currPos = pieces[pieceId].pos;
   if (currPos[0] === targetPos[0] && currPos[1] === targetPos[1]) {
-    _moveEnd(gameId, pieceId, state);
+    _moveEnd(pieceId, state);
     return;
   };
 
   var newPos = Board.getNextPos(pieceId, targetPos, state);
   if (!newPos) { // can't move to target pos
-    _moveEnd(gameId, pieceId, state);
+    _moveEnd(pieceId, state);
     return;
   }
 
-  var removeId = Board.getTarget(newPos, state); // moveEnd
+  var removeId = Board.getTarget(newPos, state);
   delete state.pieces[removeId];
-
-  var pieceData = {
-    id: pieceId,
-    pos: newPos,
-    type: pieces[pieceId].type,
-    hasMoved: 1,
-    onDelay: 1
-  };
 
   state.grid[currPos[0]][currPos[1]] = undefined;
   state.grid[newPos[0]][newPos[1]] = pieceId;
 
-  pieces[pieceId] = pieceData;
+  var pieceData = { pos: newPos, hasMoved: 1, status: 1 };
 
-  io.to(gameId).emit('game-move', state); // emit to client
+  Object.assign(pieces[pieceId], pieceData);
 
-  var moveData = {
-    state: state,
-    createdAt: new Date()
-  };
-  redis.lpush(gameId, JSON.stringify(moveData)); // add to history
+  _emitStateData('game-move', state);
 
-  if (!pieces[28] || !pieces[4]) {
-    _gameOver({_id: gameId, state: state});
+  _updateMoveHistory(state);
+
+  if (Board.isGameOver(state)) {
+    _gameOver(state);
   } else {
     setTimeout(() => {
-      _performMove(gameId, pieceId, targetPos);
+      _performMove(pieceId, targetPos, state);
     }, GameConfig.speed);
   }
 };
 
-var _updateState = function() {
-  // TODO: handle update logic
+var _performKnightMove = function(pieceId, targetPos, state) {
+  let currPos = state.pieces[pieceId].pos;
+  state.grid[currPos[0]][currPos[1]] = undefined;
+  state.reserved[targetPos[0]][targetPos[1]] = pieceId;
+  Object.assign(state.pieces[pieceId], { pos: targetPos, hasMoved: 1, status: -1 });
+  _emitStateData('game-move', state);
+
+  if (Board.isGameOver(state)) {
+    _gameOver(state);
+  } else {
+    setTimeout(() => {
+      var removeId = Board.getTarget(targetPos, state);
+      delete state.pieces[removeId];
+      state.grid[targetPos[0]][targetPos[1]] = pieceId;
+      state.reserved[targetPos[0]][targetPos[1]] = undefined;
+      _emitStateData('game-move', state);
+
+      setTimeout(()=>{_moveEnd(pieceId, state);}, GameConfig.speed);
+    }, GameConfig.speed);
+  }
 };
 
-var _moveEnd = function(gameId, pieceId, state) {
-  setTimeout(() => {
+var _performCastleMove = function(kingId, targetPos, state) {
+  let rookRow = kingId < 16 ? 7 : 0;
+  let [rookCol, rookTargetCol] = targetPos[1] === 6 ? [7, 5] : [0, 3];
+  let rookTargetPos = [rookRow, rookTargetCol];
+  let rookId = state.grid[rookRow][rookCol];
+
+  _performImmediate(kingId, targetPos, state);
+  _performImmediate(rookId, rookTargetPos, state);
+
+  _emitStateData('game-move', state);
+  _updateMoveHistory(state);
+};
+
+var _performImmediate = function(pieceId, pos, state) {
+  var currPos = state.pieces[pieceId].pos;
+  delete state.pieces[Board.getTarget(pos, state)];
+  state.grid[currPos[0]][currPos[1]] = undefined;
+  state.grid[pos[0]][pos[1]] = pieceId;
+  Object.assign(state.pieces[pieceId], { pos: pos, hasMoved: 1, status: 1 });
+  setTimeout(() => {_moveEnd(pieceId, state);}, GameConfig.speed);
+};
+
+var _updateMoveHistory = function(state) {
+  var moveData = { state: state, createdAt: new Date() };
+  redis.lpush(state.gameId.toString(), JSON.stringify(moveData)); // add to history
+};
+
+var _moveEnd = function(pieceId, state) {
+  if (Board.shouldPromote(pieceId, state) && state.pieces[pieceId])
+    state.pieces[pieceId].type = 1; // promote
+
+  if (state.pieces[pieceId]) state.pieces[pieceId].status = 2;
+  _emitStateData('game-move', state);
+
+  setTimeout(() => { // off delay
     if (state.pieces[pieceId]) {
-      state.pieces[pieceId].onDelay = 0;
-      io.to(gameId).emit('game-move', state);
+      state.pieces[pieceId].status = 0;
+      _emitStateData('game-move', state);
     }
   }, GameConfig.delay);
 };
 
 var _gameExpired = function(id, state) {
-  _gameOver({_id: id, state: state});
+  _gameOver(state);
 };
 
-var _gameOver = function(game) {
-  console.log('removed game by id ', game._id);
-  var state = game.state;
-  var history = redis.lrange(game._id, 0, -1);
+var _gameOver = function(state) {
+  var gameId = state.gameId;
+  var history = redis.lrange(gameId, 0, -1);
 
   // cleanup cache and redis
-  cache.del(game._id);
-  redis.del(game._id);
+  cache.del(gameId);
+  redis.del(gameId);
 
   // update mongo with new state
-  Game.findById(game._id)
+  Game.findById(gameId)
     .populate('white')
     .populate('black')
     .exec((err, game) => {
@@ -133,27 +181,20 @@ var _gameOver = function(game) {
         io.to(game._id).emit('errors', err.errors);
       } else {
         game.status = 'archived';
-        game.winner = _getWinner(state);
+        game.winner = Board.getWinner(state);
         game.save();
         MoveHistory.create({game: game, moves: history});
       };
   });
 };
 
-var _getWinner = function(state) {
-  if (!state.pieces[28] && !state.pieces[4])
-    return 'draw';
-  else if (!state.pieces[28])
-    return 'white';
-  else if (!state.pieces[4])
-    return 'black';
-  else
-    return 'draw';
-};
-
 var _isCorrectUser = function(userId, pieceId, state) {
   let color = (pieceId < 16 ? 'white' : 'black');
   return state[color]._id.toString() === userId;
+};
+
+var _emitStateData = function(action, state) {
+  io.to(state.gameId).emit(action, state);
 };
 
 export default {

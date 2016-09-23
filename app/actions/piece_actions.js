@@ -5,8 +5,10 @@ var PieceActions = {
   receiveState: (state) => {
     AppDispatcher.dispatch({
       actionType: PieceConstants.STATE_RECEIVED,
+      gameId: state.gameId,
       pieces: state.pieces,
-      grid: state.grid
+      grid: state.grid,
+      reserved: state.reserved
     });
   },
 

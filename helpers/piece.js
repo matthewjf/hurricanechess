@@ -7,34 +7,18 @@ import moves from './moves';
 
 var _getNextPos = function(pieceId, targetPos, state) {
   var piece = state.pieces[pieceId], currPos = piece.pos;
-  if (piece.type === 4 && _canMoveTo(pieceId, targetPos, state)) { // handle knight move
-    return endPos;
-  // handle castling
-  // } else if (this.type === 'king' && isCastleMove(endPos)) {
-  //   return;
-  // handle pawn promotion
-  // } else if (this.type === 'pawn' && endPos ) {
-  //   return;
-  } else { // normal move
-    var newPos = _getDiff(currPos, targetPos);
-    if (_canMoveTo(pieceId, newPos, state)) {
-      return newPos;
-    }
-  }
+  var newPos = _getDiff(currPos, targetPos);
+  if (_canMoveTo(pieceId, newPos, state)) return newPos;
 };
 
 var _canMoveTo = function(pieceId, targetPos, state) {
   var piece = state.pieces[pieceId];
-  var validMoves = moves({piece: piece, pieces: state.pieces, grid: state.grid});
+  var validMoves = moves(Object.assign(state, {piece: piece}));
   for (var i = 0; i < validMoves.length; i++) {
     var curr = validMoves[i];
     if (curr[0] === targetPos[0] && curr[1] === targetPos[1]) return true;
   }
   return false;
-};
-
-var _isCastleMove = function(endPos) {
-
 };
 
 var _getDiff = function(curr, target) {

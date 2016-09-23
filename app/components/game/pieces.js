@@ -10,18 +10,16 @@ class Pieces extends React.Component {
     this.getState = this.getState.bind(this);
     this.renderPieces = this.renderPieces.bind(this);
     this.style = this.style.bind(this);
+    this.renderClickHandler = this.renderClickHandler.bind(this);
 
-    this.state = {
-      gameId: this.props.gameId,
-      isWhite: this.props.isWhite,
-      pieces: PieceStore.get().pieces,
-      grid: PieceStore.get().grid,
-      errors: null
-    };
+    this.state = Object.assign(
+      {isWhite: this.props.isWhite, isActive: this.props.isActive, errors: null},
+      PieceStore.get()
+    );
   }
 
   componentWillReceiveProps(props) {
-    this.setState({isWhite: props.isWhite, gameId: props.gameId});
+    this.setState({isWhite: props.isWhite, isActive: props.isActive});
   }
 
   componentDidMount() {
@@ -33,8 +31,7 @@ class Pieces extends React.Component {
   }
 
   getState() {
-    var state = PieceStore.get();
-    this.setState({pieces: state.pieces, grid: state.grid});
+    this.setState(Object.assign(this.state, PieceStore.get()));
   }
 
   renderPieces(pieces) {
@@ -45,7 +42,7 @@ class Pieces extends React.Component {
                   key={pieceId}
                   pieceId={pieceId}
                   data={pieces[pieceId]}
-                  isWhite={this.state.isWhite}/>;
+                  isWhite={this.state.isWhite} />;
       });
     } else {
       return null;
@@ -60,14 +57,25 @@ class Pieces extends React.Component {
       };
   }
 
+  renderClickHandler() {
+    if (this.state.isActive) {
+      return (
+        <ClickHandler
+          pieces={this.state.pieces}
+          grid={this.state.grid}
+          reserved={this.state.reserved}
+          gameId={this.state.gameId}
+          isWhite={this.state.isWhite} />
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return (
       <div id='pieces' style={this.style()}>
-        <ClickHandler
-          pieces={this.state.pieces} 
-          grid={this.state.grid}
-          isWhite={this.state.isWhite}
-          gameId={this.state.gameId} />
+        {this.renderClickHandler()}
         {this.renderPieces(this.state.pieces)}
       </div>
     );

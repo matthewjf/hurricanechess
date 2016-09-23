@@ -13,6 +13,7 @@ class Game extends React.Component {
     this.getGame = this.getGame.bind(this);
     this.rejected = this.rejected.bind(this);
     this.isWhite = this.isWhite.bind(this);
+    this.isActive = this.isActive.bind(this);
 
     this.state = {
       gameId: this.props.params.id,
@@ -60,6 +61,10 @@ class Game extends React.Component {
       return false;
   }
 
+  isActive() {
+    return this.state.game && this.state.game.status === 'active';
+  }
+
   render() {
     return (
       <section id='game' className='no-select'>
@@ -69,7 +74,7 @@ class Game extends React.Component {
             <i className="material-icons settings-icon">settings</i>
           </a>
         </div>
-        <Pieces gameId={this.state.gameId} isWhite={this.isWhite()} />
+        <Pieces isActive={this.isActive()} isWhite={this.isWhite()} />
         <Board />
       </section>
     );

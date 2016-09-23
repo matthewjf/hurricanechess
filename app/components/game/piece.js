@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PieceMap from '../../utils/piece_map';
 import Display from '../../utils/display';
 import GameConfig from '../../../config/game';
@@ -7,11 +8,13 @@ class Piece extends React.Component {
   constructor(props) {
     super(props);
     this.style = this.style.bind(this);
+    this.renderTimer = this.renderTimer.bind(this);
 
     this.state = {
       id: this.props.pieceId,
       type: this.props.data.type,
       pos: this.props.data.pos,
+      status: this.props.data.status,
       color: this.props.pieceId < 16 ? 'white' : 'black',
       isWhite: this.props.isWhite
     };
@@ -22,20 +25,16 @@ class Piece extends React.Component {
       id: props.pieceId,
       type: props.data.type,
       pos: props.data.pos,
+      status: props.data.status,
       color: props.pieceId < 16 ? 'white' : 'black',
       isWhite: props.isWhite
     });
   }
 
-  componentDidMount() {
-  }
-
-  componentWillUnmount() {
-  }
-
   style() {
     var scale = this.state.isWhite ? '' : 'scale(-1, -1)';
-    var transition = "top "+GameConfig.speed+"ms linear, left "+GameConfig.speed+"ms linear";
+    var transSpeed = this.state.type === 4 ? GameConfig.speed * 2 : GameConfig.speed;
+    var transition = "top "+transSpeed+"ms linear, left "+transSpeed+"ms linear";
 
     return {
       fontSize: (Display.tileSize * 3 / 4) + 'px',
@@ -49,12 +48,27 @@ class Piece extends React.Component {
     };
   }
 
+  renderTimer() {
+    let height = this.state.status === 2 &&
+      this.state.id < 16 === this.state.isWhite ? Display.tileSizePx : 0;
+
+    return <div
+      className={'timer ' + (height ? 'timer-animation' : '')}
+      style={{
+        width: Display.tileSizePx,
+        height: height,
+        animationDuration: GameConfig.delay + 'ms'
+      }}
+      ref='timer' />;
+  }
+
   render() {
     return <div
-              className={this.state.color + '-piece piece'}
+              className={this.state.color + '-piece piece-wrapper'}
               style={this.style()}>
-            {PieceMap[this.state.type]}
-           </div>;
+              <div className='piece' >{PieceMap[this.state.type]}</div>
+              {this.renderTimer()}
+            </div>;
   }
 };
 

@@ -17,6 +17,7 @@ class ClickHandler extends React.Component {
       gameId: this.props.gameId,
       pieces: this.props.pieces,
       grid: this.props.grid,
+      reserved: this.props.reserved,
       isWhite: this.props.isWhite,
       errors: null
     };
@@ -27,12 +28,13 @@ class ClickHandler extends React.Component {
       gameId: props.gameId,
       pieces: props.pieces,
       grid: props.grid,
+      reserved: props.reserved,
       isWhite: props.isWhite
     });
   }
 
   getGameState() {
-    return {pieces: this.state.pieces, grid: this.state.grid};
+    return {pieces: this.state.pieces, grid: this.state.grid, reserved: this.state.reserved};
   }
 
   getOwnPiece(pos) {

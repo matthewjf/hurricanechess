@@ -4,21 +4,24 @@ import PieceConstants from '../constants/piece_constants';
 
 var _pieces = {};
 var _grid = [];
+var _reserved = [];
+var _gameId;
 
 var _error = null;
 var CHANGE_EVENT = 'change';
 
-function _setPieces(pieces) {
-  _pieces = pieces || {};
-}
-
-function _setGrid(grid) {
-  _grid = grid || [];
+function _setState(state) {
+  _gameId = state.gameId;
+  _pieces = state.pieces || {};
+  _grid = state.grid || [];
+  _reserved = state.reserved || [];
 }
 
 function _removeState() {
+  _gameId = undefined;
   _pieces = {};
   _grid = [];
+  _reserved = [];
 }
 
 function _setError(error) {
@@ -36,7 +39,7 @@ class PieceStore extends EventEmitter {
   }
 
   get() {
-    return {pieces: _pieces, grid: _grid};
+    return {pieces: _pieces, grid: _grid, gameId: _gameId, reserved: _reserved};
   }
 
   emitChange() {
@@ -54,8 +57,7 @@ class PieceStore extends EventEmitter {
   dispatcherCallback(payload) {
     switch(payload.actionType) {
       case PieceConstants.STATE_RECEIVED:
-        _setPieces(payload.pieces);
-        _setGrid(payload.grid);
+        _setState(payload);
         break;
       case PieceConstants.ERROR_RECEIVED:
         _setError(payload.error);
