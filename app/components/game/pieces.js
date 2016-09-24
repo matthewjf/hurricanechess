@@ -3,6 +3,7 @@ import Piece from './piece';
 import ClickHandler from './click_handler';
 import PieceStore from '../../stores/piece_store';
 import Display from '../../utils/display';
+import PieceActions from '../../actions/piece_actions';
 
 class Pieces extends React.Component {
   constructor(props) {
@@ -13,13 +14,15 @@ class Pieces extends React.Component {
     this.renderClickHandler = this.renderClickHandler.bind(this);
 
     this.state = Object.assign(
-      {isWhite: this.props.isWhite, isActive: this.props.isActive, errors: null},
+      {isWhite: this.props.isWhite, status: this.props.status, errors: null},
       PieceStore.get()
     );
   }
 
   componentWillReceiveProps(props) {
-    this.setState({isWhite: props.isWhite, isActive: props.isActive});
+    this.setState({isWhite: props.isWhite, status: props.status});
+    if (this.state.status === 'archived')
+      $('.timer').remove();
   }
 
   componentDidMount() {
@@ -28,6 +31,7 @@ class Pieces extends React.Component {
 
   componentWillUnmount() {
     PieceStore.removeChangeListener(this.getState);
+    PieceActions.removeState();
   }
 
   getState() {
@@ -58,7 +62,7 @@ class Pieces extends React.Component {
   }
 
   renderClickHandler() {
-    if (this.state.isActive) {
+    if (this.state.status === 'active') {
       return (
         <ClickHandler
           pieces={this.state.pieces}

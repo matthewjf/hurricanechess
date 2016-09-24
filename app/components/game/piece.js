@@ -49,8 +49,7 @@ class Piece extends React.Component {
   }
 
   renderTimer() {
-    let height = this.state.status === 2 &&
-      this.state.id < 16 === this.state.isWhite ? Display.tileSizePx : 0;
+    let height = this.state.status === 2 ? Display.tileSizePx : 0;
 
     return <div
       className={'timer ' + (height ? 'timer-animation' : '')}

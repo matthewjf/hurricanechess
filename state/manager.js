@@ -26,7 +26,7 @@ var init = function(game) {
     let state = cache.put(
       game._id.toString(),
       getInitialState(game),
-      1000 * 60 * 30, // 30 minutes max time
+      GameConfig.maxTime, // 30 minutes max time
       _gameExpired
     );
 

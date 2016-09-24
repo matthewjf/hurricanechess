@@ -1,6 +1,7 @@
 import io from '../config/socketio';
 import mongoose from 'mongoose';
 import GameManager from '../state/manager';
+import GameConfig from '../config/game';
 
 var Schema = mongoose.Schema;
 
@@ -119,7 +120,7 @@ var delayedRemove = function(id) {
         });
       }
     });
-  }, 10000);
+  }, GameConfig.removeDelay);
 };
 
 var delayedActivate = (id) => {
@@ -133,8 +134,7 @@ var delayedActivate = (id) => {
         game.activate();
       }
     });
-  }, 1000);
-  // }, 10000);
+  }, GameConfig.startDelay);
 };
 
 GameSchema.pre('save', function(next) {
