@@ -1,6 +1,6 @@
 import React from 'react';
 import {IndexRoute, Route} from 'react-router';
-import App from './components/App';
+import App from './components/app';
 
 import GameIndex from './components/game_index/index';
 import Game from './components/game/game';
