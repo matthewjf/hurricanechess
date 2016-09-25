@@ -1,5 +1,11 @@
 # TODO
 
+## User Features
+- password change
+- email
+- email confirmation
+- user page
+
 ## Mobile Support
 - dynamic grid sizing
 
