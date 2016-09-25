@@ -50,6 +50,7 @@ GameSchema.methods.join = function(user, color, callback) {
   if (this.isInGame(user)) {
     // do nothing
   } else if (this.isEmpty()) {
+    color = color || 'white';
     if (color === 'white')
       this.white = user;
     else
@@ -63,7 +64,7 @@ GameSchema.methods.join = function(user, color, callback) {
 };
 
 GameSchema.methods.leave = function(user, callback) {
-  if (this.status === 'waiting' || this.status == 'starting') {
+  if (this.status === 'waiting' || this.status === 'starting') {
     if (user.equals(this.white))
       this.white = undefined;
     if (user.equals(this.black))

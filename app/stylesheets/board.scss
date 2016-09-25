@@ -1,0 +1,63 @@
+@import 'colors';
+
+#board-overlay {
+  background-color: hsla(0, 0%, 0%, 0.3);
+  position: absolute;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+}
+#board-status {
+  width: 40%;
+  border-radius: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  font-size: 1.2em;
+  letter-spacing: 0.25em;
+  padding: 0.75em 0 0.75em 0.25em;
+  background-color: hsla(0, 0%, 0%, 0.75);
+  color: #fce4ec;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
+}
+
+#board {
+  padding: 0;
+  flex-shrink: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin: 0;
+
+  .square {
+    background-color: $dark-1;
+  }
+
+  &.natural-board {
+    .white-square {
+      background-color: $natural-white;
+    }
+    .black-square {
+      background-color: $natural-black;
+    }
+  }
+
+  &.cool-board {
+    .white-square {
+      background-color: $cool-white;
+    }
+    .black-square {
+      background-color: $cool-black;
+    }
+  }
+
+  &.candy-board {
+    .white-square {
+      background-color: $candy-white;
+    }
+    .black-square {
+      background-color: $candy-black;
+    }
+  }
+}

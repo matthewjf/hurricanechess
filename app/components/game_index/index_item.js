@@ -2,7 +2,7 @@ import React from 'react';
 import {browserHistory} from 'react-router';
 import ErrorUtil from '../../utils/error_util';
 
-export class GameIndexItem extends React.Component {
+class GameIndexItem extends React.Component {
   constructor(props) {
     super(props);
     this.handleClick = this.handleClick.bind(this);;
@@ -57,7 +57,7 @@ export class GameIndexItem extends React.Component {
   render() {
     let game = this.props.game;
     return(
-      <li className="row card-panel hoverable waves-effect game"
+      <li className="row card-panel clickable waves-effect game"
           onClick={this.handleClick}>
         <div className='col s7'>
           {game.name}

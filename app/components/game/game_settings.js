@@ -20,11 +20,24 @@ class BoardSettings extends React.Component {
   }
 
   componentDidMount() {
+    this.addColorPreviews(this.refs.boardColor);
     $('select').material_select();
     $(this.refs.boardColor).on('change', this.handleColorChange);
     let color = this.getStoredBoardColor();
     this.setBoardColor(color);
     $('input.select-dropdown')[0].value = color;
+  }
+
+  addColorPreviews(select) {
+    $(document).ready(function() {
+      var $ddl = $(this.parentElement.querySelector('.dropdown-content'));
+      $ddl.find('span').each(function() {
+        var $preview = $('<div class="'+this.innerHTML+' preview">')
+          .append('<div class="dark">')
+          .append('<div class="light">');
+        $(this.parentElement).prepend($preview);
+      });
+    }.bind(select));
   }
 
   handleColorChange(event) {

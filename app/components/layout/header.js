@@ -54,17 +54,17 @@ class Header extends React.Component {
     if (this.state.currentUser) {
 			return (
         <ul id={id} className={className}>
-          <li><a id='logout' onClick={this.logout}>Log Out</a></li>
+          <li><a id='logout' onClick={this.logout}>LOG OUT</a></li>
         </ul>
       );
 		} else {
       return (
         <ul id={id} className={className}>
   				<li><a onClick={this.openSignup} className="modal-trigger">
-  					Sign Up
+  					SIGN UP
   				</a></li>
           <li><a onClick={this.openLogin} className="modal-trigger">
-  					Log In
+            LOG IN
   				</a></li>
         </ul>
       );

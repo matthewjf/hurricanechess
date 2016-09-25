@@ -52,20 +52,20 @@ class Piece extends React.Component {
     let height = this.state.status === 2 ? Display.tileSizePx : 0;
 
     return <div
+      ref='timer'
       className={'timer ' + (height ? 'timer-animation' : '')}
       style={{
         width: Display.tileSizePx,
         height: height,
         animationDuration: GameConfig.delay + 'ms'
-      }}
-      ref='timer' />;
+      }} />;
   }
 
   render() {
     return <div
               className={this.state.color + '-piece piece-wrapper'}
               style={this.style()}>
-              <div className='piece' >{PieceMap[this.state.type]}</div>
+              <div className='piece'>{PieceMap[this.state.type]}</div>
               {this.renderTimer()}
             </div>;
   }

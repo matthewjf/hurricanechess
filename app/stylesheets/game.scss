@@ -8,71 +8,12 @@
     flex: 0 0 12.5%;
     height: 12.5%;
   }
-  #board-overlay {
-    background-color: hsla(0, 0%, 0%, 0.3);
+  .velocity-component {
     position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 99;
-  }
-  #board-status {
-    width: 40%;
-    border-radius: 2px;
-    text-transform: uppercase;
-    text-align: center;
-    font-size: 1.2em;
-    letter-spacing: 0.25em;
-    padding: 0.75em 0 0.75em 0.25em;
-    background-color: hsla(0, 0%, 0%, 0.75);
-    color: #fce4ec;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12) !important;
-  }
-
-  #board {
-    padding: 0;
-    flex-shrink: 0;
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    margin: 0;
-
-    .square {
-      background-color: $dark-1;
-    }
-
-    &.natural-board {
-      .white-square {
-        background-color: hsl(35, 32, 58);
-      }
-      .black-square {
-        background-color: hsl(18, 54, 46);
-      }
-    }
-
-    &.cool-board {
-      .white-square {
-        background-color: hsl(200, 14, 54);
-      }
-      .black-square {
-        background-color: hsl(200, 20, 36);
-      }
-    }
-
-    &.candy-board {
-      .white-square {
-        background-color: hsl(1, 28, 64);
-      }
-      .black-square {
-        background-color: hsl(4, 32, 48);
-      }
-    }
   }
 
   .split.settings {
     justify-content: flex-end;
-    margin-bottom: 1rem;
   }
 
   .btn.settings-btn {
@@ -88,8 +29,58 @@
     color: $primary-color;
   }
 
+  .player-card {
+    margin: 1.5rem 0;
+    background-color: hsl(0,0%,22%);
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    &.waiting {
+      justify-content: center;
+      font-style: italic;
+    }
+  }
+
   #game-settings-modal {
     max-width: 480px;
+    .preview {
+      float: right;
+      width: 84px;
+      height: 50px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: row;
+      .light, .dark {
+        margin: 0.5em 0.5em 0.5em 0;
+        display: inline-flex;
+        flex: 1 1 50%;
+      }
+    }
+    .cool {
+      .light {
+        background-color: $cool-white;
+      }
+      .dark {
+        background-color: $cool-black;
+      }
+    }
+    .natural {
+      .light {
+        background-color: $natural-white;
+      }
+      .dark {
+        background-color: $natural-black;
+      }
+    }
+    .candy {
+      .light {
+        background-color: $candy-white;
+      }
+      .dark {
+        background-color: $candy-black;
+      }
+    }
   }
 
   #click-handler {

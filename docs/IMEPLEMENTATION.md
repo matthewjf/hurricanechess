@@ -13,4 +13,4 @@ Need to store current game state while the game is being played.
   - Don't need to worry about asynchronous writes based on stale game state
 - Cons
   - Memory limits: if this limit is reached, there will likely be other performance issues
-  - Volatile: could use redis to backup current game state in case of a crash
+  - Volatile: use redis to backup current game state in case of a crash

@@ -3,7 +3,7 @@ import GameSubscription from '../../sockets/game_subscription';
 import GameIndexSubscription from '../../sockets/game_index_subscription';
 import ErrorUtil from '../../utils/error_util';
 
-export class NewGameForm extends React.Component {
+class NewGameForm extends React.Component {
   constructor() {
     super();
     this.blankAttrs = {
