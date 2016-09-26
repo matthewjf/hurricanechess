@@ -6,13 +6,14 @@ import GameSubscription from '../../sockets/game_subscription';
 class ClickHandler extends React.Component {
   constructor(props) {
     super(props);
-    this.getGameState = this.getGameState.bind(this);
     this.getOwnPiece = this.getOwnPiece.bind(this);
     this.clearSelected = this.clearSelected.bind(this);
     this.squareClass = this.squareClass.bind(this);
     this.renderTiles = this.renderTiles.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.isInValidMoves = this.isInValidMoves.bind(this);
+    this.getGameState = this.getGameState.bind(this);
+    this.updateValidMoves = this.updateValidMoves.bind(this);
 
     this.state = {
       gameId: this.props.gameId,
@@ -32,15 +33,16 @@ class ClickHandler extends React.Component {
       pieces: props.pieces,
       grid: props.grid,
       reserved: props.reserved,
-      isWhite: props.isWhite
+      isWhite: props.isWhite,
+      validMoves: BoardHelper.getMoves(this.state.selected, this.getGameState(props))
     });
   }
 
   // STATE & LOGIC
 
-  getGameState() {
-    return {pieces: this.state.pieces, grid: this.state.grid, reserved: this.state.reserved};
-  }
+  getGameState(state = this.state) {
+    return {pieces: state.pieces, grid: state.grid, reserved: state.reserved};
+  };
 
   getOwnPiece(pos) {
     let isWhite = this.state.isWhite;
@@ -51,6 +53,10 @@ class ClickHandler extends React.Component {
 
   clearSelected(){
     this.setState({selected: undefined, validMoves: []});
+  }
+
+  updateValidMoves() {
+    this.setState({validMoves: BoardHelper.getMoves(this.state.selected, this.getGameState())});
   }
 
   isInValidMoves(pos) {
@@ -70,7 +76,7 @@ class ClickHandler extends React.Component {
     if (Number.isInteger(targetId))
       this.setState({
         selected: targetId,
-        validMoves: BoardHelper.getMoves(targetId, this.getGameState())
+        validMoves: BoardHelper.getMoves(targetId, this.state)
       });
     else {
       if (this.isInValidMoves(targetPos))

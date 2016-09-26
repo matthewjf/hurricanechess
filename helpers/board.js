@@ -16,7 +16,7 @@ var _buildGrid = function(pieces) {
 
 var _getMoves = function(pieceId, state) {
   var pieces = state.pieces, piece = pieces[pieceId];
-  if (piece) {
+  if (piece && piece.status === 0) {
     return Piece.getMoves(pieceId, state);
   }
   return [];
