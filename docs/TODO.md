@@ -43,3 +43,10 @@
 ## Competitive Matchmaking
 - Matchmaking for competitive games
 - Add competitive game mode
+
+## Chat
+## Friends
+
+# KNOWN BUGS
+- modal buttons don't always work
+- pieces dont render properly on android mobile
