@@ -5,6 +5,11 @@ import moves from './moves';
 // const pieceTypes = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
 // const pieceTypeId = {king: 0, queen: 1, rook: 2, bishop: 3, knight: 4, pawn: 5};
 
+var _getMoves = function(pieceId, state) {
+  var piece = state.pieces[pieceId];
+  return moves(Object.assign(state, {piece: piece}));
+};
+
 var _getNextPos = function(pieceId, targetPos, state) {
   var piece = state.pieces[pieceId], currPos = piece.pos;
   var newPos = _getDiff(currPos, targetPos);
@@ -42,6 +47,7 @@ var _getDiff = function(curr, target) {
 
 
 var Piece = {
+  getMoves: _getMoves,
   getNextPos: _getNextPos,
   canMoveTo: _canMoveTo
 };

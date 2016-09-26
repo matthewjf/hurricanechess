@@ -14,6 +14,14 @@ var _buildGrid = function(pieces) {
   return grid;
 };
 
+var _getMoves = function(pieceId, state) {
+  var pieces = state.pieces, piece = pieces[pieceId];
+  if (piece) {
+    return Piece.getMoves(pieceId, state);
+  }
+  return [];
+};
+
 var _canMovePiece = function(pieceId, target, state) {
   var pieces = state.pieces, piece = pieces[pieceId];
   if (piece) {
@@ -63,6 +71,7 @@ var _getWinner = function(state) {
 
 var Board = {
   buildGrid: _buildGrid,
+  getMoves: _getMoves,
   canMovePiece: _canMovePiece,
   getNextPos: _getNextPos,
   getTarget: _getTarget,
