@@ -123,7 +123,7 @@ class NewGameForm extends React.Component {
   render() {
     return (
       <div className='row'>
-        <form onSubmit={this.handleSubmit} >
+        <form>
 
           <div className="modal-content">
             {this.renderErrors(this.state.errors)}
@@ -160,9 +160,9 @@ class NewGameForm extends React.Component {
           </div>
 
           <div className='modal-footer'>
-            <input type='submit'
-                   value='create'
-                   className="waves-effect waves-light btn" />
+            <a onClick={this.handleSubmit} className="waves-effect waves-light btn">
+              create
+            </a>
           </div>
 
         </form>

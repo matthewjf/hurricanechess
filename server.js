@@ -55,7 +55,7 @@ app.use(function(req, res) {
 
 // START
 var server = app.listen(app.get('port'), function() {
-  console.log('Express server listening on port ' + app.get('port'));
+  console.info('express server listening on port ' + app.get('port'));
 });
 
 exports.server = server;
@@ -63,3 +63,4 @@ exports.app = app;
 
 // SOCKET IO
 require('./sockets/connection');
+require('./helpers/cleanup');

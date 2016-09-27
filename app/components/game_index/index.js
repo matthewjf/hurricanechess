@@ -1,5 +1,6 @@
 import React from 'react';
-import {VelocityTransitionGroup, VelocityComponent} from 'velocity-react';
+import {VelocityTransitionGroup} from 'velocity-react';
+import ErrorUtil from '../../utils/error_util';
 
 import GameIndexSubscription from '../../sockets/game_index_subscription';
 import GameIndexStore from '../../stores/game_index_store';
@@ -10,9 +11,11 @@ import NewGameForm from './new_game_form';
 class GameIndex extends React.Component {
   constructor(props) {
     super(props);
+    this.openNewGameForm = this.openNewGameForm.bind(this);
     this.getGames = this.getGames.bind(this);
+    this.gameList = this.gameList.bind(this);
 
-    this.state = { games: [] };
+    this.state = { currentUser: this.props.currentUser, games: [] };
   }
 
   getGames() {
@@ -34,7 +37,10 @@ class GameIndex extends React.Component {
   }
 
   openNewGameForm() {
-		$('#new-game-modal').openModal();
+    if (this.state.currentUser)
+		  $('#new-game-modal').openModal();
+    else
+      ErrorUtil.loginRequired();
   }
 
   gameList(games) {

@@ -1,6 +1,13 @@
 # TODO
 
+## Critical
+- handle deployment with active games
+- handle archived game display
+
 ## User Features
+- logged in as
+- account settings
+- gameplay settings tester
 - password change
 - email
 - email confirmation
@@ -14,6 +21,10 @@
 - sorting
 - searching
 - private games
+
+## Game Features
+- rematch
+- start new game
 
 ## About Page
 - General
@@ -47,6 +58,11 @@
 ## Chat
 ## Friends
 
+## Game Modes
+- chess Z(OMBIES)
+
 # KNOWN BUGS
-- modal buttons don't always work
-- pieces dont render properly on android mobile
+- pieces don't render properly on android mobile
+- reservations don't work for multiple pieces
+  - potential issue if 2 knights of different color reserve the same position
+  - solution: different reservations for each color

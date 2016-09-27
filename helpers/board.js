@@ -59,6 +59,8 @@ var _isGameOver = function(state) {
 };
 
 var _getWinner = function(state) {
+  if (!state.pieces) return 'draw';
+
   if (!state.pieces[28] && !state.pieces[4])
     return 'draw';
   else if (!state.pieces[28])

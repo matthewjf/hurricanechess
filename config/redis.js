@@ -1,8 +1,8 @@
-import config from './config';
+var config = require('./config');
 var redis = require('redis').createClient(config.redis);
 
 redis.on("connect", function() {
-  console.log("redis connected");
+  console.info("redis connected");
 });
 
 module.exports = redis;

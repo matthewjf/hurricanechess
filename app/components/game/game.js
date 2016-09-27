@@ -57,6 +57,7 @@ class Game extends React.Component {
     $('#game-settings-modal').openModal();
   }
 
+  // TODO: player type: 'white', 'black', 'spectator'?
   isWhite() {
     var game = this.state.game;
     if (game.white && game.white._id === this.state.currentUser._id)

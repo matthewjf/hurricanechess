@@ -56,6 +56,8 @@ var movePiece = function(gameId, userId, pieceId, targetPos) {
 };
 
 // PRIVATE
+
+  // UPDATE STATE
 var _performMove = function(pieceId, targetPos, state) {
   var gameId = state.gameId;
   var pieces = state.pieces;
@@ -156,6 +158,8 @@ var _moveEnd = function(pieceId, state) {
   }, GameConfig.delay);
 };
 
+  //  HELPERS
+
 var _setTarget = function(pieceId, target, state) {
   state.grid[target[0]][target[1]] = pieceId;
 };
@@ -168,6 +172,12 @@ var _gameExpired = function(id, state) {
   _gameOver(state);
 };
 
+var _isCorrectUser = function(userId, pieceId, state) {
+  let color = (pieceId < 16 ? 'white' : 'black');
+  return state[color]._id.toString() === userId;
+};
+
+  // UPDATE DB
 var _gameOver = function(state) {
   var gameId = state.gameId;
   var history = redis.lrange(gameId, 0, -1);
@@ -178,25 +188,21 @@ var _gameOver = function(state) {
 
   // update mongo with new state
   Game.findById(gameId)
-    .populate('white')
-    .populate('black')
-    .exec((err, game) => {
-      if (err) {
-        io.to(game._id).emit('errors', err.errors);
-      } else {
-        game.status = 'archived';
-        game.winner = Board.getWinner(state);
-        game.save();
-        MoveHistory.create({game: game, moves: history});
-      };
+  .populate('white')
+  .populate('black')
+  .exec((err, game) => {
+    if (err) {
+      io.to(game._id).emit('errors', err.errors);
+    } else {
+      game.status = 'archived';
+      game.winner = Board.getWinner(state);
+      game.save();
+      MoveHistory.create({game: game, moves: history});
+    };
   });
 };
 
-var _isCorrectUser = function(userId, pieceId, state) {
-  let color = (pieceId < 16 ? 'white' : 'black');
-  return state[color]._id.toString() === userId;
-};
-
+  // CLIENT COMMUNICATION
 var _emitStateData = function(action, state) {
   io.to(state.gameId).emit(action, state);
   _updateMoveHistory(state);
@@ -205,5 +211,6 @@ var _emitStateData = function(action, state) {
 export default {
   init: init,
   movePiece: movePiece,
-  getState: getState
+  getState: getState,
+  gameOver: _gameOver
 };

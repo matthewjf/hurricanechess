@@ -44,7 +44,7 @@ class SignupForm extends React.Component {
       return (
         <div id="signup-modal" className="modal">
           <div className='row'>
-            <form onSubmit={this.handleSubmit} >
+            <form>
 
               <div className="modal-content">
 
@@ -70,9 +70,9 @@ class SignupForm extends React.Component {
               </div>
 
               <div className='modal-footer'>
-                <input type='submit'
-                       value='sign up'
-                       className="waves-effect waves-light btn" />
+                <a onClick={this.handleSubmit} className="waves-effect waves-light btn">
+                  Sign Up
+                </a>
               </div>
 
             </form>
