@@ -15,6 +15,7 @@ var GameSubscription = {
     });
 
     socket.on('errors', (errors) => {
+      browserHistory.push("/");
       if (errorCB)
         errorCB(errors);
     });

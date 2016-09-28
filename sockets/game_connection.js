@@ -47,7 +47,7 @@ export default (client, joined) => {
         .exec((err, game) => {
           if (err) {
             client.emit('errors', err.errors);
-          } else {
+          } else if (game) {
             game.join(user, null, (err, game) => {
               if (err) {
                 client.emit('errors', err.errors);
@@ -61,6 +61,8 @@ export default (client, joined) => {
                 });
               }
             });
+          } else {
+            client.emit('errors', 'no game found');
           }
         });
     });

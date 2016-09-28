@@ -66,7 +66,8 @@ class BoardSettings extends React.Component {
     return (
       <div id="game-settings-modal" className="modal">
         <div className='row'>
-          <form>
+          <form ref='settingsForm' onSubmit={this.handleSubmit}>
+
             <div className="modal-content">
               <div className='row'>
                 <div className='input-field'>
@@ -77,11 +78,13 @@ class BoardSettings extends React.Component {
                 </div>
               </div>
             </div>
+            <input type='submit' hidden />
             <div className='modal-footer'>
               <a onClick={this.handleSubmit} className="waves-effect waves-light btn">
                 save
               </a>
             </div>
+
           </form>
         </div>
       </div>

@@ -41,7 +41,7 @@
 ## Player ranks
 - Store player stats
 - [internal ranking package](https://www.npmjs.com/package/glicko2)
-- External rank ranges
+- External rank badges
 
 ## Spectators
 - Allow spectators to joins

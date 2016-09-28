@@ -179,25 +179,23 @@ var _isCorrectUser = function(userId, pieceId, state) {
 
   // UPDATE DB
 var _gameOver = function(state) {
-  var gameId = state.gameId;
-  var history = redis.lrange(gameId, 0, -1);
-
-  // cleanup cache and redis
-  cache.del(gameId);
-  redis.del(gameId);
-
   // update mongo with new state
-  Game.findById(gameId)
+  Game.findById(state.gameId)
   .populate('white')
   .populate('black')
   .exec((err, game) => {
+    var gameId = game._id.toString();
     if (err) {
       io.to(game._id).emit('errors', err.errors);
     } else {
       game.status = 'archived';
       game.winner = Board.getWinner(state);
       game.save();
-      MoveHistory.create({game: game, moves: history});
+      redis.lrange(gameId.toString(), 0, -1, (err, moves) => {
+        MoveHistory.create({game: game, moves: moves});
+        cache.del(gameId);
+        redis.del(gameId);
+      });
     };
   });
 };
