@@ -8,24 +8,24 @@ class Player extends React.Component {
   }
 
   name() {
-    if (this.props.isCurrentUser) {
-      return 'YOU';
+    if (this.props.data.player) {
+      return this.props.data.player.username;
     } else {
-      return this.props.player ? this.props.player.username : 'waiting for an opponent';
+      return 'waiting for an opponent';
     }
   }
 
   color() {
-    if (this.props.player) return this.props.color;
+    if (this.props.data.player) return this.props.data.color;
   }
 
   render() {
     return(
-      <div className={"card-panel player-card" + (this.props.player ? '' : ' waiting')}>
-        <div className={'col' + (this.props.player ? '' : ' grey-text')}>
+      <div className={"card-panel player-card" + (this.props.data.player ? '' : ' waiting')}>
+        <div className={'col' + (this.props.data.player ? '' : ' grey-text text-lighten-1')}>
           {this.name()}
         </div>
-        <div className='col grey-text'>
+        <div className='col grey-text text-lighten-1'>
           {this.color()}
         </div>
       </div>

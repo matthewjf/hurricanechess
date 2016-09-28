@@ -14,10 +14,12 @@ class Game extends React.Component {
 
     this.getGame = this.getGame.bind(this);
     this.rejected = this.rejected.bind(this);
-    this.isWhite = this.isWhite.bind(this);
-    this.getStatus = this.getStatus.bind(this);
-    this.getCurrentPlayer = this.getCurrentPlayer.bind(this);
-    this.getOpponent = this.getOpponent.bind(this);
+    this.status = this.status.bind(this);
+    this.whiteOnBottom = this.whiteOnBottom.bind(this);
+    this.playerStatus = this.playerStatus.bind(this);
+    this.topCard = this.topCard.bind(this);
+    this.botCard = this.botCard.bind(this);
+    this.card = this.card.bind(this);
 
     this.state = {
       gameId: this.props.params.id,
@@ -57,26 +59,36 @@ class Game extends React.Component {
     $('#game-settings-modal').openModal();
   }
 
-  // TODO: player type: 'white', 'black', 'spectator'?
-  isWhite() {
+  playerStatus() {
     var game = this.state.game;
     if (game.white && game.white._id === this.state.currentUser._id)
-      return true;
+      return 'white';
     else if (game.black && game.black._id === this.state.currentUser._id)
-      return false;
+      return 'black';
     else
-      return; // spectator
+      return 'spectator';
   }
 
-  getCurrentPlayer() {
-    return this.isWhite() ? this.state.game.white : this.state.game.black;
+  whiteOnBottom() {
+    let game = this.state.game;
+    return this.playerStatus() !== 'black';
   }
 
-  getOpponent() {
-    return this.isWhite() ? this.state.game.black : this.state.game.white;
+  topCard() {
+    if (!this.state.game) return {};
+    return this.whiteOnBottom() ?  this.card('black') : this.card('white');
   }
 
-  getStatus() {
+  botCard() {
+    if (!this.state.game) return {};
+    return this.whiteOnBottom() ?  this.card('white') : this.card('black');
+  }
+
+  card(color) {
+    return {color: color, player: this.state.game[color]};
+  }
+
+  status() {
     if (this.state.game) return this.state.game.status;
   }
 
@@ -89,11 +101,11 @@ class Game extends React.Component {
             <i className="material-icons settings-icon">settings</i>
           </a>
         </div>
-        <Player isCurrentUser={false} color={this.isWhite() ? 'black' : 'white'} player={this.getOpponent()}/>
-        <Overlay status={this.getStatus()} />
-        <Pieces status={this.getStatus()} isWhite={this.isWhite()} />
+        <Player data={this.topCard()} />
+        <Overlay status={this.status()} />
+        <Pieces status={this.status()} playerStatus={this.playerStatus()} />
         <Board />
-        <Player isCurrentUser={true} color={this.isWhite() ? 'white' : 'black'} player={this.getCurrentPlayer()}/>
+        <Player data={this.botCard()} />
       </section>
     );
   }

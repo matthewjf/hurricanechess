@@ -2,6 +2,8 @@
 
 ## Critical
 - handle deployment with active games
+  - stop accepting new games
+  - delay deploy until active games are complete (max 30 minutes)
 - handle archived game display
 
 ## User Features
@@ -62,7 +64,11 @@
 - chess Z(OMBIES)
 
 # KNOWN BUGS
+- enter key doesn't work on game settings modal
 - pieces don't render properly on android mobile
 - reservations don't work for multiple pieces
   - potential issue if 2 knights of different color reserve the same position
   - solution: different reservations for each color
+- joining mid-game will set timers to full
+  - do not want to track timer progress, it will slow down the game
+  - maybe show empty instead?

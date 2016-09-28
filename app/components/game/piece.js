@@ -16,7 +16,7 @@ class Piece extends React.Component {
       pos: this.props.data.pos,
       status: this.props.data.status,
       color: this.props.pieceId < 16 ? 'white' : 'black',
-      isWhite: this.props.isWhite
+      whiteOnBottom: this.props.whiteOnBottom
     };
   }
 
@@ -27,12 +27,12 @@ class Piece extends React.Component {
       pos: props.data.pos,
       status: props.data.status,
       color: props.pieceId < 16 ? 'white' : 'black',
-      isWhite: props.isWhite
+      whiteOnBottom: props.whiteOnBottom
     });
   }
 
   style() {
-    var scale = this.state.isWhite ? '' : 'scale(-1, -1)';
+    var scale = this.state.whiteOnBottom ? '' : 'scale(-1, -1)';
     var transSpeed = this.state.type === 4 ? GameConfig.speed * 2 : GameConfig.speed;
     var transition = "top "+transSpeed+"ms linear, left "+transSpeed+"ms linear";
 

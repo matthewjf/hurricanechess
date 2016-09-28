@@ -8,10 +8,15 @@ nav {
 
     #logo {
       font-size: 2.5rem;
-      font-weight: bold;
       color: $primary-color;
-      font-family: 'Megrim', sans-serif;
+      font-family: 'Megrim', cursive;
       cursor: pointer;
+    }
+
+    .username {
+      color: color('grey', 'base');
+      font-weight: lighter;
+      margin-right: 1rem;
     }
 
     a .material-icons {

@@ -1,5 +1,5 @@
 @function hover($color) {
-  @return lighten($color, 2%);
+  @return lighten($color, 3%);
 }
 
 @function click($color) {

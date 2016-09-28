@@ -10,6 +10,7 @@ class Header extends React.Component {
     this.desktopLinks = this.desktopLinks.bind(this);
     this.mobileLinks = this.mobileLinks.bind(this);
     this.links = this.links.bind(this);
+    this.username = this.username.bind(this);
 
     this.state = {currentUser: this.props.currentUser};
   }
@@ -71,6 +72,16 @@ class Header extends React.Component {
     }
   }
 
+  // TODO: add username to header
+  username() {
+    if (this.state.currentUser)
+      return <ul className='right'><li className='username'>
+          {this.state.currentUser.username}
+         </li></ul>;
+    else
+      return null;
+  }
+
   render() {
     return (
       <nav>
@@ -82,9 +93,9 @@ class Header extends React.Component {
           <a href="#" data-activates="nav-mobile" className="button-collapse">
             <i className="material-icons">menu</i>
           </a>
-
           {this.desktopLinks()}
           {this.mobileLinks()}
+          {this.username()}
         </div>
       </nav>
     );
