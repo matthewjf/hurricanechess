@@ -47,18 +47,15 @@ GameSchema.methods.isArchived = function() {
 };
 
 GameSchema.methods.join = function(user, color, callback) {
-  if (this.isInGame(user)) {
-    // do nothing
-  } else if (this.isEmpty()) {
-    color = color || 'white';
-    if (color === 'white')
-      this.white = user;
-    else
-      this.black = user;
-  } else if (this.white) {
-    this.black = user;
-  } else {
+  if (this.isInGame(user) || this.isFull()) {
+    callback(null, this);
+    return;
+  }
+
+  if (!this.white) {
     this.white = user;
+  } else {
+    this.black = user;
   }
   this.save(callback);
 };
