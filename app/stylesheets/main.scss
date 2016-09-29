@@ -12,6 +12,15 @@
   box-shadow: none !important;
 }
 
+@font-face {
+  font-family: 'cheq';
+  src: url('/cheq.ttf');
+}
+
+.piece {
+  font-family: 'cheq' !important;
+}
+
 html {
   font-family: 'Open Sans', sans-serif;
   background-color: $dark-1;

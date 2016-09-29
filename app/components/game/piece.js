@@ -37,7 +37,7 @@ class Piece extends React.Component {
     var transition = "top "+transSpeed+"ms linear, left "+transSpeed+"ms linear";
 
     return {
-      fontSize: (Display.tileSize * 3 / 4) + 'px',
+      fontSize: (Display.tileSize * 4 / 5) + 'px',
       top: (this.state.pos[0] * Display.tileSize) + 'px',
       left: (this.state.pos[1] * Display.tileSize) + 'px',
       lineHeight: Display.tileSizePx,

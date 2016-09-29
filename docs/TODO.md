@@ -7,7 +7,6 @@
 - handle archived game display
 
 ## User Features
-- logged in as
 - account settings
 - gameplay settings tester
 - password change
@@ -45,10 +44,6 @@
 - [internal ranking package](https://www.npmjs.com/package/glicko2)
 - External rank badges
 
-## Spectators
-- Allow spectators to joins
-- Setup spectators with state
-
 ## Archived Games
 - Allow joining archived games
 - Add replay feature
@@ -70,5 +65,5 @@
   - potential issue if 2 knights of different color reserve the same position
   - solution: different reservations for each color
 - joining mid-game will set timers to full
-  - do not want to track timer progress, it will slow down the game
+  - do not want to track timer progress, too slow
   - maybe show empty instead?
