@@ -1,46 +1,44 @@
 import React from 'react';
-import Display from '../../utils/display';
 import BoardHelper from '../../../helpers/board';
-import PieceStore from '../../stores/piece_store';
 import GameSubscription from '../../sockets/game_subscription';
 
 class ClickHandler extends React.Component {
   constructor(props) {
     super(props);
-    this.getState = this.getState.bind(this);
     this.getOwnPiece = this.getOwnPiece.bind(this);
     this.clearSelected = this.clearSelected.bind(this);
     this.squareClass = this.squareClass.bind(this);
     this.renderTiles = this.renderTiles.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.isInValidMoves = this.isInValidMoves.bind(this);
+    this.buildState = this.buildState.bind(this);
+    this.getGameState = this.getGameState.bind(this);
 
-    this.state = Object.assign(
-      {isWhite: this.props.isWhite, validMoves: []},
-      PieceStore.get());
+    this.state = this.buildState(this.props);
   }
 
   // LIFE CYCLE
 
   componentWillReceiveProps(props) {
-    this.setState({
+    this.setState(Object.assign(this.buildState(props),
+      {validMoves: BoardHelper.getMoves(this.state.selected, this.getGameState(props))}));
+  }
+
+  buildState(props) {
+    return {
+      gameId: props.gameId,
+      pieces: props.pieces,
+      grid: props.grid,
+      reserved: props.reserved,
       isWhite: props.isWhite
-    });
+    };
   }
 
-  componentDidMount() {
-    this.pieceListener = PieceStore.addChangeListener(this.getState);
-  }
-
-  componentWillUnmount() {
-    PieceStore.removeChangeListener(this.getState);
-  }
+  getGameState(state = this.state) { // required since boardhelper extends state
+    return {pieces: state.pieces, grid: state.grid, reserved: state.reserved};
+  };
 
   // STATE & LOGIC
-
-  getState() {
-    this.setState(Object.assign(this.state, PieceStore.get()));
-  }
 
   getOwnPiece(pos) {
     let isWhite = this.state.isWhite;
@@ -49,7 +47,7 @@ class ClickHandler extends React.Component {
       return pieceId;
   }
 
-  clearSelected(){
+  clearSelected() {
     this.setState({selected: undefined, validMoves: []});
   }
 
@@ -97,13 +95,6 @@ class ClickHandler extends React.Component {
     return '';
   }
 
-  style() {
-    return {
-      height: Display.gridSizePx,
-      width: Display.gridSizePx
-    };
-  }
-
   // RENDER
 
   renderGrid(classFunction) {
@@ -130,7 +121,7 @@ class ClickHandler extends React.Component {
 
   render() {
     return (
-      <div id='click-handler' onMouseDown={this.handleClick} style={this.style()}>
+      <div id='click-handler' onMouseDown={this.handleClick}>
         {this.renderTiles()}
       </div>
     );

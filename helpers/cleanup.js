@@ -7,7 +7,7 @@ var connected = {redis: false, mongoose: false};
 
 var cleanup = function(){
   if (connected.redis && connected.mongoose) {
-    Game.find({status: 'active'}, function(err, games) {
+    Game.find({status: {$ne: 'archived'}}, function(err, games) {
       games.forEach((game) => {
         var gameId = game._id.toString();
         if (!cache.get(gameId)) {

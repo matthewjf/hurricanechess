@@ -66,8 +66,7 @@ class Pieces extends React.Component {
   style() {
     if (!this.whiteOnBottom())
       return {
-        transform: 'scale(-1, -1)',
-        top: Display.gridSizePx
+        transform: 'scale(-1, -1)'
       };
   }
 

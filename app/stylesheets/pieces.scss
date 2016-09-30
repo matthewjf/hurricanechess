@@ -6,7 +6,8 @@
 }
 
 #pieces {
-  position: relative;
+  height: 100%; width: 100%;
+  position: absolute;
   .piece-wrapper {
     background-color: transparent;
     position: absolute;
