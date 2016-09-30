@@ -4,7 +4,7 @@ import {browserHistory} from 'react-router';
 import UserApi from '../../api/user_api';
 
 function closeSideNav() {
-  $('.button-collapse').sideNav('hide');
+  $('.button-collapse', '#header').sideNav('hide');
 }
 
 class Header extends React.Component {
@@ -21,7 +21,7 @@ class Header extends React.Component {
   }
 
   componentDidMount() {
-    $(".button-collapse").sideNav();
+    $(".button-collapse", "#header").sideNav();
   }
 
   componentWillReceiveProps(props) {

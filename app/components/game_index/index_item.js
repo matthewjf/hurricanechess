@@ -11,7 +11,7 @@ class GameIndexItem extends React.Component {
   handleClick(e) {
     // TODO: add velocity component with bounce animation if not logged in
     e.preventDefault();
-    $("li").velocity('finishAll');
+    $("li", "#game-index").velocity('finishAll');
     if (this.props.currentUser) {
       browserHistory.push('games/' + this.props.game._id);
     } else {
