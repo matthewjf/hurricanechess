@@ -102,9 +102,11 @@ class Game extends React.Component {
           </a>
         </div>
         <Player data={this.topCard()} />
-        <Overlay status={this.status()} />
-        <Pieces status={this.status()} playerStatus={this.playerStatus()} />
-        <Board />
+        <div id='board-wrapper'>
+          <Overlay status={this.status()} />
+          <Pieces status={this.status()} playerStatus={this.playerStatus()} />
+          <Board />
+        </div>
         <Player data={this.botCard()} />
       </section>
     );

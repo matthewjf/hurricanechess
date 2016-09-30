@@ -16,7 +16,7 @@ class Pieces extends React.Component {
     this.isWhite = this.isWhite.bind(this);
 
     this.state = Object.assign(
-      {playerStatus: this.props.playerStatus, status: this.props.status, errors: null},
+      {playerStatus: this.props.playerStatus, status: this.props.status},
       PieceStore.get()
     );
   }

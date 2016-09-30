@@ -119,8 +119,7 @@ class Overlay extends React.Component {
   renderOverlay() {
     if (!this.isActive()) {
       return (
-        <div id='board-overlay'
-             style={{height: Display.gridSizePx, width: Display.gridSizePx }}>
+        <div id='board-overlay'>
           <div id='board-status' ref='status' className='z-depth-1'>
             {this.state.statusText}
           </div>
@@ -134,7 +133,7 @@ class Overlay extends React.Component {
   render() {
     return <VelocityTransitionGroup
         runOnMount={true}
-        className='velocity-component'
+        id='board-overlay-velocity'
         enter={{animation: 'fadeIn', duration: 500}}
         leave={{animation: 'fadeOut', duration: 50}} >
       {this.renderOverlay()}

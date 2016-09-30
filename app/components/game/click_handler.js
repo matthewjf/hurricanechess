@@ -1,48 +1,46 @@
 import React from 'react';
 import Display from '../../utils/display';
 import BoardHelper from '../../../helpers/board';
+import PieceStore from '../../stores/piece_store';
 import GameSubscription from '../../sockets/game_subscription';
 
 class ClickHandler extends React.Component {
   constructor(props) {
     super(props);
+    this.getState = this.getState.bind(this);
     this.getOwnPiece = this.getOwnPiece.bind(this);
     this.clearSelected = this.clearSelected.bind(this);
     this.squareClass = this.squareClass.bind(this);
     this.renderTiles = this.renderTiles.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.isInValidMoves = this.isInValidMoves.bind(this);
-    this.getGameState = this.getGameState.bind(this);
-    this.updateValidMoves = this.updateValidMoves.bind(this);
 
-    this.state = {
-      gameId: this.props.gameId,
-      pieces: this.props.pieces,
-      grid: this.props.grid,
-      reserved: this.props.reserved,
-      isWhite: this.props.isWhite,
-      errors: null
-    };
+    this.state = Object.assign(
+      {isWhite: this.props.isWhite, validMoves: []},
+      PieceStore.get());
   }
 
   // LIFE CYCLE
 
   componentWillReceiveProps(props) {
     this.setState({
-      gameId: props.gameId,
-      pieces: props.pieces,
-      grid: props.grid,
-      reserved: props.reserved,
-      isWhite: props.isWhite,
-      validMoves: BoardHelper.getMoves(this.state.selected, this.getGameState(props))
+      isWhite: props.isWhite
     });
+  }
+
+  componentDidMount() {
+    this.pieceListener = PieceStore.addChangeListener(this.getState);
+  }
+
+  componentWillUnmount() {
+    PieceStore.removeChangeListener(this.getState);
   }
 
   // STATE & LOGIC
 
-  getGameState(state = this.state) {
-    return {pieces: state.pieces, grid: state.grid, reserved: state.reserved};
-  };
+  getState() {
+    this.setState(Object.assign(this.state, PieceStore.get()));
+  }
 
   getOwnPiece(pos) {
     let isWhite = this.state.isWhite;
@@ -53,10 +51,6 @@ class ClickHandler extends React.Component {
 
   clearSelected(){
     this.setState({selected: undefined, validMoves: []});
-  }
-
-  updateValidMoves() {
-    this.setState({validMoves: BoardHelper.getMoves(this.state.selected, this.getGameState())});
   }
 
   isInValidMoves(pos) {

@@ -1,5 +1,17 @@
 @import 'colors';
 
+#board-wrapper {
+  position: relative;
+}
+
+#board-overlay-velocity {
+  position: absolute;
+}
+
+#board-overlay, #board-overlay-velocity {
+  height: 100%; width: 100%;
+}
+
 #board-overlay {
   background-color: hsla(0, 0%, 0%, 0.3);
   position: absolute;
