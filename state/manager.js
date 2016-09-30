@@ -75,7 +75,7 @@ var _performMove = function(pieceId, targetPos, state) {
     return;
   }
 
-  _deletePiece(Board.getTarget(newPos, state));
+  _deletePiece(Board.getTarget(newPos, state), state);
 
   _clearTarget(currPos, state);
   _setTarget(pieceId, newPos, state);
@@ -103,7 +103,7 @@ var _performKnightMove = function(pieceId, targetPos, state) {
   _emitStateData('game-move', state);
 
   setTimeout(() => {
-    _deletePiece(Board.getTarget(targetPos, state));
+    _deletePiece(Board.getTarget(targetPos, state), state);
     _setTarget(pieceId, targetPos, state);
     _clearReserved(targetPos, state);
     _emitStateData('game-move', state);
