@@ -207,7 +207,8 @@ var _archiveGame = function(game, winner) {
   game.status = 'archived';
   game.winner = winner;
   game.save();
-  redis.lrange(gameId.toString(), 0, -1, (err, moves) => {
+  var gameId = game._id.toString();
+  redis.lrange(gameId, 0, -1, (err, moves) => {
     MoveHistory.create({game: game, moves: moves});
     cache.del(gameId);
     redis.del(gameId);
