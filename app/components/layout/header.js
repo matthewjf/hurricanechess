@@ -3,6 +3,10 @@ import React from 'react';
 import {browserHistory} from 'react-router';
 import UserApi from '../../api/user_api';
 
+function closeSideNav() {
+  $('.button-collapse').sideNav('hide');
+}
+
 class Header extends React.Component {
   constructor(props) {
     super(props);
@@ -11,7 +15,7 @@ class Header extends React.Component {
     this.mobileLinks = this.mobileLinks.bind(this);
     this.links = this.links.bind(this);
     this.username = this.username.bind(this);
-    this.openAbout = this.openAbout.bind(this);
+    this.about = this.about.bind(this);
 
     this.state = {currentUser: this.props.currentUser};
   }
@@ -28,6 +32,7 @@ class Header extends React.Component {
     e.preventDefault();
     this.home();
     UserApi.logout(() => {
+      closeSideNav();
       Materialize.toast('Logged out', 2000, 'error-text');
     });
   }
@@ -36,11 +41,18 @@ class Header extends React.Component {
     browserHistory.push('/');
 	}
 
+  about() {
+    closeSideNav();
+    browserHistory.push('/about');
+  }
+
   openLogin() {
+    closeSideNav();
 		$('#login-modal').openModal();
 	}
 
 	openSignup() {
+    closeSideNav();
 		$('#signup-modal').openModal();
 	}
 
@@ -56,14 +68,14 @@ class Header extends React.Component {
     if (this.state.currentUser) {
 			return (
         <ul id={id} className={className}>
-          <li><a onClick={this.openAbout}>ABOUT</a></li>
+          <li><a onClick={this.about}>ABOUT</a></li>
           <li><a id='logout' onClick={this.logout}>LOG OUT</a></li>
         </ul>
       );
 		} else {
       return (
         <ul id={id} className={className}>
-          <li><a onClick={this.openAbout}>ABOUT</a></li>
+          <li><a onClick={this.about}>ABOUT</a></li>
   				<li><a onClick={this.openSignup} className="modal-trigger">
   					SIGN UP
   				</a></li>
@@ -73,10 +85,6 @@ class Header extends React.Component {
         </ul>
       );
     }
-  }
-
-  openAbout() {
-    browserHistory.push('/about');
   }
 
   // TODO: add username to header
