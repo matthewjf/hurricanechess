@@ -10,25 +10,22 @@ class Piece extends React.Component {
     this.style = this.style.bind(this);
     this.renderTimer = this.renderTimer.bind(this);
 
-    this.state = {
-      id: this.props.pieceId,
-      type: this.props.data.type,
-      pos: this.props.data.pos,
-      status: this.props.data.status,
-      color: this.props.pieceId < 16 ? 'white' : 'black',
-      whiteOnBottom: this.props.whiteOnBottom
-    };
+    this.state = this.buildState(this.props);
   }
 
   componentWillReceiveProps(props) {
-    this.setState({
+    this.setState(this.buildState(props));
+  }
+
+  buildState(props) {
+    return {
       id: props.pieceId,
       type: props.data.type,
       pos: props.data.pos,
       status: props.data.status,
       color: props.pieceId < 16 ? 'white' : 'black',
       whiteOnBottom: props.whiteOnBottom
-    });
+    };
   }
 
   style() {

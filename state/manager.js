@@ -57,7 +57,7 @@ var movePiece = function(gameId, userId, pieceId, targetPos) {
 
 // PRIVATE
 
-  // UPDATE STATE
+  // MOVE STATE
 var _performMove = function(pieceId, targetPos, state) {
   var gameId = state.gameId;
   var pieces = state.pieces;
@@ -75,8 +75,7 @@ var _performMove = function(pieceId, targetPos, state) {
     return;
   }
 
-  var removeId = Board.getTarget(newPos, state);
-  delete state.pieces[removeId];
+  _deletePiece(Board.getTarget(newPos, state));
 
   _clearTarget(currPos, state);
   _setTarget(pieceId, newPos, state);
@@ -99,15 +98,14 @@ var _performMove = function(pieceId, targetPos, state) {
 var _performKnightMove = function(pieceId, targetPos, state) {
   let currPos = state.pieces[pieceId].pos;
   _clearTarget(currPos, state);
-  state.reserved[targetPos[0]][targetPos[1]] = pieceId;
+  _setReserved(pieceId, targetPos, state);
   Object.assign(state.pieces[pieceId], { pos: targetPos, hasMoved: 1, status: -1 });
   _emitStateData('game-move', state);
 
   setTimeout(() => {
-    var removeId = Board.getTarget(targetPos, state);
-    delete state.pieces[removeId];
+    _deletePiece(Board.getTarget(targetPos, state));
     _setTarget(pieceId, targetPos, state);
-    state.reserved[targetPos[0]][targetPos[1]] = undefined;
+    _clearReserved(targetPos, state);
     _emitStateData('game-move', state);
     if (Board.isGameOver(state)) {
       _gameOver(state);
@@ -168,6 +166,18 @@ var _clearTarget = function(target, state) {
   _setTarget(undefined, target, state);
 };
 
+var _setReserved = function(pieceId, target, state) {
+  state.reserved[target[0]][target[1]] = pieceId;
+};
+
+var _clearReserved = function(target, state) {
+  _setReserved(undefined, target, state);
+};
+
+var _deletePiece = function(pieceId, state) {
+  if (pieceId) delete state.pieces[pieceId];
+};
+
 var _gameExpired = function(id, state) {
   _gameOver(state);
 };
@@ -188,15 +198,19 @@ var _gameOver = function(state) {
     if (err) {
       io.to(game._id).emit('errors', err.errors);
     } else {
-      game.status = 'archived';
-      game.winner = Board.getWinner(state);
-      game.save();
-      redis.lrange(gameId.toString(), 0, -1, (err, moves) => {
-        MoveHistory.create({game: game, moves: moves});
-        cache.del(gameId);
-        redis.del(gameId);
-      });
+      _archiveGame(game);
     };
+  });
+};
+
+var _archiveGame = function(game) {
+  game.status = 'archived';
+  game.winner = Board.getWinner(state);
+  game.save();
+  redis.lrange(gameId.toString(), 0, -1, (err, moves) => {
+    MoveHistory.create({game: game, moves: moves});
+    cache.del(gameId);
+    redis.del(gameId);
   });
 };
 

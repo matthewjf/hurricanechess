@@ -11,6 +11,7 @@ class Header extends React.Component {
     this.mobileLinks = this.mobileLinks.bind(this);
     this.links = this.links.bind(this);
     this.username = this.username.bind(this);
+    this.openAbout = this.openAbout.bind(this);
 
     this.state = {currentUser: this.props.currentUser};
   }
@@ -55,12 +56,14 @@ class Header extends React.Component {
     if (this.state.currentUser) {
 			return (
         <ul id={id} className={className}>
+          <li><a onClick={this.openAbout}>ABOUT</a></li>
           <li><a id='logout' onClick={this.logout}>LOG OUT</a></li>
         </ul>
       );
 		} else {
       return (
         <ul id={id} className={className}>
+          <li><a onClick={this.openAbout}>ABOUT</a></li>
   				<li><a onClick={this.openSignup} className="modal-trigger">
   					SIGN UP
   				</a></li>
@@ -70,6 +73,10 @@ class Header extends React.Component {
         </ul>
       );
     }
+  }
+
+  openAbout() {
+    browserHistory.push('/about');
   }
 
   // TODO: add username to header

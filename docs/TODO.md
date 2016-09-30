@@ -15,7 +15,9 @@
 - user page
 
 ## Mobile Support
+- improve mobile design
 - dynamic grid sizing
+  - have to move keyframe animation to react component
 
 ## Add Index Features
 - filtering
@@ -28,9 +30,15 @@
 - start new game
 
 ## About Page
-- General
-- Gameplay
-- Mechanics
+- Getting started
+- How to play
+- Advanced mechanics
+
+## Onboarding
+- improve onboard experience
+
+## Style
+- component transitions
 
 ## Gameplay Options
 - Settings store
@@ -53,17 +61,21 @@
 - Add competitive game mode
 
 ## Chat
+- live in game chat
+
 ## Friends
+- live private chat with friends
 
 ## Game Modes
 - chess Z(OMBIES)
 
 # KNOWN BUGS
-- enter key doesn't work on game settings modal
-- pieces don't render properly on android mobile
+- enter key doesn't work on game settings modal (fires on window)
 - reservations don't work for multiple pieces
   - potential issue if 2 knights of different color reserve the same position
   - solution: different reservations for each color
 - joining mid-game will set timers to full
   - do not want to track timer progress, too slow
   - maybe show empty instead?
+- kicked out of game when game over
+  - not sure why this happened

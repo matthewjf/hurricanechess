@@ -24,7 +24,7 @@ class Pieces extends React.Component {
   componentWillReceiveProps(props) {
     this.setState({playerStatus: props.playerStatus, status: props.status});
     if (this.state.status === 'archived')
-      $('.timer').remove();
+      $('.timer').remove(); // TODO: use something faster
   }
 
   componentDidMount() {

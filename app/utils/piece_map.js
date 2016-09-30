@@ -1,3 +1,6 @@
+// Using custom font
+// uniform rendering across devices
+
 export default {
   0: 'l',
   1: 'w',
