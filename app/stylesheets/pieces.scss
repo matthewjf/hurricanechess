@@ -1,5 +1,10 @@
 @import 'colors';
 
+@font-face {
+  font-family: 'cheq';
+  src: url('/cheq.ttf');
+}
+
 #pieces {
   position: relative;
   .piece-wrapper {
@@ -10,7 +15,7 @@
     text-align: center;
   }
   .piece {
-    font-family: Arial;
+    font-family: 'cheq', Arial;
     position: relative;
     z-index: 5;
   }
