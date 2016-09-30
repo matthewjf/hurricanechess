@@ -87,7 +87,6 @@ class Header extends React.Component {
     }
   }
 
-  // TODO: add username to header
   username() {
     if (this.state.currentUser)
       return <ul className='right'><li className='username'>
