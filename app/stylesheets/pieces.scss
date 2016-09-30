@@ -29,32 +29,4 @@
     z-index: 1;
     opacity: 0.3;
   }
-
-  .timer-animation {
-    animation-name: animate-timer;
-    animation-timing-function: linear;
-    -webkit-animation-fill-mode:forwards; /*Chrome 16+, Safari 4+*/
-    -moz-animation-fill-mode:forwards; /*FF 5+*/
-    -ms-animation-fill-mode:forwards; /*IE 10+*/
-    animation-fill-mode:forwards; /*when the spec is finished*/
-  }
-
-  // TODO: figure out to share config vars with css
-  $height: 64px;
-  @-webkit-keyframes animate-timer {
-    0%   { height: $height; margin-top: 0px; }
-    100% { height: 0; margin-top: $height }
-  }
-  @-moz-keyframes animate-timer {
-    0%   { height: $height; margin-top: 0px; }
-    100% { height: 0; margin-top: $height }
-  }
-  @-o-keyframes animate-timer {
-    0%   { height: $height; margin-top: 0px; }
-    100% { height: 0; margin-top: $height }
-  }
-  @keyframes animate-timer {
-    0%   { height: $height; margin-top: 0px; }
-    100% { height: 0; margin-top: $height }
-  }
 }

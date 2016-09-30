@@ -9,11 +9,13 @@ class Piece extends React.Component {
     super(props);
     this.style = this.style.bind(this);
     this.renderTimer = this.renderTimer.bind(this);
+    this.runTimer = this.runTimer.bind(this);
 
     this.state = this.buildState(this.props);
   }
 
   componentWillReceiveProps(props) {
+    if (this.state.status !== 2 && props.data.status === 2) this.runTimer();
     this.setState(this.buildState(props));
   }
 
@@ -46,16 +48,18 @@ class Piece extends React.Component {
   }
 
   renderTimer() {
-    let height = this.state.status === 2 ? Display.tileSizePx : 0;
-
     return <div
       ref='timer'
-      className={'timer ' + (height ? 'timer-animation' : '')}
+      className='timer'
       style={{
         width: Display.tileSizePx,
-        height: height,
-        animationDuration: GameConfig.delay + 'ms'
       }} />;
+  }
+
+  runTimer() {
+    $(this.refs.timer)
+      .velocity({height: Display.tileSizePx, marginTop: 0}, {duration: 0})
+      .velocity({height: 0, marginTop: Display.tileSizePx}, {duration: GameConfig.delay, easing: 'linear'});
   }
 
   render() {
