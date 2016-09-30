@@ -198,14 +198,14 @@ var _gameOver = function(state) {
     if (err) {
       io.to(game._id).emit('errors', err.errors);
     } else {
-      _archiveGame(game);
+      _archiveGame(game, Board.getWinner(state));
     };
   });
 };
 
-var _archiveGame = function(game) {
+var _archiveGame = function(game, winner) {
   game.status = 'archived';
-  game.winner = Board.getWinner(state);
+  game.winner = winner;
   game.save();
   redis.lrange(gameId.toString(), 0, -1, (err, moves) => {
     MoveHistory.create({game: game, moves: moves});
