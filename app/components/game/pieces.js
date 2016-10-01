@@ -2,21 +2,22 @@ import React from 'react';
 import Piece from './piece';
 import ClickHandler from './click_handler';
 import PieceStore from '../../stores/piece_store';
-import Display from '../../utils/display';
 import PieceActions from '../../actions/piece_actions';
+import Display from '../../utils/display';
 
 class Pieces extends React.Component {
   constructor(props) {
     super(props);
+    this.handleResize = this.handleResize.bind(this);
     this.getState = this.getState.bind(this);
-    this.renderPieces = this.renderPieces.bind(this);
     this.style = this.style.bind(this);
-    this.renderClickHandler = this.renderClickHandler.bind(this);
     this.whiteOnBottom = this.whiteOnBottom.bind(this);
     this.isWhite = this.isWhite.bind(this);
+    this.renderPieces = this.renderPieces.bind(this);
+    this.renderClickHandler = this.renderClickHandler.bind(this);
 
     this.state = Object.assign(
-      {playerStatus: this.props.playerStatus, status: this.props.status},
+      {playerStatus: this.props.playerStatus, status: this.props.status, tileSize: Display.tileSize},
       PieceStore.get()
     );
   }
@@ -29,6 +30,7 @@ class Pieces extends React.Component {
 
   componentDidMount() {
     this.pieceListener = PieceStore.addChangeListener(this.getState);
+    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillUnmount() {
@@ -36,23 +38,12 @@ class Pieces extends React.Component {
     PieceActions.removeState();
   }
 
-  getState() {
-    this.setState(Object.assign(this.state, PieceStore.get()));
+  handleResize() {
+    this.setState({tileSize: Display.tileSize()});
   }
 
-  renderPieces(pieces) {
-    var pieceIds = Object.keys(pieces);
-    if (pieceIds.length) {
-      return pieceIds.map((pieceId) => {
-        return <Piece
-                  key={pieceId}
-                  pieceId={pieceId}
-                  data={pieces[pieceId]}
-                  whiteOnBottom={this.whiteOnBottom()} />;
-      });
-    } else {
-      return null;
-    }
+  getState() {
+    this.setState(Object.assign(this.state, PieceStore.get()));
   }
 
   whiteOnBottom() {
@@ -80,6 +71,22 @@ class Pieces extends React.Component {
           gameId={this.state.gameId}
           isWhite={this.isWhite()} />
       );
+    } else {
+      return null;
+    }
+  }
+
+  renderPieces(pieces) {
+    var pieceIds = Object.keys(pieces);
+    if (pieceIds.length) {
+      return pieceIds.map((pieceId) => {
+        return <Piece
+                  key={pieceId}
+                  pieceId={pieceId}
+                  data={pieces[pieceId]}
+                  tileSize={this.state.tileSize}
+                  whiteOnBottom={this.whiteOnBottom()} />;
+      });
     } else {
       return null;
     }

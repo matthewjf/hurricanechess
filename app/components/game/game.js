@@ -20,7 +20,6 @@ class Game extends React.Component {
     this.topCard = this.topCard.bind(this);
     this.botCard = this.botCard.bind(this);
     this.card = this.card.bind(this);
-    // this.wrapperStyle = this.wrapperStyle.bind(this);
 
     this.state = {
       gameId: this.props.params.id,
@@ -92,13 +91,6 @@ class Game extends React.Component {
   status() {
     if (this.state.game) return this.state.game.status;
   }
-
-  // wrapperStyle() {
-  //   if (!this.whiteOnBottom())
-  //     return {
-  //       transform: 'scale(-1, -1)'
-  //     };
-  // }
 
   render() {
     return (

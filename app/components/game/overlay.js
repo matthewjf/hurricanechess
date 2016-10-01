@@ -1,6 +1,5 @@
 import React from 'react';
 import GameConfig from '../../../config/game';
-import Display from '../../utils/display';
 import {VelocityTransitionGroup, VelocityComponent} from 'velocity-react';
 
 class Overlay extends React.Component {

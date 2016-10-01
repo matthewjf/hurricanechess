@@ -34,6 +34,8 @@
 }
 
 #board {
+  height: 100vw; width: 100vw;
+  max-width: 512px; max-height: 512px;
   padding: 0;
   flex-shrink: 0;
   list-style: none;

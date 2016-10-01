@@ -1,16 +1,9 @@
-var _boardSize = 8;
-var _tileSize = 64;
-
-var _setTileSize = function(size) {_tileSize = size;};
+var _tileSize = function() {
+  return Math.min(document.documentElement.clientWidth / 8, 64);
+};
 
 var display = {
-  boardSize: _boardSize,
-  tileSize: _tileSize,
-  gridSize: _boardSize * _tileSize,
-  boardSizePx: _boardSize + 'px',
-  tileSizePx: _tileSize + 'px',
-  gridSizePx: (_boardSize * _tileSize) + 'px',
-  setTileSize: _setTileSize
+  tileSize: _tileSize
 };
 
 export default display;

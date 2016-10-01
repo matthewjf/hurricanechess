@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PieceMap from '../../utils/piece_map';
-import Display from '../../utils/display';
 import GameConfig from '../../../config/game';
 
 class Piece extends React.Component {
@@ -24,6 +23,7 @@ class Piece extends React.Component {
       pos: props.data.pos,
       status: props.data.status,
       color: props.pieceId < 16 ? 'white' : 'black',
+      tileSize: props.tileSize,
       whiteOnBottom: props.whiteOnBottom
     };
   }
@@ -34,12 +34,12 @@ class Piece extends React.Component {
     var transition = "top "+transSpeed+"ms linear, left "+transSpeed+"ms linear";
 
     return {
-      fontSize: (Display.tileSize * 4 / 5) + 'px',
-      top: (this.state.pos[0] * Display.tileSize) + 'px',
-      left: (this.state.pos[1] * Display.tileSize) + 'px',
-      lineHeight: Display.tileSizePx,
-      heigt: Display.tileSizePx,
-      width: Display.tileSizePx,
+      fontSize: (this.state.tileSize * 4 / 5) + 'px', // css
+      top: (this.state.pos[0] * this.state.tileSize) + 'px',
+      left: (this.state.pos[1] * this.state.tileSize) + 'px',
+      lineHeight: this.state.tileSize + 'px', // css
+      height: this.state.tileSize + 'px', // css
+      width: this.state.tileSize + 'px', // css
       transform: scale,
       transition: transition
     };

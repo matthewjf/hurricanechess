@@ -1,6 +1,5 @@
 import React from 'react';
 import GameSettings from './game_settings';
-import Display from '../../utils/display';
 
 class Board extends React.Component {
   constructor(props) {
@@ -25,12 +24,8 @@ class Board extends React.Component {
     this.setState({boardColor: color});
   }
 
-  style() {
-    return {height: Display.gridSizePx, width: Display.gridSizePx};
-  }
-
   render() {
-    return <div id='board' style={this.style()} className={this.state.boardColor + '-board card-panel'}>
+    return <div id='board' className={this.state.boardColor + '-board card-panel'}>
       <GameSettings setBoardColor={this.setBoardColor}/>
       {this.renderSquares()}
     </div>;
