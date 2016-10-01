@@ -6,10 +6,9 @@
   - delay deploy until active games are complete (max 30 minutes)
 - handle archived game display
   - display last game state for now
-- client side error handling
 
 ## Stats Bar
-- players online
+- players online (see user)
 - active games
 
 ## User Features
@@ -19,6 +18,10 @@
 - email
 - email confirmation
 - user page
+- store online status (redis)
+  - socket connection required
+  - add counter
+  - make searchable
 
 ## Mobile Support
 - improve mobile design (layout)
