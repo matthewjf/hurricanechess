@@ -10,6 +10,7 @@ class LoginForm extends React.Component {
     this.resetState = this.resetState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.success = this.success.bind(this);
+    this.error = this.error.bind(this);
 
     this.state = {username: '', password: ''};
   }
@@ -28,7 +29,7 @@ class LoginForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    UserApi.login(this.state, this.success);
+    UserApi.login(this.state, this.success, this.error);
   }
 
   success(data) {
@@ -37,6 +38,19 @@ class LoginForm extends React.Component {
     Materialize.toast(
       'Welcome back, ' + data.username + '!', 2000, 'success-text'
     );
+  }
+
+  error() {
+    this.setState({error: 'Invalid username and password'});
+  }
+
+  renderError(error) {
+    if (error)
+      return <span className='error-text'>
+        {error}
+      </span>;
+    else
+      return null;
   }
 
   render() {
@@ -49,7 +63,7 @@ class LoginForm extends React.Component {
             <form onSubmit={this.handleSubmit}>
 
               <div className="modal-content">
-
+                {this.renderError(this.state.error)}
                 <div className='row'>
                   <div className='input-field'>
                     <input id="login[username]"

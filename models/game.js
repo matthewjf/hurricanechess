@@ -6,7 +6,12 @@ import GameConfig from '../config/game';
 var Schema = mongoose.Schema;
 
 var GameSchema = new Schema({
-  name:     { type: String,  required: true, minlength: 6,      index: true },
+  name:     {
+    type: String,
+    required: [true, 'Name is required'],
+    minlength: [4, 'Name must be at least 4 characters'],
+    index: true
+  },
   private:  { type: Boolean,                 default: false                 },
   password: { type: String                                                  },
   white:    { type: Schema.Types.ObjectId, ref: 'User' },

@@ -10,6 +10,7 @@ class SignupForm extends React.Component {
     this.resetState = this.resetState.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.success = this.success.bind(this);
+    this.error = this.error.bind(this);
 
     this.state = {username: '', password: ''};
   }
@@ -28,13 +29,33 @@ class SignupForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    UserApi.signup(this.state, this.success);
+    UserApi.signup(this.state, this.success, this.error);
   }
 
   success(data) {
     this.resetState();
     $('#signup-modal').closeModal();
     Materialize.toast('Welcome, ' + data.username + '!', 2000, 'success-text');
+  }
+
+  error(res) {
+    var json = res.responseJSON;
+    if (json.errors) this.setState({errors: json.errors});
+    else this.setState({errors: {err: json}});
+  }
+
+  renderErrors(errors) {
+    if (errors) {
+      return Object.keys(errors).map(key =>{
+        return (
+          <span className='error-text' key={key} >
+            {errors[key].message.replace('Path ', '')}
+          </span>
+        );
+      });
+    } else {
+      return null;
+    }
   }
 
   render() {
@@ -47,7 +68,7 @@ class SignupForm extends React.Component {
             <form onSubmit={this.handleSubmit}>
 
               <div className="modal-content">
-
+                {this.renderErrors(this.state.errors)}
                 <div className='row'>
                   <div className='input-field'>
                     <input id="signup[username]"

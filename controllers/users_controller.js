@@ -14,7 +14,7 @@ router.route('/users/new').post((req, res) => {
     req.body.password,
     (err, user) => {
       if (err) {
-        res.status(422).json({error: err, status: 422});
+        res.status(422).json(err);
       } else {
         passport.authenticate('local')(req, res, () => {
           req.session.save((err) => {
