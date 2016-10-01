@@ -79,3 +79,12 @@
   - maybe show empty instead?
 - kicked out of game when game over
   - not sure why this happened
+
+## MOBILE
+use media queries
+- 600 (75 px tile size)
+- 480 (60 px tile size)
+- 360 (45 px tile size)
+- < 360 friendly not supported message
+
+update layout to support small screens (settings)

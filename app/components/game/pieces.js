@@ -17,7 +17,7 @@ class Pieces extends React.Component {
     this.renderClickHandler = this.renderClickHandler.bind(this);
 
     this.state = Object.assign(
-      {playerStatus: this.props.playerStatus, status: this.props.status, tileSize: Display.tileSize},
+      {playerStatus: this.props.playerStatus, status: this.props.status},
       PieceStore.get()
     );
   }
@@ -29,13 +29,15 @@ class Pieces extends React.Component {
   }
 
   componentDidMount() {
+    this.handleResize();
     this.pieceListener = PieceStore.addChangeListener(this.getState);
-    window.addEventListener('resize', this.handleResize);
+    this.resizeListener = window.addEventListener('resize', this.handleResize);
   }
 
   componentWillUnmount() {
     PieceStore.removeChangeListener(this.getState);
     PieceActions.removeState();
+    window.removeEventListener('resize', this.resizeListener);
   }
 
   handleResize() {

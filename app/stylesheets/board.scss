@@ -1,4 +1,5 @@
 @import 'colors';
+@import 'queries';
 
 #board-wrapper {
   position: relative;
@@ -34,8 +35,18 @@
 }
 
 #board {
-  height: 100vw; width: 100vw;
-  max-width: 512px; max-height: 512px;
+  @include sm-width {
+    width: 360px; height: 360px;
+  }
+
+  @include md-width {
+    width: 480px; height: 480px;
+  }
+
+  @include lg-width {
+    width: 600px; height: 600px;
+  }
+
   padding: 0;
   flex-shrink: 0;
   list-style: none;

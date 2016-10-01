@@ -1,0 +1,20 @@
+$md-width: 480px;
+$lg-width: 600px;
+
+@mixin sm-width {
+  @media (max-width: #{$md-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin md-width {
+  @media (min-width: #{$md-width}) and (max-width: #{$lg-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin lg-width {
+  @media (min-width: #{$lg-width}) {
+    @content;
+  }
+}
