@@ -3,10 +3,7 @@ import User from '../models/user';
 import GameManager from '../state/manager';
 
 export default (client, joined) => {
-  var userId;
-  if (client.handshake.session.passport)
-    userId = client.handshake.session.passport.user;
-
+  var userId = (client.handshake.session.passport || {}).user;
 
   const gameData = (data, user) => {
     if (data.black)

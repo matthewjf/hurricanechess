@@ -1,16 +1,17 @@
 /*
 /   Removes any non-archived games on server start
 /   Any game state would have been lost on reset
+/   Removes any online players
 */
 
 var mongoose = require('../config/database');
-var redis = require('../config/redis');
+import redis from '../config/redis';
 import Game from '../models/game';
 import cache from '../state/cache';
 
 var connected = {redis: false, mongoose: false};
 
-var cleanup = function(){
+var cleanupGames = function() {
   if (connected.redis && connected.mongoose) {
     Game.find({status: {$ne: 'archived'}}, function(err, games) {
       games.forEach((game) => {
@@ -24,14 +25,19 @@ var cleanup = function(){
   }
 };
 
+var resetOnline = function() {
+  redis.del('onlineStatus');
+};
+
 mongoose.connection.once('open', function() {
   connected.mongoose = true;
-  cleanup();
+  cleanupGames();
 });
 
 redis.on("connect", function() {
   connected.redis = true;
-  cleanup();
+  cleanupGames();
+  resetOnline();
 });
 
 module.exports;

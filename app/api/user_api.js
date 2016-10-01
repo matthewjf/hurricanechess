@@ -7,7 +7,7 @@ var UserApi = {
 			type: "post",
 			data: user,
 			success: ((data) => {
-				socket = io.connect();
+				socket.open();
 				UserActions.receiveCurrentUser(data);
 				if (successCB) { successCB(data.user); }
 			}),
@@ -24,7 +24,7 @@ var UserApi = {
 			type: "post",
 			data: user,
 			success: ((data) => {
-				socket = io.connect();
+				socket.connect();
 				UserActions.receiveCurrentUser(data);
 				if (successCB) { successCB(data.user); }
 			}),
@@ -40,7 +40,7 @@ var UserApi = {
 			url: '/api/session',
 			method: 'delete',
 			success: ((data) => {
-				socket = io.connect();
+				socket.connect();
 				UserActions.removeCurrentUser();
 				if (successCB) { successCB(data); }
 			}),

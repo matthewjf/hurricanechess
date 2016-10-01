@@ -11,6 +11,11 @@ var GameIndexSubscription = {
       GameIndexActions.removeGame(data.game);
     });
 
+    socket.on('userCount', (count) => {
+      console.log(count);
+      // TODO: add user count component
+    });
+
     SocketManager.join(ROOM, {}, (data) => {
       GameIndexActions.receiveGames(data.games);
     });

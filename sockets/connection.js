@@ -6,14 +6,16 @@ import GameConnection from './game_connection';
 import User from '../models/user';
 import Game from '../models/game';
 
+import OnlineStatus from '../helpers/online_status';
+
 io.on('connection', client => {
-  var currentRoom, userId;
+  var currentRoom, userId = (client.handshake.session.passport || {}).user;
+
+  OnlineStatus.set(userId);
 
   // CLEANUP
   const cleanupGame = gameId => {
-    var userId;
-    if (client.handshake.session.passport)
-      var userId = client.handshake.session.passport.user;
+    var userId = (client.handshake.session.passport || {}).user;
     Game.findById(gameId)
       .populate('white')
       .populate('black')
@@ -46,7 +48,10 @@ io.on('connection', client => {
     }
   };
 
+  // DICONNECT
   client.on('disconnect', () => {
+    OnlineStatus.del(userId);
+
     if (currentRoom !== 'index')
       cleanupGame(currentRoom);
   });

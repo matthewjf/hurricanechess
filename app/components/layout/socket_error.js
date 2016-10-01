@@ -29,7 +29,7 @@ class SocketError extends React.Component {
     });
 
     socket.on('reconnect', () => {
-      // nothing
+      // connect event also fires so no action necessary
     });
   }
 

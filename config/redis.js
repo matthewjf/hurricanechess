@@ -5,4 +5,4 @@ redis.on("connect", function() {
   console.info("redis connected");
 });
 
-module.exports = redis;
+export default redis;
