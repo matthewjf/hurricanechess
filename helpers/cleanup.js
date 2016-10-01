@@ -1,3 +1,8 @@
+/*
+/   Removes any non-archived games on server start
+/   Any game state would have been lost on reset
+*/
+
 var mongoose = require('../config/database');
 var redis = require('../config/redis');
 import Game from '../models/game';

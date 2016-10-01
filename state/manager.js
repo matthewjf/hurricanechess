@@ -1,3 +1,9 @@
+ /*
+ /   Responsibility: initialize game state and perform moves
+ /   All game logic is delegated to helper files
+ /   TODO: break this up into smaller modules
+*/
+
 import redis from '../config/redis';
 import cache from './cache';
 import io from '../config/socketio';

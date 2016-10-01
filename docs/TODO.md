@@ -5,6 +5,8 @@
   - stop accepting new games
   - delay deploy until active games are complete (max 30 minutes)
 - handle archived game display
+  - display last game state for now
+- client side error handling
 
 ## User Features
 - account settings
@@ -15,9 +17,8 @@
 - user page
 
 ## Mobile Support
-- improve mobile design
-- dynamic grid sizing
-  - have to move keyframe animation to react component
+- improve mobile design (layout)
+- improve animations for mobile
 
 ## Add Index Features
 - filtering
@@ -77,14 +78,3 @@
 - joining mid-game will set timers to full
   - do not want to track timer progress, too slow
   - maybe show empty instead?
-- kicked out of game when game over
-  - not sure why this happened
-
-## MOBILE
-use media queries
-- 600 (75 px tile size)
-- 480 (60 px tile size)
-- 360 (45 px tile size)
-- < 360 friendly not supported message
-
-update layout to support small screens (settings)
