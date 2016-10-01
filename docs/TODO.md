@@ -8,6 +8,10 @@
   - display last game state for now
 - client side error handling
 
+## Stats Bar
+- players online
+- active games
+
 ## User Features
 - account settings
 - gameplay settings tester
@@ -18,7 +22,7 @@
 
 ## Mobile Support
 - improve mobile design (layout)
-- improve animations for mobile
+- improve mobile performance
 
 ## Add Index Features
 - filtering
