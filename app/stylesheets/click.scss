@@ -25,10 +25,10 @@
   }
   .selected, .highlight {
     @include sm-width {
-      border-width: 2px;
+      border-width: 3px;
     }
     @include md-width {
-      border-width: 3px;
+      border-width: 4px;
     }
     @include lg-width {
       border-width: 4px;
