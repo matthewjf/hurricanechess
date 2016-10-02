@@ -82,12 +82,7 @@ var _performMove = function(pieceId, targetPos, state) {
   }
 
   _deletePiece(Board.getTarget(newPos, state), state);
-
-  // update piece logic
-  _clearTarget(currPos, state);
-  _setTarget(pieceId, newPos, state);
-  var pieceData = { pos: newPos, hasMoved: 1, status: 1 };
-  Object.assign(pieces[pieceId], pieceData);
+  _updatePiece(pieceId, { pos: newPos, hasMoved: 1, status: 1 }, state);
 
   _emitStateData('game-move', state);
 
@@ -103,7 +98,7 @@ var _performMove = function(pieceId, targetPos, state) {
 var _performKnightMove = function(pieceId, targetPos, state) {
   let currPos = state.pieces[pieceId].pos;
 
-  // update logic
+  // TODO: updatePiece
   _clearTarget(currPos, state);
   _setReserved(pieceId, targetPos, state);
   Object.assign(state.pieces[pieceId], { pos: targetPos, hasMoved: 1, status: -1 });
@@ -111,9 +106,9 @@ var _performKnightMove = function(pieceId, targetPos, state) {
   _emitStateData('game-move', state);
 
   setTimeout(() => {
-
-    // update logic
     _deletePiece(Board.getTarget(targetPos, state), state);
+
+    // TODO: updatePiece
     _setTarget(pieceId, targetPos, state);
     _clearReserved(targetPos, state);
     _emitStateData('game-move', state);
@@ -139,28 +134,25 @@ var _performCastleMove = function(kingId, targetPos, state) {
 
 var _performImmediate = function(pieceId, pos, state) {
   var currPos = state.pieces[pieceId].pos;
-  delete state.pieces[Board.getTarget(pos, state)];
-
-  // update logic
-  _clearTarget(currPos, state);
-  _setTarget(pieceId, pos, state);
-  Object.assign(state.pieces[pieceId], { pos: pos, hasMoved: 1, status: 1 });
+  _deletePiece(Board.getTarget(pos, state), state);
+  _updatePiece(pieceId, { pos: pos, hasMoved: 1, status: 1 }, state);
   setTimeout(() => {_moveEnd(pieceId, state);}, GameConfig.speed);
 };
 
 var _updateMoveHistory = function(state) {
+  // TODO: redefine movedata
   var moveData = { state: state, createdAt: new Date() };
   redis.lpush(state.gameId.toString(), JSON.stringify(moveData)); // add to history
 };
 
 var _moveEnd = function(pieceId, state) {
-  if (Board.shouldPromote(pieceId, state) && state.pieces[pieceId])
-    state.pieces[pieceId].type = 1; // promote
+  if (Board.shouldPromote(pieceId, state) && state.pieces[pieceId]) // promote
+    state.pieces[pieceId].type = 1;
 
-  if (state.pieces[pieceId]) state.pieces[pieceId].status = 2;
+  if (state.pieces[pieceId]) state.pieces[pieceId].status = 2; // on delay
   _emitStateData('game-move', state);
 
-  setTimeout(() => { // off delay
+  setTimeout(() => {              // off delay
     if (state.pieces[pieceId]) {
       state.pieces[pieceId].status = 0;
       _emitStateData('game-move', state);
@@ -190,20 +182,19 @@ var _deletePiece = function(pieceId, state) {
   var piece = state.pieces[pieceId];
   if (pieceId && piece) {
     _clearTarget(piece.pos, state);
-    _clearReserved(piece.pos, state);
     delete state.pieces[pieceId];
     // TODO: emit here
   }
 };
 
-var _updatePiece = function(pieceId, opts, state) {
+var _updatePiece = function(pieceId, newData, state) {
   var piece = state.pieces[pieceId];
   if (pieceId && piece) {
-    if (opts.pos) {
+    if (newData.pos) {
       _clearTarget(piece.pos, state);
-      _setTarget(pieceId, opts.pos, state);
+      _setTarget(pieceId, newData.pos, state);
     }
-    Object.assign(state.pieces[pieceId], opts);
+    Object.assign(state.pieces[pieceId], newData);
     // TODO: emit here
   }
 };
