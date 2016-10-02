@@ -86,3 +86,4 @@
   - do not want to track timer progress, too slow
   - maybe show empty instead?
 - spectators cannot join game if player leaves
+  - add a `sit` feature for empty seats
