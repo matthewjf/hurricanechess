@@ -7,6 +7,13 @@
 - handle archived game display
   - display last game state for now
 
+## Monitoring
+- server memory usage
+- db memory usage
+- redis memory usage
+- in-game performance
+- db performance
+
 ## Stats Bar
 - players online (see user)
 - active games

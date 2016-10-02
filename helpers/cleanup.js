@@ -18,8 +18,8 @@ var cleanupGames = function() {
         var gameId = game._id.toString();
         if (!cache.get(gameId)) {
           Game.findByIdAndRemove(game._id, function(err, doc) { /* nothing */ });
-          redis.del(gameId);
         };
+        redis.del(gameId);
       });
     });
   }

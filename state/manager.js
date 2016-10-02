@@ -83,11 +83,10 @@ var _performMove = function(pieceId, targetPos, state) {
 
   _deletePiece(Board.getTarget(newPos, state), state);
 
+  // update piece logic
   _clearTarget(currPos, state);
   _setTarget(pieceId, newPos, state);
-
   var pieceData = { pos: newPos, hasMoved: 1, status: 1 };
-
   Object.assign(pieces[pieceId], pieceData);
 
   _emitStateData('game-move', state);
@@ -103,12 +102,17 @@ var _performMove = function(pieceId, targetPos, state) {
 
 var _performKnightMove = function(pieceId, targetPos, state) {
   let currPos = state.pieces[pieceId].pos;
+
+  // update logic
   _clearTarget(currPos, state);
   _setReserved(pieceId, targetPos, state);
   Object.assign(state.pieces[pieceId], { pos: targetPos, hasMoved: 1, status: -1 });
+
   _emitStateData('game-move', state);
 
   setTimeout(() => {
+
+    // update logic
     _deletePiece(Board.getTarget(targetPos, state), state);
     _setTarget(pieceId, targetPos, state);
     _clearReserved(targetPos, state);
@@ -136,6 +140,8 @@ var _performCastleMove = function(kingId, targetPos, state) {
 var _performImmediate = function(pieceId, pos, state) {
   var currPos = state.pieces[pieceId].pos;
   delete state.pieces[Board.getTarget(pos, state)];
+
+  // update logic
   _clearTarget(currPos, state);
   _setTarget(pieceId, pos, state);
   Object.assign(state.pieces[pieceId], { pos: pos, hasMoved: 1, status: 1 });
@@ -181,7 +187,25 @@ var _clearReserved = function(target, state) {
 };
 
 var _deletePiece = function(pieceId, state) {
-  if (pieceId) delete state.pieces[pieceId];
+  var piece = state.pieces[pieceId];
+  if (pieceId && piece) {
+    _clearTarget(piece.pos, state);
+    _clearReserved(piece.pos, state);
+    delete state.pieces[pieceId];
+    // TODO: emit here
+  }
+};
+
+var _updatePiece = function(pieceId, opts, state) {
+  var piece = state.pieces[pieceId];
+  if (pieceId && piece) {
+    if (opts.pos) {
+      _clearTarget(piece.pos, state);
+      _setTarget(pieceId, opts.pos, state);
+    }
+    Object.assign(state.pieces[pieceId], opts);
+    // TODO: emit here
+  }
 };
 
 var _gameExpired = function(id, state) {
