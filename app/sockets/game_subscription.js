@@ -11,7 +11,7 @@ var GameSubscription = {
         successCB(game);
       socket.off('created-game');
       socket.off('errors');
-      browserHistory.push("games/" + game._id);
+      browserHistory.push("/games/" + game._id);
     });
 
     socket.on('errors', (errors) => {

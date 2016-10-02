@@ -85,7 +85,12 @@ class Game extends React.Component {
   }
 
   card(color) {
-    return {color: color, player: this.state.game[color]};
+    return {
+      color: color,
+      player: this.state.game[color],
+      spectator: this.playerStatus() === 'spectator',
+      gameId: this.state.gameId
+    };
   }
 
   status() {

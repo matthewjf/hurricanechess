@@ -13,7 +13,7 @@ class GameIndexItem extends React.Component {
     e.preventDefault();
     $("li", "#game-index").velocity('finishAll');
     if (this.props.currentUser) {
-      browserHistory.push('games/' + this.props.game._id);
+      browserHistory.push('/games/' + this.props.game._id);
     } else {
       ErrorUtil.loginRequired();
     }
