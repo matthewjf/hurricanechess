@@ -31,13 +31,13 @@ class Pieces extends React.Component {
   componentDidMount() {
     this.handleResize();
     this.pieceListener = PieceStore.addChangeListener(this.getState);
-    this.resizeListener = window.addEventListener('resize', this.handleResize);
+    window.addEventListener('resize', this.handleResize);
   }
 
   componentWillUnmount() {
     PieceStore.removeChangeListener(this.getState);
     PieceActions.removeState();
-    window.removeEventListener('resize', this.resizeListener);
+    window.removeEventListener('resize', this.handleResize);
   }
 
   handleResize() {
