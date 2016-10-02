@@ -6,7 +6,6 @@ var SocketManager = {
     });
 
     this.connect = () => {
-      console.log('socket manager connect');
       socket.emit('join-' + room, payload);
     };
 
