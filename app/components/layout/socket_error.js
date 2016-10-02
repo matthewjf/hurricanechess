@@ -11,32 +11,31 @@ class SocketError extends React.Component {
   }
 
   componentDidMount() {
-    socket.on('connect', this.connect);
+    socket.on('connect', () => {this.connect();});
 
     socket.on('disconnect', () => {
       $(this.refs.socketError).velocity('finish');
-      this.disconnect = setTimeout ( function() {
+      this.disconnect = setTimeout(() => {
         this.setState(
           {socketError: "LOST CONNECTION TO SERVER... BIG PROBLEMS."}
         );
-      }.bind(this), 500);
-    });
-
-    socket.on('reconnect', () => {
-      // connect event also fires so no action necessary
+      }, 500);
     });
   }
 
   connect() {
+    console.log('connect event');
     clearTimeout(this.disconnect);
-    $(this.refs.socketError).text('RECONNECTED');
-    $(this.refs.socketError)
-      .velocity({backgroundColor: '#388e3c'}, {duration: 0})
-      .velocity({scale: 1.25}, {duration: 200, easing: 'swing'})
-      .velocity('reverse');
-    setTimeout(() => {
-      this.setState({socketError: null});
-    }, 500);
+    if (this.state.socketError) {
+      $(this.refs.socketError).text('RECONNECTED');
+      $(this.refs.socketError)
+        .velocity({backgroundColor: '#388e3c'}, {duration: 0})
+        .velocity({scale: 1.25}, {duration: 200, easing: 'swing'})
+        .velocity('reverse');
+      setTimeout(() => {
+        this.setState({socketError: null});
+      }, 500);
+    }
   }
 
   renderError() {

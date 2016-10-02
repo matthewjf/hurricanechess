@@ -5,15 +5,18 @@ var SocketManager = {
         successCB(data);
     });
 
-    socket.on('connect', () => {
+    this.connect = () => {
+      console.log('socket manager connect');
       socket.emit('join-' + room, payload);
-    });
+    };
+
+    socket.on('connect', this.connect);
 
     socket.emit('join-' + room, payload);
   },
 
   leave(room){
-    socket.off("connect");
+    socket.off("connect", this.connect);
     socket.off("joined-" + room);
   }
 };

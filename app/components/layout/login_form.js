@@ -84,7 +84,7 @@ class LoginForm extends React.Component {
                   </div>
                 </div>
               </div>
-              <input type="submit" hidden />
+              <input type="submit" className='hidden-submit' />
               <div className='modal-footer'>
                 <a onClick={this.handleSubmit} className="waves-effect waves-light btn">
                   Login

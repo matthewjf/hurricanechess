@@ -41,6 +41,7 @@ class BoardSettings extends React.Component {
   }
 
   handleColorChange(event) {
+    event.preventDefault();
     this.setBoardColor(event.currentTarget.value);
   }
 
@@ -66,7 +67,7 @@ class BoardSettings extends React.Component {
     return (
       <div id="game-settings-modal" className="modal">
         <div className='row'>
-          <form ref='settingsForm' onSubmit={this.handleSubmit}>
+          <form ref='settingsForm' id='settings-form' onSubmit={this.handleSubmit}>
 
             <div className="modal-content">
               <div className='row'>
@@ -78,7 +79,7 @@ class BoardSettings extends React.Component {
                 </div>
               </div>
             </div>
-            <input type='submit' hidden />
+            <input type="submit" className='hidden-submit' />
             <div className='modal-footer'>
               <a onClick={this.handleSubmit} className="waves-effect waves-light btn">
                 save
@@ -87,7 +88,7 @@ class BoardSettings extends React.Component {
 
           </form>
         </div>
-      </div>
+        </div>
     );
   }
 }
