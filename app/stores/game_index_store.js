@@ -3,6 +3,7 @@ import AppDispatcher from '../dispatcher/dispatcher.js';
 import GameIndexConstants from '../constants/game_index_constants';
 
 var _games = {};
+var _userCount;
 var _error = null;
 var CHANGE_EVENT = 'change';
 
@@ -21,6 +22,10 @@ function _setGame(game) {
 
 function _removeGame(game) {
   delete _games[game._id];
+};
+
+function _setUserCount(count) {
+  _userCount = count;
 };
 
 function _setError(error) {
@@ -78,6 +83,9 @@ class GameIndexStore extends EventEmitter {
         break;
       case GameIndexConstants.GAME_REMOVED:
         _removeGame(payload.game);
+        break;
+      case GameIndexConstants.USER_COUNT_RECEIVED:
+        _setUserCount(payload.count);
         break;
       case GameIndexConstants.ERROR_RECEIVED:
         _setError(payload.error);

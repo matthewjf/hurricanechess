@@ -1,5 +1,5 @@
  /*
- /   Responsibility: initialize game state and perform moves
+ /   Responsibility: initialize game state and manage move timers
  /   All game logic is delegated to helper files
  /   TODO: break this up into smaller modules
 */

@@ -15,8 +15,8 @@
 - db performance
 
 ## Stats Bar
-- players online (see user)
-- active games
+- players online count (see user)
+- active games count
 
 ## User Features
 - account settings
@@ -32,6 +32,7 @@
 
 ## Mobile Support
 - improve mobile design (layout)
+  - game settings should be moved
 - improve mobile performance
 
 ## Add Index Features
@@ -92,5 +93,4 @@
 - joining mid-game will set timers to full
   - do not want to track timer progress, too slow
   - maybe show empty instead?
-- spectators cannot join game if player leaves
-  - add a `sit` feature for empty seats
+- login/logout shows socket error message on safari
