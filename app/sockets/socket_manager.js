@@ -5,7 +5,7 @@ var SocketManager = {
         successCB(data);
     });
 
-    socket.on('reconnect', () => {
+    socket.on('connect', () => {
       socket.emit('join-' + room, payload);
     });
 
@@ -13,7 +13,7 @@ var SocketManager = {
   },
 
   leave(room){
-    socket.off("reconnect");
+    socket.off("connect");
     socket.off("joined-" + room);
   }
 };

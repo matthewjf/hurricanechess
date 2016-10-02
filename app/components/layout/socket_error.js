@@ -5,32 +5,38 @@ class SocketError extends React.Component {
   constructor(props) {
     super(props);
     this.renderError = this.renderError.bind(this);
+    this.connect = this.connect.bind(this);
 
     this.state = { socketError: null };
   }
 
   componentDidMount() {
-    socket.on('connect', () => {
-      $(this.refs.socketError).text('RECONNECTED');
-      $(this.refs.socketError)
-        .velocity({backgroundColor: '#388e3c'}, {duration: 0})
-        .velocity({scale: 1.25}, {duration: 200, easing: 'swing'})
-        .velocity('reverse');
-      setTimeout(() => {
-        this.setState({socketError: null});
-      }, 500);
-    });
+    socket.on('connect', this.connect);
 
     socket.on('disconnect', () => {
       $(this.refs.socketError).velocity('finish');
-      this.setState(
-        {socketError: "LOST CONNECTION TO SERVER... BIG PROBLEMS."}
-      );
+      this.disconnect = setTimeout ( function() {
+        this.setState(
+          {socketError: "LOST CONNECTION TO SERVER... BIG PROBLEMS."}
+        );
+      }.bind(this), 500);
     });
 
     socket.on('reconnect', () => {
       // connect event also fires so no action necessary
     });
+  }
+
+  connect() {
+    clearTimeout(this.disconnect);
+    $(this.refs.socketError).text('RECONNECTED');
+    $(this.refs.socketError)
+      .velocity({backgroundColor: '#388e3c'}, {duration: 0})
+      .velocity({scale: 1.25}, {duration: 200, easing: 'swing'})
+      .velocity('reverse');
+    setTimeout(() => {
+      this.setState({socketError: null});
+    }, 500);
   }
 
   renderError() {

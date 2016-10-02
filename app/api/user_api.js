@@ -1,4 +1,5 @@
 import UserActions from '../actions/user_actions';
+import {browserHistory} from 'react-router';
 
 var UserApi = {
 	signup: (user, successCB, errorCB) => {
@@ -7,7 +8,8 @@ var UserApi = {
 			type: "post",
 			data: user,
 			success: ((data) => {
-				socket.open();
+				socket.disconnect();
+				socket.connect();
 				UserActions.receiveCurrentUser(data);
 				if (successCB) { successCB(data.user); }
 			}),
@@ -24,6 +26,7 @@ var UserApi = {
 			type: "post",
 			data: user,
 			success: ((data) => {
+				socket.disconnect();
 				socket.connect();
 				UserActions.receiveCurrentUser(data);
 				if (successCB) { successCB(data.user); }
@@ -40,6 +43,7 @@ var UserApi = {
 			url: '/api/session',
 			method: 'delete',
 			success: ((data) => {
+				socket.disconnect();
 				socket.connect();
 				UserActions.removeCurrentUser();
 				if (successCB) { successCB(data); }

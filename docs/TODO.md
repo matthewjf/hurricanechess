@@ -85,3 +85,4 @@
 - joining mid-game will set timers to full
   - do not want to track timer progress, too slow
   - maybe show empty instead?
+- spectators cannot join game if player leaves
