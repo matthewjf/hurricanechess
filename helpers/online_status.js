@@ -4,8 +4,10 @@ import io from '../config/socketio';
 var _userCount = 0;
 // TODO: need to update online status for login/logout
 var _set = function(id) {
+  console.log('setting online status: ', _userCount);
   if (id)
     redis.hset('onlineStatus', id, 1, (err, res) => {
+      _userCount += res;
       io.to('index').emit('userCount', _userCount);
     });
   else
@@ -14,6 +16,7 @@ var _set = function(id) {
 };
 
 var _del = function (id) {
+  console.log('deleting online status: ', _userCount);
   if (id)
     redis.hdel('onlineStatus', id, (err, res) => {
       _userCount -= res;

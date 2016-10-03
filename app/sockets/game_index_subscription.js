@@ -1,5 +1,7 @@
 import SocketManager from './socket_manager';
 import GameIndexActions from '../actions/game_index_actions';
+import OnlineStatsActions from '../actions/online_stats_actions';
+
 const ROOM = 'index';
 var GameIndexSubscription = {
   join() {
@@ -12,11 +14,12 @@ var GameIndexSubscription = {
     });
 
     socket.on('userCount', (count) => {
-      GameIndexActions.receiveUserCount(count);
+      OnlineStatsActions.receiveUserCount(count);
     });
 
     SocketManager.join(ROOM, {}, (data) => {
       GameIndexActions.receiveGames(data.games);
+      OnlineStatsActions.receiveUserCount(data.count);
     });
   },
 

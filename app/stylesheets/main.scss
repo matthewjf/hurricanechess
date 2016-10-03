@@ -36,10 +36,11 @@ main {
   font-size: 16px;
   display: flex;
   justify-content: center;
-  #game-index {
-    max-width: 800px;
-    width: 100%;
-  }
+}
+
+.primary-content {
+  max-width: 800px;
+  width: 100%;
 }
 
 .split {
@@ -96,7 +97,6 @@ form {
 
 .error-text {
   color: $error-color;
-  margin-bottom: 0.5rem;
 }
 
 .error-color {

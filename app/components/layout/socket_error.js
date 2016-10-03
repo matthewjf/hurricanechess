@@ -40,7 +40,7 @@ class SocketError extends React.Component {
   renderError() {
     if (this.state.socketError) {
       return (
-        <div id='socket-error' ref='socketError' className="card-panel white-text error-color">
+        <div id='socket-error' ref='socketError' className="primary-content card-panel white-text error-color">
           {this.state.socketError}
         </div>
       );

@@ -7,6 +7,7 @@ import GameIndexStore from '../../stores/game_index_store';
 
 import GameIndexItem from './index_item';
 import NewGameForm from './new_game_form';
+import OnlineStats from './online_stats';
 
 class GameIndex extends React.Component {
   constructor(props) {
@@ -54,7 +55,8 @@ class GameIndex extends React.Component {
 
   render() {
     return(
-      <div id='game-index'>
+      <div id='game-index' className='primary-content'>
+        <OnlineStats />
         <div className='split'>
           <h2>GAMES</h2>
 

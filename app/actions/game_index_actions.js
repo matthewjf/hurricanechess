@@ -23,13 +23,6 @@ var GameIndexActions = {
     });
   },
 
-  receiveUserCount: (count) => {
-    AppDispatcher.dispatch({
-      actionType: GameIndexConstants.USER_COUNT_RECEIVED,
-      userCount: userCount
-    });
-  },
-
   handleError: (error) => {
     AppDispatcher.dispatch({
       actionType: GameIndexConstants.ERROR_RECEIVED,

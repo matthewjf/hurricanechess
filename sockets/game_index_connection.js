@@ -1,5 +1,5 @@
 import Game from '../models/game';
-
+import OnlineStatus from '../helpers/online_status';
 export default function(client, joined) {
   client.on("join-index", function(_){
     client.join("index", function() {
@@ -10,7 +10,7 @@ export default function(client, joined) {
           .exec(function(err, games) {
             joined({room: 'index'});
             client.join('index');
-            client.emit('joined-index', {games: games});
+            client.emit('joined-index', {games: games, count: OnlineStatus.getCount()});
           });
     });
   });
