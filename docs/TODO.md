@@ -29,6 +29,7 @@
   - socket connection required
   - add counter
   - make searchable
+- google and facebook auth
 
 ## Mobile Support
 - improve mobile design (layout)
@@ -52,6 +53,9 @@
 
 ## Onboarding
 - improve onboard experience
+- a dismissable welcome banner
+- possibly a walkthrough (forget what these are called)
+- hint at about page
 
 ## Style
 - component transitions

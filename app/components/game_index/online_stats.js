@@ -22,7 +22,16 @@ class OnlineStats extends React.Component {
   }
 
   render() {
-    return <div>users online: {this.state.userCount}</div>;
+    return <div id='online-stats' className='card-panel'>
+        <table>
+          <tbody>
+          <tr>
+            <td>users online:</td>
+            <td>{this.state.userCount}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>;
   }
 };
 

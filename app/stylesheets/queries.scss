@@ -1,5 +1,6 @@
 $md-width: 480px;
 $lg-width: 600px;
+$xl-width: 1200px;
 
 @mixin sm-width {
   @media (max-width: #{$md-width - 1px}) {
@@ -15,6 +16,12 @@ $lg-width: 600px;
 
 @mixin lg-width {
   @media (min-width: #{$lg-width}) {
+    @content;
+  }
+}
+
+@mixin xl-width {
+  @media (min-width: #{$xl-width}) {
     @content;
   }
 }

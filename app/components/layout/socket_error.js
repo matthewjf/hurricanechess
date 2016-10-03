@@ -24,6 +24,7 @@ class SocketError extends React.Component {
   }
 
   connect() {
+    $(this.refs.socketError).velocity('finish');
     clearTimeout(this.disconnect);
     if (this.state.socketError) {
       $(this.refs.socketError).text('RECONNECTED');

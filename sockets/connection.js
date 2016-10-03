@@ -9,7 +9,8 @@ import Game from '../models/game';
 import OnlineStatus from '../helpers/online_status';
 
 io.on('connection', client => {
-  var currentRoom, userId = (client.handshake.session.passport || {}).user;
+  var currentRoom;
+  var userId = (client.handshake.session.passport || {}).user || client.id;
 
   OnlineStatus.set(userId);
 

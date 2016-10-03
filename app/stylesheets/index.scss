@@ -1,4 +1,16 @@
+@import 'queries';
 @import 'colors';
+
+#online-stats {
+  margin-left: auto;
+  padding-top: 0; padding-bottom: 0;
+  width: 200px;
+  background-color: $dark-0;
+  @include xl-width {
+    position: absolute;
+    right: 1rem;
+  }
+}
 
 #game-index {
   h2 {
