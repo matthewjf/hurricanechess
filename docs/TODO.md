@@ -17,6 +17,8 @@
 ## Stats Bar
 - players online count (see user)
 - active games count
+- style
+  - background color vs toasts
 
 ## User Features
 - account settings

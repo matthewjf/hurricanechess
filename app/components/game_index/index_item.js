@@ -59,7 +59,7 @@ class GameIndexItem extends React.Component {
     return(
       <li className="row card-panel clickable waves-effect game"
           onClick={this.handleClick}>
-        <div className='col s7'>
+        <div className='col s7 game-name'>
           {game.name}
         </div>
         <div className={this.playerColor(game) + ' col s2 right-align'}>

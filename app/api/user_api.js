@@ -1,15 +1,22 @@
 import UserActions from '../actions/user_actions';
 import {browserHistory} from 'react-router';
 
+// TODO: put this somewhere more appropriate
+function forceReconnect() {
+	socket.disconnect();
+	setTimeout(()=>{socket.connect();}, 100);
+};
+
 var UserApi = {
+
+
 	signup: (user, successCB, errorCB) => {
 		$.ajax({
 			url: "/api/users/new",
 			type: "post",
 			data: user,
 			success: ((data) => {
-				socket.disconnect();
-				socket.connect();
+				forceReconnect();
 				UserActions.receiveCurrentUser(data);
 				if (successCB) { successCB(data.user); }
 			}),
@@ -26,8 +33,7 @@ var UserApi = {
 			type: "post",
 			data: user,
 			success: ((data) => {
-				socket.disconnect();
-				socket.connect();
+				forceReconnect();
 				UserActions.receiveCurrentUser(data);
 				if (successCB) { successCB(data.user); }
 			}),
@@ -43,8 +49,7 @@ var UserApi = {
 			url: '/api/session',
 			method: 'delete',
 			success: ((data) => {
-				socket.disconnect();
-				socket.connect();
+				forceReconnect();
 				UserActions.removeCurrentUser();
 				if (successCB) { successCB(data); }
 			}),

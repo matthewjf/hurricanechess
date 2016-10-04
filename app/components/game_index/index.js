@@ -55,8 +55,8 @@ class GameIndex extends React.Component {
 
   render() {
     return(
+      <div id='index-wrapper'>
       <div id='game-index' className='primary-content'>
-        <OnlineStats />
         <div className='split'>
           <h2>GAMES</h2>
 
@@ -77,6 +77,11 @@ class GameIndex extends React.Component {
             {this.gameList(this.state.games)}
           </VelocityTransitionGroup>
         </ul>
+      </div>
+
+      <div className='secondary-content'>
+        <OnlineStats />
+      </div>
       </div>
     );
   }
