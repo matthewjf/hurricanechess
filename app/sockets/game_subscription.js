@@ -26,7 +26,7 @@ var GameSubscription = {
   join(id, successCB, errorCB) {
     socket.on('errors', (data) => {
       if (errorCB)
-        errorCB(errorCB);
+        errorCB(data);
     });
 
     socket.on('game', (data) => {

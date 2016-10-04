@@ -47,12 +47,12 @@ class Game extends React.Component {
     GameSubscription.leave();
   }
 
-  rejected() {
+  rejected(data) {
     browserHistory.push('/');
     if (this.state.currentUser)
-      ErrorUtil.gameRejected();
+      ErrorUtil.gameRejected(data);
     else
-      ErrorUtil.loginRequired();
+      ErrorUtil.loginRequired(data);
   }
 
   openGameSettings() {

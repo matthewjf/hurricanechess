@@ -26,7 +26,7 @@ class OnlineStats extends React.Component {
         <table>
           <tbody>
           <tr>
-            <td>users online:</td>
+            <td className='grey-text text-lighten-1'>users online</td>
             <td>{this.state.userCount}</td>
           </tr>
           </tbody>

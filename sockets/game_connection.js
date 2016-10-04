@@ -59,7 +59,7 @@ export default (client, joined) => {
               }
             });
           } else {
-            client.emit('errors', 'no game found');
+            client.emit('errors', 'Game not found');
           }
         });
     });
