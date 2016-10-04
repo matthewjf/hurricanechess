@@ -51,7 +51,7 @@ var movePiece = function(gameId, userId, pieceId, targetPos) {
   if (!state) throw new Error('no game found');
   if (!_isCorrectUser(userId, pieceId, state)) throw new Error('incorrect user');
   if (Board.canMovePiece(pieceId, targetPos, state)) {
-    var type = state.pieces[pieceId].type;
+    var type = Board.getPiece(pieceId, state).type;
     if (type === 4)
       _performKnightMove(pieceId, targetPos, state);
     else if ( type === 0 && Board.isCastleMove(pieceId, targetPos, state))
@@ -96,12 +96,12 @@ var _performMove = function(pieceId, targetPos, state) {
 };
 
 var _performKnightMove = function(pieceId, targetPos, state) {
-  let currPos = state.pieces[pieceId].pos;
+  let currPos = Board.getPiece(pieceId, state).pos;
 
   // TODO: updatePiece
   _clearTarget(currPos, state);
   _setReserved(pieceId, targetPos, state);
-  Object.assign(state.pieces[pieceId], { pos: targetPos, hasMoved: 1, status: -1 });
+  Object.assign(Board.getPiece(pieceId, state), { pos: targetPos, hasMoved: 1, status: -1 });
 
   _emitStateData('game-move', state);
 
@@ -133,7 +133,7 @@ var _performCastleMove = function(kingId, targetPos, state) {
 };
 
 var _performImmediate = function(pieceId, pos, state) {
-  var currPos = state.pieces[pieceId].pos;
+  var currPos = Board.getPiece(pieceId, state).pos;
   _deletePiece(Board.getTarget(pos, state), state);
   _updatePiece(pieceId, { pos: pos, hasMoved: 1, status: 1 }, state);
   setTimeout(() => {_moveEnd(pieceId, state);}, GameConfig.speed);
@@ -146,15 +146,15 @@ var _updateMoveHistory = function(state) {
 };
 
 var _moveEnd = function(pieceId, state) {
-  if (Board.shouldPromote(pieceId, state) && state.pieces[pieceId]) // promote
-    state.pieces[pieceId].type = 1;
+  if (Board.shouldPromote(pieceId, state) && Board.getPiece(pieceId, state)) // promote
+    Board.getPiece(pieceId, state).type = 1;
 
-  if (state.pieces[pieceId]) state.pieces[pieceId].status = 2; // on delay
+  if (Board.getPiece(pieceId, state)) Board.getPiece(pieceId, state).status = 2; // on delay
   _emitStateData('game-move', state);
 
   setTimeout(() => {              // off delay
-    if (state.pieces[pieceId]) {
-      state.pieces[pieceId].status = 0;
+    if (Board.getPiece(pieceId, state)) {
+      Board.getPiece(pieceId, state).status = 0;
       _emitStateData('game-move', state);
     }
   }, GameConfig.delay);
@@ -179,8 +179,8 @@ var _clearReserved = function(target, state) {
 };
 
 var _deletePiece = function(pieceId, state) {
-  var piece = state.pieces[pieceId];
-  if (pieceId && piece) {
+  var piece = Board.getPiece(pieceId, state);
+  if (piece) {
     _clearTarget(piece.pos, state);
     delete state.pieces[pieceId];
     // TODO: emit here
@@ -188,13 +188,13 @@ var _deletePiece = function(pieceId, state) {
 };
 
 var _updatePiece = function(pieceId, newData, state) {
-  var piece = state.pieces[pieceId];
-  if (pieceId && piece) {
+  var piece = Board.getPiece(pieceId, state);
+  if (piece) {
     if (newData.pos) {
       _clearTarget(piece.pos, state);
       _setTarget(pieceId, newData.pos, state);
     }
-    Object.assign(state.pieces[pieceId], newData);
+    Object.assign(Board.getPiece(pieceId, state), newData);
     // TODO: emit here
   }
 };

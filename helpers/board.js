@@ -41,6 +41,11 @@ var _getTarget = function(target, state) {
   return state.grid[target[0]][target[1]];
 };
 
+var _getPiece = function(pieceId, state) {
+  if (!Number.isInteger(pieceId)) return;
+  return state.pieces[pieceId];
+};
+
 var _isCastleMove = function(pieceId, targetPos, state) {
   var piece = state.pieces[pieceId];
   var row = piece.id < 16 ? 7 : 0;
@@ -77,6 +82,7 @@ var Board = {
   canMovePiece: _canMovePiece,
   getNextPos: _getNextPos,
   getTarget: _getTarget,
+  getPiece: _getPiece,
   isCastleMove: _isCastleMove,
   shouldPromote: _shouldPromote,
   getWinner: _getWinner,

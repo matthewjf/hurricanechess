@@ -14,11 +14,11 @@
 - in-game performance
 - db performance
 
+## Errors
+- catch and log thrown errors
+
 ## Stats Bar
-- players online count (see user)
 - active games count
-- style
-  - background color vs toasts
 
 ## User Features
 - account settings
