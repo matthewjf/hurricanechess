@@ -6,6 +6,9 @@
   - delay deploy until active games are complete (max 30 minutes)
 - handle archived game display
   - display last game state for now
+- new move data format can break game if received out of order
+  - need a way resolve de-sync
+  - add a move counter and request full state if received if out of order
 
 ## Monitoring
 - server memory usage
