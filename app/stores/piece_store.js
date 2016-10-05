@@ -1,6 +1,7 @@
 import {EventEmitter} from 'events';
 import AppDispatcher from '../dispatcher/dispatcher.js';
 import PieceConstants from '../constants/piece_constants';
+import State from '../../state/state';
 
 var _pieces = {};
 var _grid = [];
@@ -15,6 +16,14 @@ function _setState(state) {
   _pieces = state.pieces || {};
   _grid = state.grid || [];
   _reserved = state.reserved || [];
+}
+
+function _getState() {
+  return {pieces: _pieces, grid: _grid, gameId: _gameId, reserved: _reserved};
+}
+
+function _setMove(data) {
+  State.updatePiece(data.pieceId, data.newData, _getState());
 }
 
 function _removeState() {
@@ -39,7 +48,7 @@ class PieceStore extends EventEmitter {
   }
 
   get() {
-    return {pieces: _pieces, grid: _grid, gameId: _gameId, reserved: _reserved};
+    return _getState();
   }
 
   emitChange() {
@@ -58,6 +67,9 @@ class PieceStore extends EventEmitter {
     switch(payload.actionType) {
       case PieceConstants.STATE_RECEIVED:
         _setState(payload);
+        break;
+      case PieceConstants.MOVE_RECEIVED:
+        _setMove(payload.data);
         break;
       case PieceConstants.ERROR_RECEIVED:
         _setError(payload.error);

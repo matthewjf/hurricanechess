@@ -38,7 +38,7 @@ var GameSubscription = {
     });
 
     socket.on('game-move', (state) => {
-      PieceActions.receiveState(state);
+      PieceActions.receiveMove(state);
     });
 
     SocketManager.join(ROOM, {id: id}, (data) => {

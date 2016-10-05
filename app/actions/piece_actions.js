@@ -12,6 +12,13 @@ var PieceActions = {
     });
   },
 
+  receiveMove: (data) => {
+    AppDispatcher.dispatch({
+      actionType: PieceConstants.MOVE_RECEIVED,
+      data: data
+    });
+  },
+
   handleError: (error) => {
     AppDispatcher.dispatch({
       actionType: PieceConstants.ERROR_RECEIVED,

@@ -1,7 +1,6 @@
  /*
  /   Responsibility: initialize game state and manage move timers
  /   All game logic is delegated to helper files
- /   TODO: break this up into smaller modules
 */
 
 import redis from '../config/redis';
@@ -9,6 +8,7 @@ import cache from './cache';
 import io from '../config/socketio';
 import GameConfig from '../config/game';
 import Game from '../models/game';
+import State from './state';
 import Board from '../helpers/board';
 import MoveHistory from '../models/history';
 import InitialPieces from '../helpers/initial_pieces';
@@ -36,7 +36,7 @@ var init = function(game) {
       _gameExpired
     );
 
-    _emitStateData('state-init', state);
+    _emitStateData(state.gameId, 'state-init', state);
   } else {
     throw new Error('Game cannot be initialized');
   }
@@ -63,7 +63,7 @@ var movePiece = function(gameId, userId, pieceId, targetPos) {
 
 // PRIVATE
 
-  // MOVE STATE
+// MOVE LOGIC
 var _performMove = function(pieceId, targetPos, state) {
   var gameId = state.gameId;
   var pieces = state.pieces;
@@ -80,11 +80,7 @@ var _performMove = function(pieceId, targetPos, state) {
     _moveEnd(pieceId, state);
     return;
   }
-
-  _deletePiece(Board.getTarget(newPos, state), state);
-  _updatePiece(pieceId, { pos: newPos, hasMoved: 1, status: 1 }, state);
-
-  _emitStateData('game-move', state);
+  _updatePieceAndEmit(pieceId, { pos: newPos, hasMoved: 1, status: 1 }, state);
 
   if (Board.isGameOver(state)) {
     _gameOver(state);
@@ -96,22 +92,11 @@ var _performMove = function(pieceId, targetPos, state) {
 };
 
 var _performKnightMove = function(pieceId, targetPos, state) {
-  let currPos = Board.getPiece(pieceId, state).pos;
-
-  // TODO: updatePiece
-  _clearTarget(currPos, state);
-  _setReserved(pieceId, targetPos, state);
-  Object.assign(Board.getPiece(pieceId, state), { pos: targetPos, hasMoved: 1, status: -1 });
-
-  _emitStateData('game-move', state);
+  _updatePieceAndEmit(pieceId, { pos: targetPos, hasMoved: 1, status: -1 }, state);
 
   setTimeout(() => {
-    _deletePiece(Board.getTarget(targetPos, state), state);
+    _updatePieceAndEmit(pieceId, { pos: targetPos, hasMoved: 1, status: 1 }, state);
 
-    // TODO: updatePiece
-    _setTarget(pieceId, targetPos, state);
-    _clearReserved(targetPos, state);
-    _emitStateData('game-move', state);
     if (Board.isGameOver(state)) {
       _gameOver(state);
     } else {
@@ -128,75 +113,25 @@ var _performCastleMove = function(kingId, targetPos, state) {
 
   _performImmediate(kingId, targetPos, state);
   _performImmediate(rookId, rookTargetPos, state);
-
-  _emitStateData('game-move', state);
 };
 
-var _performImmediate = function(pieceId, pos, state) {
-  var currPos = Board.getPiece(pieceId, state).pos;
-  _deletePiece(Board.getTarget(pos, state), state);
-  _updatePiece(pieceId, { pos: pos, hasMoved: 1, status: 1 }, state);
+var _performImmediate = function(pieceId, targetPos, state) {
+  _updatePieceAndEmit(pieceId, { pos: targetPos, hasMoved: 1, status: 1 }, state);
   setTimeout(() => {_moveEnd(pieceId, state);}, GameConfig.speed);
 };
 
-var _updateMoveHistory = function(state) {
-  // TODO: redefine movedata
-  var moveData = { state: state, createdAt: new Date() };
-  redis.lpush(state.gameId.toString(), JSON.stringify(moveData)); // add to history
-};
-
 var _moveEnd = function(pieceId, state) {
-  if (Board.shouldPromote(pieceId, state) && Board.getPiece(pieceId, state)) // promote
-    Board.getPiece(pieceId, state).type = 1;
-
-  if (Board.getPiece(pieceId, state)) Board.getPiece(pieceId, state).status = 2; // on delay
-  _emitStateData('game-move', state);
+  if (Board.getPiece(pieceId, state)) {
+    var newData = {status: 2};
+    if (Board.shouldPromote(pieceId, state)) newData.type = 1;// promote
+    _updatePieceAndEmit(pieceId, newData, state); // on delay
+  }
 
   setTimeout(() => {              // off delay
     if (Board.getPiece(pieceId, state)) {
-      Board.getPiece(pieceId, state).status = 0;
-      _emitStateData('game-move', state);
+      _updatePieceAndEmit(pieceId, {status: 0}, state);
     }
   }, GameConfig.delay);
-};
-
-  //  HELPERS
-
-var _setTarget = function(pieceId, target, state) {
-  state.grid[target[0]][target[1]] = pieceId;
-};
-
-var _clearTarget = function(target, state) {
-  _setTarget(undefined, target, state);
-};
-
-var _setReserved = function(pieceId, target, state) {
-  state.reserved[target[0]][target[1]] = pieceId;
-};
-
-var _clearReserved = function(target, state) {
-  _setReserved(undefined, target, state);
-};
-
-var _deletePiece = function(pieceId, state) {
-  var piece = Board.getPiece(pieceId, state);
-  if (piece) {
-    _clearTarget(piece.pos, state);
-    delete state.pieces[pieceId];
-    // TODO: emit here
-  }
-};
-
-var _updatePiece = function(pieceId, newData, state) {
-  var piece = Board.getPiece(pieceId, state);
-  if (piece) {
-    if (newData.pos) {
-      _clearTarget(piece.pos, state);
-      _setTarget(pieceId, newData.pos, state);
-    }
-    Object.assign(Board.getPiece(pieceId, state), newData);
-    // TODO: emit here
-  }
 };
 
 var _gameExpired = function(id, state) {
@@ -208,7 +143,13 @@ var _isCorrectUser = function(userId, pieceId, state) {
   return state[color]._id.toString() === userId;
 };
 
-  // UPDATE DB
+// UPDATE STATE
+var _updatePieceAndEmit = function(pieceId, newData, state) {
+  State.updatePiece(pieceId, newData, state);
+  _emitStateData(state.gameId, 'game-move', {pieceId: pieceId, newData: newData});
+};
+
+// UPDATE DB
 var _gameOver = function(state) {
   // update mongo with new state
   Game.findById(state.gameId)
@@ -236,10 +177,15 @@ var _archiveGame = function(game, winner) {
   });
 };
 
-  // CLIENT COMMUNICATION
-var _emitStateData = function(action, state) {
-  io.to(state.gameId).emit(action, state);
-  _updateMoveHistory(state);
+var _updateMoveHistory = function(gameId, data) {
+  Object.assign(data, {createdAt: new Date()});
+  redis.lpush(gameId.toString(), JSON.stringify(data)); // add to history
+};
+
+// CLIENT COMMUNICATION
+var _emitStateData = function(gameId, action, data) {
+  io.to(gameId).emit(action, data);
+  _updateMoveHistory(gameId, {action: action, data: data});
 };
 
 export default {
