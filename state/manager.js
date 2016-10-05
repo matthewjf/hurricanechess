@@ -70,7 +70,7 @@ var _performMove = function(pieceId, targetPos, state) {
   if (!pieces[pieceId]) return; // piece is not available
 
   var currPos = pieces[pieceId].pos;
-  if (currPos[0] === targetPos[0] && currPos[1] === targetPos[1]) {
+  if (currPos[0] === targetPos[0] && currPos[1] === targetPos[1] || pieceTaken) {
     _moveEnd(pieceId, state);
     return;
   };
@@ -80,15 +80,19 @@ var _performMove = function(pieceId, targetPos, state) {
     _moveEnd(pieceId, state);
     return;
   }
+  var pieceTaken = !!Board.getPiece(Board.getTarget(newPos, state), state);
   _updatePieceAndEmit(pieceId, { pos: newPos, hasMoved: 1, status: 1 }, state);
 
   if (Board.isGameOver(state)) {
     _gameOver(state);
-  } else {
-    setTimeout(() => {
-      _performMove(pieceId, targetPos, state);
-    }, GameConfig.speed);
+    return;
   }
+
+  var newTarget = pieceTaken ? newPos : targetPos;
+
+  setTimeout(() => {
+    _performMove(pieceId, newTarget, state);
+  }, GameConfig.speed);
 };
 
 var _performKnightMove = function(pieceId, targetPos, state) {
