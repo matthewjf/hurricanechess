@@ -8,7 +8,8 @@ var PieceActions = {
       gameId: state.gameId,
       pieces: state.pieces,
       grid: state.grid,
-      reserved: state.reserved
+      reserved: state.reserved,
+      moveId: state.moveId
     });
   },
 

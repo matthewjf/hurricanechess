@@ -7,6 +7,7 @@ var _pieces = {};
 var _grid = [];
 var _reserved = [];
 var _gameId;
+var _moveId;
 
 var _error = null;
 var CHANGE_EVENT = 'change';
@@ -16,6 +17,7 @@ function _setState(state) {
   _pieces = state.pieces || {};
   _grid = state.grid || [];
   _reserved = state.reserved || [];
+  _moveId = state.moveId;
 }
 
 function _getState() {
@@ -23,6 +25,10 @@ function _getState() {
 }
 
 function _setMove(data) {
+  if (data.moveId < _moveId) {
+    alert('unexpected error');
+    // TODO: request full state
+  }
   State.updatePiece(data.pieceId, data.newData, _getState());
 }
 

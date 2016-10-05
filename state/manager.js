@@ -21,7 +21,8 @@ var getInitialState = function(game) {
     black: game.black,
     pieces: pieces,
     grid: Board.buildGrid(pieces),
-    reserved: Board.buildGrid({})
+    reserved: Board.buildGrid({}),
+    moveId: 0
   });
 };
 
@@ -150,7 +151,8 @@ var _isCorrectUser = function(userId, pieceId, state) {
 // UPDATE STATE
 var _updatePieceAndEmit = function(pieceId, newData, state) {
   State.updatePiece(pieceId, newData, state);
-  _emitStateData(state.gameId, 'game-move', {pieceId: pieceId, newData: newData});
+  state.moveId += 1;
+  _emitStateData(state.gameId, 'game-move', {pieceId: pieceId, newData: newData, moveId: state.moveId});
 };
 
 // UPDATE DB

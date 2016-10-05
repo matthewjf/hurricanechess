@@ -38,7 +38,7 @@ io.on('connection', client => {
 
   // JOIN SUCCESS
   const joined = data => {
-    if (currentRoom !== data.room) {
+    if (currentRoom && currentRoom.toString() !== data.room.toString()) {
       client.leave(currentRoom, function(){
         if (currentRoom && currentRoom !== 'index') {
           cleanupGame(currentRoom);
