@@ -38,7 +38,7 @@ io.on('connection', client => {
 
   // JOIN SUCCESS
   const joined = data => {
-    if (currentRoom && currentRoom.toString() !== data.room.toString()) {
+    if (!currentRoom || currentRoom.toString() !== data.room.toString()) {
       client.leave(currentRoom, function(){
         if (currentRoom && currentRoom !== 'index') {
           cleanupGame(currentRoom);
@@ -50,10 +50,9 @@ io.on('connection', client => {
 
   // DICONNECT
   client.on('disconnect', () => {
-    OnlineStatus.del(userId);
-
     if (currentRoom !== 'index')
       cleanupGame(currentRoom);
+    OnlineStatus.del(userId);
   });
 
   // JOIN INDEX

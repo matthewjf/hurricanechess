@@ -2,6 +2,7 @@ import {EventEmitter} from 'events';
 import AppDispatcher from '../dispatcher/dispatcher.js';
 import PieceConstants from '../constants/piece_constants';
 import State from '../../state/state';
+import GameSubscription from '../sockets/game_subscription';
 
 var _pieces = {};
 var _grid = [];
@@ -25,11 +26,10 @@ function _getState() {
 }
 
 function _setMove(data) {
-  if (data.moveId < _moveId) {
-    alert('unexpected error');
-    // TODO: request full state
-  }
-  State.updatePiece(data.pieceId, data.newData, _getState());
+  if (data.moveId < _moveId)
+    GameSubscription.requestGameData(_gameId);
+  else
+    State.updatePiece(data.pieceId, data.newData, _getState());
 }
 
 function _removeState() {

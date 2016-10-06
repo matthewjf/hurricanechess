@@ -65,6 +65,10 @@ export default (client, joined) => {
     });
   });
 
+  client.on("game-data", (gameId) => {
+    client.emit('game-data', GameManager.getState(gameId));
+  });
+
   client.on("game-move", data => {
     GameManager.movePiece(data.gameId, userId, data.pieceId, data.pos);
   });

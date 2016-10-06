@@ -33,13 +33,11 @@ var GameSubscription = {
       GameActions.receiveGame(data.game);
     });
 
-    socket.on('state-init', (state) => {
-      PieceActions.receiveState(state);
-    });
+    socket.on('state-init', PieceActions.receiveState);
 
-    socket.on('game-move', (state) => {
-      PieceActions.receiveMove(state);
-    });
+    socket.on('game-move', PieceActions.receiveMove);
+
+    socket.on('game-data', PieceActions.receiveState);
 
     SocketManager.join(ROOM, {id: id}, (data) => {
       GameActions.receiveGame(data.game);
@@ -53,6 +51,10 @@ var GameSubscription = {
     socket.emit('game-move', data);
   },
 
+  requestGameData(gameId) {
+    socket.emit('game-data', gameId);
+  },
+
   leave() {
     SocketManager.leave('game');
     socket.off('errors');
@@ -60,6 +62,7 @@ var GameSubscription = {
     socket.off('game');
     socket.off('game-init');
     socket.off('game-move');
+    socket.off('game-data');
   }
 };
 
