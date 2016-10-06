@@ -37,8 +37,6 @@
 - google and facebook auth
 
 ## Mobile Support
-- improve mobile design (layout)
-  - game settings should be moved
 - improve mobile performance
 
 ## Add Index Features

@@ -14,9 +14,7 @@ class Overlay extends React.Component {
     this.starting = this.starting.bind(this);
     this.archived = this.archived.bind(this);
 
-    this.state = {
-      status: this.props.status
-    };
+    this.state = { status: this.props.status, winner: this.props.winner };
   }
 
   componentDidMount() {
@@ -26,7 +24,7 @@ class Overlay extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    this.setState({status: props.status});
+    this.setState({status: props.status, winner: props.winner});
     this.updateStatusText(props.status);
   }
 
@@ -120,7 +118,10 @@ class Overlay extends React.Component {
       return (
         <div id='board-overlay'>
           <div id='board-status' ref='status' className='z-depth-1'>
-            {this.state.statusText}
+            <span>{this.state.statusText}</span>
+            <span id='win-text' className='grey-text'>
+              {this.state.winner ? this.state.winner + ' won' : ''}
+            </span>
           </div>
         </div>
       );

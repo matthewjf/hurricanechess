@@ -39,7 +39,7 @@ var init = function(game) {
 
     _emitStateData(state.gameId, 'state-init', state);
   } else {
-    throw new Error('Game cannot be initialized');
+    return new Error('Game cannot be initialized');
   }
 };
 
@@ -49,8 +49,8 @@ var getState = function(gameId) {
 
 var movePiece = function(gameId, userId, pieceId, targetPos) {
   var state = getState(gameId);
-  if (!state) throw new Error('Game not found');
-  if (!_isCorrectUser(userId, pieceId, state)) throw new Error('Incorrect user');
+  if (!state) return new Error('Game not found');
+  if (!_isCorrectUser(userId, pieceId, state)) return new Error('Incorrect user');
   if (Board.canMovePiece(pieceId, targetPos, state)) {
     var type = Board.getPiece(pieceId, state).type;
     if (type === 4)

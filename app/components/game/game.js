@@ -15,6 +15,7 @@ class Game extends React.Component {
     this.getGame = this.getGame.bind(this);
     this.rejected = this.rejected.bind(this);
     this.status = this.status.bind(this);
+    this.winner = this.winner.bind(this);
     this.whiteOnBottom = this.whiteOnBottom.bind(this);
     this.playerStatus = this.playerStatus.bind(this);
     this.topCard = this.topCard.bind(this);
@@ -97,6 +98,10 @@ class Game extends React.Component {
     if (this.state.game) return this.state.game.status;
   }
 
+  winner() {
+    if (this.state.game) return this.state.game.winner;
+  }
+
   render() {
     return (
       <div id='game-wrapper'>
@@ -109,7 +114,7 @@ class Game extends React.Component {
       <section id='game' className='no-select'>
         <Player data={this.topCard()} />
         <div id='board-wrapper'>
-          <Overlay status={this.status()} />
+          <Overlay status={this.status()} winner={this.winner()}/>
           <Pieces status={this.status()} playerStatus={this.playerStatus()} />
           <Board />
         </div>
