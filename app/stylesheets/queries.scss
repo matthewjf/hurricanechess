@@ -10,7 +10,7 @@ $xx-width: 1240px;
 }
 
 @mixin md-width {
-  @media (min-width: #{$md-width}) and (max-width: #{$lg-width - 1px}) {
+  @media (min-width: #{$md-width}) {
     @content;
   }
 }

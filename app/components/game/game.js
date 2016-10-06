@@ -99,13 +99,14 @@ class Game extends React.Component {
 
   render() {
     return (
+      <div id='game-wrapper'>
+      <div className='settings secondary-content'>
+      <a onClick={this.openGameSettings}
+      className="waves-effect waves-light btn modal-trigger settings-btn">
+      <i className="material-icons settings-icon">settings</i>
+      </a>
+      </div>
       <section id='game' className='no-select'>
-        <div className='split settings'>
-          <a onClick={this.openGameSettings}
-             className="waves-effect waves-light btn modal-trigger settings-btn">
-            <i className="material-icons settings-icon">settings</i>
-          </a>
-        </div>
         <Player data={this.topCard()} />
         <div id='board-wrapper'>
           <Overlay status={this.status()} />
@@ -114,6 +115,7 @@ class Game extends React.Component {
         </div>
         <Player data={this.botCard()} />
       </section>
+      </div>
     );
   }
 };

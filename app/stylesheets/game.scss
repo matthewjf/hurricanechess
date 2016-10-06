@@ -1,18 +1,21 @@
 @import "colors";
 @import "functions";
+@import "queries";
 
-#game{
-  cursor: default;
-  .square {
-    box-sizing: border-box;
-    flex: 0 0 12.5%;
-    height: 12.5%;
+#game-wrapper {
+  display: flex;
+  flex-direction: column;
+  .secondary-content {
+    @include xl-width {
+      position: absolute;
+      right: 1rem;
+    }
   }
+}
 
-  .split.settings {
-    justify-content: flex-end;
-  }
-
+.settings {
+  display: flex;
+  justify-content: flex-end;
   .btn.settings-btn {
     padding: 0 0.5rem;
     background-color: $dark-1;
@@ -24,6 +27,15 @@
   .settings-icon {
     font-size: 2rem;
     color: $primary-color;
+  }
+}
+
+#game{
+  cursor: default;
+  .square {
+    box-sizing: border-box;
+    flex: 0 0 12.5%;
+    height: 12.5%;
   }
 
   .player-card {
