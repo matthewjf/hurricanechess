@@ -16,6 +16,12 @@ var GameIndexActions = {
     });
   },
 
+  removeGames: () => {
+    AppDispatcher.dispatch({
+      actionType: GameIndexConstants.GAMES_REMOVED
+    });
+  },
+
   removeGame: (game) => {
     AppDispatcher.dispatch({
       actionType: GameIndexConstants.GAME_REMOVED,

@@ -17,7 +17,7 @@ var GameSchema = new Schema({
   white:    { type: Schema.Types.ObjectId, ref: 'User' },
   black:    { type: Schema.Types.ObjectId, ref: 'User' },
   status:   { type: String,  required: true, default: 'waiting', enum: ['waiting', 'starting', 'active', 'archived'] },
-  winner:   { type: String, enum: ['white', 'black', 'draw', 'none']}
+  winner:   { type: String, enum: ['white', 'black', 'draw']}
 }, {timestamps: true});
 
 // SERIALIZE WITHOUT PASSWORD
@@ -155,13 +155,13 @@ GameSchema.pre('save', function(next) {
 });
 
 GameSchema.post('save', (game, next) => {
-  io.to('index').emit('game', {game: game});
-  io.to(game._id).emit('game', {game: game});
+  io.to('index').emit('game', game);
+  io.to(game._id).emit('game', game);
   next();
 });
 
 GameSchema.post('remove', (game, next) => {
-  io.to('index').emit('remove', {game: game});
+  io.to('index').emit('remove', game);
 });
 
 var Game = mongoose.model('Game', GameSchema);

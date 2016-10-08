@@ -53,15 +53,17 @@ class UserStore extends EventEmitter {
     switch(data.actionType) {
       case UserConstants.LOGIN:
       	_login(data.user);
+        this.emitChange();
         break;
       case UserConstants.LOGOUT:
       	_logout();
+        this.emitChange();
         break;
       case UserConstants.ERROR:
         _setErrors(data.errors);
+        this.emitChange();
         break;
     }
-    this.emitChange();
   }
 }
 

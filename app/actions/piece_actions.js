@@ -3,14 +3,15 @@ import AppDispatcher from '../dispatcher/dispatcher';
 
 var PieceActions = {
   receiveState: (state) => {
-    AppDispatcher.dispatch({
-      actionType: PieceConstants.STATE_RECEIVED,
-      gameId: state.gameId,
-      pieces: state.pieces,
-      grid: state.grid,
-      reserved: state.reserved,
-      moveId: state.moveId
-    });
+    if (state)
+      AppDispatcher.dispatch({
+        actionType: PieceConstants.STATE_RECEIVED,
+        gameId: state.gameId,
+        pieces: state.pieces,
+        grid: state.grid,
+        reserved: state.reserved,
+        moveId: state.moveId
+      });
   },
 
   receiveMove: (data) => {

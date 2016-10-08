@@ -9,13 +9,20 @@ var GameActions = {
     });
   },
 
+  receiveHistory: (history) => {
+    AppDispatcher.dispatch({
+      actionType: GameConstants.HISTORY_RECEIVED,
+      history: history
+    });
+  },
+
   handleError: (error) => {
     AppDispatcher.dispatch({
       actionType: GameConstants.ERROR_RECEIVED,
       error: error
     });
   },
-  
+
   removeGame: () => {
     AppDispatcher.dispatch({
       actionType: GameConstants.GAME_REMOVED

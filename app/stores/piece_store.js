@@ -27,7 +27,7 @@ function _getState() {
 
 function _setMove(data) {
   if (data.moveId < _moveId)
-    GameSubscription.requestGameData(_gameId);
+    GameSubscription.requestGameState(_gameId);
   else
     State.updatePiece(data.pieceId, data.newData, _getState());
 }
@@ -73,18 +73,21 @@ class PieceStore extends EventEmitter {
     switch(payload.actionType) {
       case PieceConstants.STATE_RECEIVED:
         _setState(payload);
+        this.emitChange();
         break;
       case PieceConstants.MOVE_RECEIVED:
         _setMove(payload.data);
+        this.emitChange();
         break;
       case PieceConstants.ERROR_RECEIVED:
         _setError(payload.error);
+        this.emitChange();
         break;
       case PieceConstants.STATE_REMOVED:
         _removeState();
+        this.emitChange();
         break;
     }
-    this.emitChange();
   }
 }
 

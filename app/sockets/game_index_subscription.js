@@ -5,22 +5,10 @@ import OnlineStatsActions from '../actions/online_stats_actions';
 const ROOM = 'index';
 var GameIndexSubscription = {
   join() {
-    socket.on('game', (data) => {
-      GameIndexActions.receiveGame(data.game);
-    });
-
-    socket.on('remove', (data) => {
-      GameIndexActions.removeGame(data.game);
-    });
-
-    socket.on('userCount', (count) => {
-      OnlineStatsActions.receiveUserCount(count);
-    });
-
-    SocketManager.join(ROOM, {}, (data) => {
-      GameIndexActions.receiveGames(data.games);
-      OnlineStatsActions.receiveUserCount(data.count);
-    });
+    socket.on('game', GameIndexActions.receiveGame);
+    socket.on('remove', GameIndexActions.removeGame);
+    socket.on('user-count', OnlineStatsActions.receiveUserCount);
+    SocketManager.join(ROOM, {}, GameIndexActions.receiveGames);
   },
 
   leave() {

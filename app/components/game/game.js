@@ -7,6 +7,7 @@ import Board from './board';
 import Pieces from './pieces';
 import Overlay from './overlay';
 import Player from './player';
+import Replay from './replay';
 
 class Game extends React.Component {
   constructor(props) {
@@ -21,6 +22,7 @@ class Game extends React.Component {
     this.topCard = this.topCard.bind(this);
     this.botCard = this.botCard.bind(this);
     this.card = this.card.bind(this);
+    this.renderReplay = this.renderReplay.bind(this);
 
     this.state = {
       gameId: this.props.params.id,
@@ -36,7 +38,7 @@ class Game extends React.Component {
 
   componentDidMount() {
     this.gameListener = GameStore.addChangeListener(this.getGame);
-    GameSubscription.join(this.state.gameId, null,this.rejected);
+    GameSubscription.join(this.state.gameId ,this.rejected);
   }
 
   getGame() {
@@ -102,24 +104,29 @@ class Game extends React.Component {
     if (this.state.game) return this.state.game.winner;
   }
 
+  renderReplay() {
+    if (this.status() === 'archived') return <Replay />;
+  }
+
   render() {
     return (
       <div id='game-wrapper'>
-      <div className='settings secondary-content'>
-      <a onClick={this.openGameSettings}
-      className="waves-effect waves-light btn modal-trigger settings-btn">
-      <i className="material-icons settings-icon">settings</i>
-      </a>
-      </div>
-      <section id='game' className='no-select'>
-        <Player data={this.topCard()} />
-        <div id='board-wrapper'>
-          <Overlay status={this.status()} winner={this.winner()}/>
-          <Pieces status={this.status()} playerStatus={this.playerStatus()} />
-          <Board />
+        <div className='settings secondary-content'>
+          <a onClick={this.openGameSettings}
+          className="waves-effect waves-light btn modal-trigger settings-btn">
+            <i className="material-icons settings-icon">settings</i>
+          </a>
         </div>
-        <Player data={this.botCard()} />
-      </section>
+        <section id='game' className='no-select'>
+          {this.renderReplay()}
+          <Player data={this.topCard()} />
+          <div id='board-wrapper'>
+            <Overlay status={this.status()} winner={this.winner()}/>
+            <Pieces status={this.status()} playerStatus={this.playerStatus()} />
+            <Board />
+          </div>
+          <Player data={this.botCard()} />
+        </section>
       </div>
     );
   }

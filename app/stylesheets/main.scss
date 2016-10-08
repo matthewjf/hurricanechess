@@ -126,3 +126,10 @@ form {
   -ms-user-select: none;       /* Internet Explorer/Edge */
   user-select: none;
 }
+
+.paused{
+    -webkit-animation-play-state: paused;
+    -moz-animation-play-state: paused;
+    -ms-animation-play-state: paused;
+    animation-play-state: paused;
+}

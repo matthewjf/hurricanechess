@@ -10,7 +10,8 @@ export default function(client, joined) {
           .exec(function(err, games) {
             joined({room: 'index'});
             client.join('index');
-            client.emit('joined-index', {games: games, count: OnlineStatus.getCount()});
+            client.emit('joined-index', games);
+            client.emit('user-count', OnlineStatus.getCount());
           });
     });
   });

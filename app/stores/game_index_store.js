@@ -19,6 +19,10 @@ function _setGame(game) {
   _games[game._id] = game;
 };
 
+function _removeGames() {
+  _games = {};
+};
+
 function _removeGame(game) {
   delete _games[game._id];
 };
@@ -76,18 +80,25 @@ class GameIndexStore extends EventEmitter {
     switch(payload.actionType) {
       case GameIndexConstants.GAMES_RECEIVED:
         _resetGames(payload.games);
+        this.emitChange();
         break;
       case GameIndexConstants.GAME_RECEIVED:
         _setGame(payload.game);
+        this.emitChange();
+        break;
+      case GameIndexConstants.GAMES_REMOVED:
+        _removeGames();
+        this.emitChange();
         break;
       case GameIndexConstants.GAME_REMOVED:
         _removeGame(payload.game);
+        this.emitChange();
         break;
       case GameIndexConstants.ERROR_RECEIVED:
         _setError(payload.error);
+        this.emitChange();
         break;
     }
-    this.emitChange();
   }
 }
 

@@ -37,7 +37,7 @@ var init = function(game) {
       _gameExpired
     );
 
-    _emitStateData(state.gameId, 'state-init', state);
+    _emitStateData(state.gameId, 'game-init', state);
   } else {
     return new Error('Game cannot be initialized');
   }
@@ -155,8 +155,20 @@ var _updatePieceAndEmit = function(pieceId, newData, state) {
   _emitStateData(state.gameId, 'game-move', {pieceId: pieceId, newData: newData, moveId: state.moveId});
 };
 
+var _turnOffDelay = function(state) {
+  var pieces = state.pieces;
+  if (pieces) {
+    for (var i = 0; i < 32; i++) {
+      if (pieces[i])
+        pieces[i].status = 0;
+    }
+  }
+};
+
 // UPDATE DB
 var _gameOver = function(state) {
+  _turnOffDelay(state);
+  _emitStateData(state.gameId, 'game-end', state);
   // update mongo with new state
   Game.findById(state.gameId)
   .populate('white')

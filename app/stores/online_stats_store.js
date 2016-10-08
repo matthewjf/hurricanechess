@@ -35,9 +35,9 @@ class OnlineStatsStore extends EventEmitter {
     switch(data.actionType) {
       case OnlineStatsConstants.USER_COUNT_RECEIVED:
         _setUserCount(data.count);
+        this.emitChange();
         break;
     }
-    this.emitChange();
   }
 }
 

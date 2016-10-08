@@ -4,6 +4,7 @@ import ErrorUtil from '../../utils/error_util';
 
 import GameIndexSubscription from '../../sockets/game_index_subscription';
 import GameIndexStore from '../../stores/game_index_store';
+import GameIndexActions from '../../actions/game_index_actions';
 
 import GameIndexItem from './index_item';
 import NewGameForm from './new_game_form';
@@ -31,6 +32,7 @@ class GameIndex extends React.Component {
   componentWillUnmount() {
     GameIndexStore.removeChangeListener(this.getGames);
     GameIndexSubscription.leave();
+    GameIndexActions.removeGames();
   }
 
   componentWillReceiveProps(props) {

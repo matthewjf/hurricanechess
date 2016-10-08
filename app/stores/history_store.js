@@ -1,36 +1,27 @@
 import {EventEmitter} from 'events';
 import AppDispatcher from '../dispatcher/dispatcher.js';
-import GameConstants from '../constants/game_constants';
+import HistoryConstants from '../constants/history_constants';
 
-var _game = {};
+var _history = {};
 
-var _error = null;
 var CHANGE_EVENT = 'change';
 
-function _setGame(game) {
-  _game = game;
+function _setHistory(history) {
+  _history = history;
 };
 
-function _removeGame(game) {
-  _game = {};
+function _removeHistory() {
+  _history = {};
 };
 
-function _setError(error) {
-  _error = error;
-};
-
-function _clearError() {
-  _error = null;
-};
-
-class GameStore extends EventEmitter {
+class HistoryStore extends EventEmitter {
   constructor() {
     super();
     this.dispatchToken = AppDispatcher.register(this.dispatcherCallback.bind(this));
   }
 
   get() {
-    return _game;
+    return _history;
   }
 
   emitChange() {
@@ -47,20 +38,16 @@ class GameStore extends EventEmitter {
 
   dispatcherCallback(payload) {
     switch(payload.actionType) {
-      case GameConstants.GAME_RECEIVED:
-        _setGame(payload.game);
+      case HistoryConstants.HISTORY_RECEIVED:
+        _setHistory(payload.history);
         this.emitChange();
         break;
-      case GameConstants.ERROR_RECEIVED:
-        _setError(payload.error);
-        this.emitChange();
-        break;
-      case GameConstants.GAME_REMOVED:
-        _removeGame();
+      case HistoryConstants.HISTORY_REMOVED:
+        _removeHistory();
         this.emitChange();
         break;
     }
   }
 }
 
-export default new GameStore();
+export default new HistoryStore();
