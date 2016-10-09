@@ -5,26 +5,38 @@
   position: relative;
 }
 
-#board-overlay-velocity {
-  position: absolute;
-}
-
-#board-overlay, #board-overlay-velocity {
+#board-overlay, #board-overlay-velocity, #board-replay {
   height: 100%; width: 100%;
+  position: absolute;
 }
 
 #board-overlay {
   background-color: hsla(0, 0%, 0%, 0.3);
-  position: absolute;
   display: flex !important;
   justify-content: center;
   align-items: center;
   z-index: 99;
 }
 
+#board-replay {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+  color: hsla(0, 0%, 100%, 0.4);
+  font-style: italic;
+  font-size: 2em;
+  @include md-width {
+    font-size: 2.5em;
+  }
+  @include lg-width {
+    font-size: 3em;
+  }
+}
+
 #win-text {
   font-size: 0.60em;
-  
+
   @include md-width {
     font-size: 0.70em;
   }

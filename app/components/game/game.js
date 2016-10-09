@@ -37,7 +37,7 @@ class Game extends React.Component {
   }
 
   componentDidMount() {
-    this.gameListener = GameStore.addChangeListener(this.getGame);
+    GameStore.addChangeListener(this.getGame);
     GameSubscription.join(this.state.gameId ,this.rejected);
   }
 

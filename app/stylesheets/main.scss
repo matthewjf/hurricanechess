@@ -10,6 +10,7 @@
 @import 'click';
 @import 'errors';
 @import 'forms';
+@import 'replay';
 
 * {
   box-shadow: none !important;
@@ -132,4 +133,11 @@ form {
     -moz-animation-play-state: paused;
     -ms-animation-play-state: paused;
     animation-play-state: paused;
+}
+
+.no-transition {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  transition: none !important;
 }

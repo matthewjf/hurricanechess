@@ -1,4 +1,5 @@
 import React from 'react';
+import Playback from '../../utils/playback';
 import GameConfig from '../../../config/game';
 import {VelocityTransitionGroup, VelocityComponent} from 'velocity-react';
 
@@ -9,18 +10,20 @@ class Overlay extends React.Component {
     this.performCountdown = this.performCountdown.bind(this);
     this.updateStatusText = this.updateStatusText.bind(this);
     this.isActive = this.isActive.bind(this);
+    this.getPlaybackStatus = this.getPlaybackStatus.bind(this);
     this.renderOverlay = this.renderOverlay.bind(this);
     this.waiting = this.waiting.bind(this);
     this.starting = this.starting.bind(this);
     this.archived = this.archived.bind(this);
 
-    this.state = { status: this.props.status, winner: this.props.winner };
+    this.state = { status: this.props.status, winner: this.props.winner, playbackStatus: Playback.status() };
   }
 
   componentDidMount() {
     require('velocity-animate');
     require('velocity-animate/velocity.ui');
     this.updateStatusText();
+    Playback.addChangeListener(this.getPlaybackStatus);
   }
 
   componentWillReceiveProps(props) {
@@ -31,10 +34,15 @@ class Overlay extends React.Component {
   componentWillUnmount() {
     $(this.refs.status).velocity('stop');
     clearInterval(this.interval);
+    Playback.removeChangeListener(this.getPlaybackStatus);
   }
 
   isActive() {
     return this.state.status === 'active';
+  }
+
+  getPlaybackStatus() {
+    this.setState({playbackStatus: Playback.status()});
   }
 
   waiting() {
@@ -114,7 +122,7 @@ class Overlay extends React.Component {
   }
 
   renderOverlay() {
-    if (!this.isActive()) {
+    if (!this.isActive() && !this.state.playbackStatus || this.state.playbackStatus === 'ended') {
       return (
         <div id='board-overlay'>
           <div id='board-status' ref='status' className='z-depth-1'>
@@ -125,6 +133,10 @@ class Overlay extends React.Component {
           </div>
         </div>
       );
+    } else if (this.state.playbackStatus === 'playing') {
+      return <div id='board-replay'>REPLAYING</div>;
+    } else if (this.state.playbackStatus === 'paused') {
+      return <div id='board-replay'>PAUSED</div>;
     } else {
       return null;
     }

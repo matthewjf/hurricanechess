@@ -25,7 +25,7 @@ class GameIndex extends React.Component {
   }
 
   componentDidMount() {
-    this.gameIndexListener = GameIndexStore.addChangeListener(this.getGames);
+    GameIndexStore.addChangeListener(this.getGames);
     GameIndexSubscription.join();
   }
 

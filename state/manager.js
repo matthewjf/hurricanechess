@@ -139,10 +139,6 @@ var _moveEnd = function(pieceId, state) {
   }, GameConfig.delay);
 };
 
-var _gameExpired = function(id, state) {
-  _gameOver(state);
-};
-
 var _isCorrectUser = function(userId, pieceId, state) {
   let color = (pieceId < 16 ? 'white' : 'black');
   return state[color]._id.toString() === userId;
@@ -166,6 +162,10 @@ var _turnOffDelay = function(state) {
 };
 
 // UPDATE DB
+var _gameExpired = function(id, state) {
+  _gameOver(state);
+};
+
 var _gameOver = function(state) {
   _turnOffDelay(state);
   _emitStateData(state.gameId, 'game-end', state);

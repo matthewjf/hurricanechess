@@ -165,4 +165,5 @@ GameSchema.post('remove', (game, next) => {
 });
 
 var Game = mongoose.model('Game', GameSchema);
+
 export default Game;

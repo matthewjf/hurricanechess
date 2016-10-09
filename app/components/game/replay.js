@@ -1,38 +1,61 @@
 import React from 'react';
-import HistoryStore from '../../stores/history_store';
-import HistoryActions from '../../actions/history_actions';
 import Playback from '../../utils/playback';
 
 class Replay extends React.Component {
   constructor(props) {
     super(props);
-    this.getHistory = this.getHistory.bind(this);
+    this.getPlayback = this.getPlayback.bind(this);
+    this.renderControls = this.renderControls.bind(this);
+    this.play = this.play.bind(this);
 
-    this.state = {playback: this.getPlayback()};
+    this.state = {status: Playback.status(), hasHistory: Playback.hasHistory()};
   }
 
   componentDidMount() {
-    this.historyListener = HistoryStore.addChangeListener(this.getHistory);
+    Playback.addChangeListener(this.getPlayback);
   }
 
   componentWillUnmount() {
-    HistoryStore.removeChangeListener(this.getHistory);
-    HistoryActions.removeHistory();
-  }
-
-  getHistory() {
-    console.log('history received');
-    this.setState({playback: this.getPlayback()});
+    Playback.removeChangeListener(this.getPlayback);
+    Playback.removeHistory();
   }
 
   getPlayback() {
-    var moves = HistoryStore.get().moves;
-    if (moves)
-      return new Playback(moves);
+    this.setState({status: Playback.status(), hasHistory: Playback.hasHistory()});
+  }
+
+  play() {
+    if (this.state.status === 'playing') {
+      Playback.pause();
+    } else {
+      Playback.play();
+    }
+  }
+
+  stop() {
+    Playback.end();
+  }
+
+  replayClasses() {
+    return "material-icons replay-action clickable waves-effect waves-light";
+  }
+
+  renderControls() {
+    if (this.state.hasHistory) {
+      var icon = this.state.status === 'playing' ? "pause" : "play_arrow";
+      return <div id='replay-controls'>
+          <div id='control-wrapper'>
+            <i onClick={this.play} className={this.replayClasses()}>{icon}</i>
+            <i onClick={this.stop} className={this.replayClasses()}>stop</i>
+          </div>
+        </div>;
+    } else {
+      return null;
+    }
   }
 
   render() {
-    return null;
+    return <div id='replay'>{this.renderControls()}</div>;
   }
 };
 

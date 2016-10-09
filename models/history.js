@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import io from '../config/socketio';
 
 var Schema = mongoose.Schema;
 
@@ -7,5 +8,11 @@ var MoveHistorySchema = new Schema({
   moves: [String]
 });
 
+MoveHistorySchema.post('save', (history, next) => {
+  io.to(history.game._id).emit('game-history', history);
+  next();
+});
+
 var MoveHistory = mongoose.model('History', MoveHistorySchema);
-module.exports = MoveHistory;
+
+export default MoveHistory;

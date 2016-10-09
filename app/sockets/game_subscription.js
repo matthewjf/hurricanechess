@@ -1,7 +1,7 @@
 import SocketManager from './socket_manager';
 import GameActions from '../actions/game_actions';
 import PieceActions from '../actions/piece_actions';
-import HistoryActions from '../actions/history_actions';
+import Playback from '../utils/playback';
 import {browserHistory} from 'react-router';
 const ROOM = 'game';
 
@@ -34,13 +34,8 @@ var GameSubscription = {
     socket.on('game-move', PieceActions.receiveMove);
     socket.on('game-state', PieceActions.receiveState);
     socket.on('game-end', PieceActions.receiveState);
-    socket.on('game-history', HistoryActions.receiveHistory);
+    socket.on('game-history', Playback.receiveHistory.bind(Playback));
     SocketManager.join(ROOM, {id: id}, GameActions.receiveGame);
-      // TODO: handle history for archived games better and replay functionality
-      // if (data.history) {
-      //   console.log(data.history);
-      //   PieceActions.receiveState(JSON.parse(data.history.moves[0]).data);
-      // }
   },
 
   requestMove(data) {

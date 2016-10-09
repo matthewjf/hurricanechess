@@ -17,7 +17,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.userListener = UserStore.addChangeListener(this.updateUser);
+    UserStore.addChangeListener(this.updateUser);
     if (!UserStore.currentUser()) {UserApi.fetchCurrentUser();}
   }
 

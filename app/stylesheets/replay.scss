@@ -1,0 +1,39 @@
+@import 'colors';
+@import 'functions';
+@import 'queries';
+
+#replay-controls {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#control-wrapper {
+  position: absolute;
+  display: flex;
+  top: -40px;
+  @include sm-width {
+    top: -36px;
+    left: 0;
+  }
+  @include xl-width {
+    flex-direction: column;
+    left: 608px;
+    top: 360px;
+  }
+  .replay-action {
+    margin: 2px;
+    padding: 0.5rem 1rem;
+    border-radius: 2px;
+    line-height: 1;
+    font-size: 2rem;
+    @include sm-width {
+      font-size: 1.5rem;
+    }
+    background-color: $dark-0;
+    &:hover {
+      background-color: hover($dark-0);
+    }
+  }
+}

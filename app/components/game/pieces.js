@@ -25,12 +25,12 @@ class Pieces extends React.Component {
   componentWillReceiveProps(props) {
     this.setState({playerStatus: props.playerStatus, status: props.status});
     if (this.state.status === 'archived')
-      $('.timer', '#pieces').remove();
+      $('.timer', '#pieces').finish();
   }
 
   componentDidMount() {
     this.handleResize();
-    this.pieceListener = PieceStore.addChangeListener(this.getState);
+    PieceStore.addChangeListener(this.getState);
     window.addEventListener('resize', this.handleResize);
   }
 
