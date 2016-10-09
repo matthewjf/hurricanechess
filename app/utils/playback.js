@@ -138,6 +138,7 @@ class PlaybackStore extends EventEmitter {
   }
 
   removeHistory() {
+    clearInterval(this.interval);
     _setState();
     this.emitChange();
   }
