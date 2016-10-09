@@ -134,7 +134,7 @@ class Overlay extends React.Component {
         </div>
       );
     } else if (this.state.playbackStatus === 'playing') {
-      return <div id='board-replay'>REPLAYING</div>;
+      return <div id='board-replay'>REPLAY</div>;
     } else if (this.state.playbackStatus === 'paused') {
       return <div id='board-replay'>PAUSED</div>;
     } else {

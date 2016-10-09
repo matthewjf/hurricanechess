@@ -17,11 +17,11 @@ function _setState(history) {
   _clearState();
   if (history) {
     let historyData = HistoryHelper.buildState(history.moves);
+    _status = 'ended';
     _initState = historyData.init;
     _endState = historyData.end;
     _endTime = historyData.endTime;
     _frames = historyData.frames;
-    _status = 'ended';
     PieceActions.receiveState(_endState);
   }
 };
@@ -68,7 +68,12 @@ class PlaybackStore extends EventEmitter {
     clearInterval(this.interval);
     this.interval = setInterval(this._playStep.bind(this), STEP);
     $('.timer', '#pieces').removeClass('paused');
-    setTimeout(() => {$('.piece-wrapper', '#pieces').removeClass('no-transition');}, 50);
+
+    // TODO: use event instead
+    setTimeout(() => {
+      $('.piece-wrapper', '#pieces').removeClass('no-transition');
+    }, 50);
+
     this.emitChange();
   }
 
@@ -104,21 +109,25 @@ class PlaybackStore extends EventEmitter {
 
   jumpForward() {
     _elapsed += (JUMP * 1000);
-    if (_status === 'ended') this.play();
     $('.piece-wrapper', '#pieces').addClass('no-transition');
+    PieceActions.receiveState(_frames[_frameIdx]);
+    if (_elapsed > _endTime) return this.end();
+
     setTimeout(() => {
       $('.piece-wrapper', '#pieces').removeClass('no-transition');
+      if (_status === 'ended') this.play();
     }, 50);
   }
 
   jumpBackward() {
     _elapsed = _elapsed - (JUMP * 1000) < 0 ? 0 : _elapsed - (JUMP * 1000);
     if (!_elapsed) PieceActions.receiveState(_initState);
+    else PieceActions.receiveState(_frames[_frameIdx]);
     _frameIdx = _getLastFrame();
-    if (_status === 'ended') this.play();
     $('.piece-wrapper', '#pieces').addClass('no-transition');
     setTimeout(() => {
       $('.piece-wrapper', '#pieces').removeClass('no-transition');
+      if (_status === 'ended') this.play();
     }, 50);
   }
 

@@ -20,7 +20,7 @@
   @include xl-width {
     flex-direction: column;
     left: 608px;
-    top: 360px;
+    top: 124px;
   }
   .replay-action {
     margin: 2px;
@@ -34,6 +34,12 @@
     background-color: $dark-0;
     &:hover {
       background-color: hover($dark-0);
+    }
+    &.stop {
+      color: $error-color;
+    }
+    &.play_arrow {
+      color: $success-color;
     }
   }
 }

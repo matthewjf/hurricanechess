@@ -54,9 +54,9 @@ class Replay extends React.Component {
       return <div id='replay-controls'>
           <div id='control-wrapper'>
             <i onClick={this.jumpBack} className={this.replayClasses()}>replay_10</i>
-            <i onClick={this.play} className={this.replayClasses()}>{icon}</i>
+            <i onClick={this.play} className={this.replayClasses()+' '+icon}>{icon}</i>
             <i onClick={this.jumpFwd} className={this.replayClasses()}>forward_10</i>
-            <i onClick={this.stop} className={this.replayClasses()}>stop</i>
+            <i onClick={this.stop} className={this.replayClasses()+' stop'}>stop</i>
           </div>
         </div>;
     } else {
