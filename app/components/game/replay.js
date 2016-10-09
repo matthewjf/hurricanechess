@@ -36,6 +36,14 @@ class Replay extends React.Component {
     Playback.end();
   }
 
+  jumpFwd() {
+    Playback.jumpForward();
+  }
+
+  jumpBack() {
+    Playback.jumpBackward();
+  }
+
   replayClasses() {
     return "material-icons replay-action clickable waves-effect waves-light";
   }
@@ -45,7 +53,9 @@ class Replay extends React.Component {
       var icon = this.state.status === 'playing' ? "pause" : "play_arrow";
       return <div id='replay-controls'>
           <div id='control-wrapper'>
+            <i onClick={this.jumpBack} className={this.replayClasses()}>replay_10</i>
             <i onClick={this.play} className={this.replayClasses()}>{icon}</i>
+            <i onClick={this.jumpFwd} className={this.replayClasses()}>forward_10</i>
             <i onClick={this.stop} className={this.replayClasses()}>stop</i>
           </div>
         </div>;
