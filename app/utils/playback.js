@@ -22,7 +22,7 @@ function _setState(history) {
     _endState = historyData.end;
     _endTime = historyData.endTime;
     _frames = historyData.frames;
-    PieceActions.receiveState(_endState);
+    _sendFrame('end');
   }
 };
 
@@ -43,6 +43,18 @@ function _getLastFrame(startIdx = -1) {
   return newIdx;
 }
 
+function _sendFrame(id) {
+  if (id === 'init') { // init frame
+    PieceActions.receiveState(_initState);
+  } else if (id === 'end') { // end frame
+    PieceActions.receiveState(_endState);
+  } else if (Number.isInteger(id)) { // specified frame by ID
+    PieceActions.receiveState(_frames[id].state);
+  } else { // fallback to current frame
+    PieceActions.receiveState(_frames[_frameIdx].state);
+  }
+}
+
 class PlaybackStore extends EventEmitter {
   constructor() {
     super();
@@ -61,7 +73,7 @@ class PlaybackStore extends EventEmitter {
   play() {
     if (_status === 'playing') return;
     if (_status === 'ended') {
-      PieceActions.receiveState(_initState);
+      _sendFrame('init');
       $('.piece-wrapper', '#pieces').addClass('no-transition');
     };
     _status = 'playing';
@@ -69,7 +81,7 @@ class PlaybackStore extends EventEmitter {
     this.interval = setInterval(this._playStep.bind(this), STEP);
     $('.timer', '#pieces').removeClass('paused');
 
-    // TODO: use event instead
+    // TODO: use event from component did update and pause playback until update complete
     setTimeout(() => {
       $('.piece-wrapper', '#pieces').removeClass('no-transition');
     }, 50);
@@ -86,7 +98,7 @@ class PlaybackStore extends EventEmitter {
     var newIdx = _getLastFrame(_frameIdx); // find next frame
     if (newIdx) { // update current frame and send state if next frame
       _frameIdx = newIdx;
-      PieceActions.receiveState(_frames[newIdx].state);
+      _sendFrame(newIdx);
     }
   }
 
@@ -100,7 +112,7 @@ class PlaybackStore extends EventEmitter {
   end() {
     clearInterval(this.interval);
     _status = 'ended', _elapsed = 0, _frameIdx = -1;
-    PieceActions.receiveState(_endState);
+    _sendFrame('end');
     $('.piece-wrapper', '#pieces').addClass('no-transition');
     $('.timer', '#pieces').removeClass('paused');
     $('.timer', '#pieces').finish();
@@ -109,24 +121,27 @@ class PlaybackStore extends EventEmitter {
 
   jumpForward() {
     _elapsed += (JUMP * 1000);
-    $('.piece-wrapper', '#pieces').addClass('no-transition');
-    PieceActions.receiveState(_frames[_frameIdx]);
-    if (_elapsed > _endTime) return this.end();
-
-    setTimeout(() => {
-      $('.piece-wrapper', '#pieces').removeClass('no-transition');
-      if (_status === 'ended') this.play();
-    }, 50);
+    this.jumpComplete();
   }
 
   jumpBackward() {
     _elapsed = _elapsed - (JUMP * 1000) < 0 ? 0 : _elapsed - (JUMP * 1000);
-    if (!_elapsed) PieceActions.receiveState(_initState);
-    else PieceActions.receiveState(_frames[_frameIdx]);
-    _frameIdx = _getLastFrame();
+    this.jumpComplete();
+  }
+
+  jumpComplete() {
     $('.piece-wrapper', '#pieces').addClass('no-transition');
+
+    if (!_elapsed) return _sendFrame('init');
+    if (_elapsed > _endTime) return this.end();
+
+    _frameIdx = _getLastFrame();
+    _sendFrame();
+
+
     setTimeout(() => {
       $('.piece-wrapper', '#pieces').removeClass('no-transition');
+      if (_status === 'paused') $('.timer', '#pieces').addClass('paused');
       if (_status === 'ended') this.play();
     }, 50);
   }
