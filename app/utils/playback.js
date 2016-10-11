@@ -55,7 +55,7 @@ function _sendFrame(id) {
   }
 }
 
-class PlaybackStore extends EventEmitter {
+class Playback extends EventEmitter {
   constructor() {
     super();
   }
@@ -172,4 +172,4 @@ class PlaybackStore extends EventEmitter {
   }
 }
 
-export default new PlaybackStore();
+export default new Playback();
