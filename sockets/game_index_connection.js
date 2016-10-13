@@ -11,7 +11,9 @@ export default function(client, joined) {
             joined({room: 'index'});
             client.join('index');
             client.emit('joined-index', games);
-            client.emit('user-count', OnlineStatus.getCount());
+            OnlineStatus.getCount((count) => {
+              client.emit('user-count', count);
+            });
           });
     });
   });

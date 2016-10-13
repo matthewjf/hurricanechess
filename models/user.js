@@ -11,6 +11,11 @@ var UserSchema = new Schema({
   },
   password: {
     type: String
+  },
+  email: {
+    type: String,
+    require: [true, 'Email is required'],
+    unique: true
   }
 }, {timestamps: true});
 

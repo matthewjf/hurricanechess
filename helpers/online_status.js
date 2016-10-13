@@ -1,29 +1,32 @@
 import redis from '../config/redis';
 import io from '../config/socketio';
 
-var _userCount = 0;
 var _set = function(id) {
-  if (id)
-    redis.hset('onlineStatus', id, 1, (err, res) => {
-      _userCount += res;
-      io.to('index').emit('user-count', _userCount);
-    });
-  else
-    io.to('index').emit('user-count', ++_userCount);
+  redis.sadd('onlineStatus', id, (err, res) => {
+    if (res) {
+      _getCount((onlineCount) => {
+        io.to('index').emit('user-count', onlineCount);
+      });
+    }
+  });
 };
 
 var _del = function (id) {
-  if (id)
-    redis.hdel('onlineStatus', id, (err, res) => {
-      _userCount -= res;
-      io.to('index').emit('user-count', _userCount);
-    });
-  else
-    io.to('index').emit('user-count', --_userCount);
+  redis.srem('onlineStatus', id, (err, res) => {
+    if (res) {
+      _getCount((onlineCount) => {
+        io.to('index').emit('user-count', onlineCount);
+      });
+    }
+  });
 };
 
-var _getCount = function() {
-  return _userCount;
+var _getCount = function(cb) {
+  if (cb) {
+    redis.scard('onlineStatus', (err, onlineCount) => {
+      cb(onlineCount);
+    });
+  }
 };
 
 export default {
