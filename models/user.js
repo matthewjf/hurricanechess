@@ -14,7 +14,7 @@ var UserSchema = new Schema({
   },
   email: {
     type: String,
-    require: [true, 'Email is required'],
+    required: [true, 'Email is required'],
     unique: true
   }
 }, {timestamps: true});
