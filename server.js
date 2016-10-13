@@ -10,6 +10,7 @@ var app = express();
 var config = require('./config/config');
 var passport = require('./config/passport');
 var session = require('./config/session');
+var enforce = require('express-sslify');
 
 // APP
 app.set('port', config.port);
@@ -20,6 +21,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session);
 app.use(passport.initialize());
 app.use(passport.session());
+
+if (config.env === 'production')
+  app.use(enforce.HTTPS({trustProtoHeader: true}));
 
 // API ROUTES
 var users = require('./controllers/users_controller');
