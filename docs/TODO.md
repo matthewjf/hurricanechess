@@ -1,9 +1,13 @@
-# TODO
+TODO
 
 ## Critical
 - handle deployment with active games
   - stop accepting new games
   - delay deploy until active games are complete (max 30 minutes)
+
+- email verification
+  - verify failure
+  - password resets
 
 ## Monitoring
 - server memory usage

@@ -1,6 +1,7 @@
 /* global Materialize */
 import React from 'react';
 import UserApi from '../../api/user_api';
+import {browserHistory} from 'react-router';
 
 class LoginForm extends React.Component {
   constructor() {
@@ -32,6 +33,11 @@ class LoginForm extends React.Component {
     UserApi.login(this.state, this.success, this.error);
   }
 
+  handleForgot(e) {
+    $('#login-modal').closeModal();
+    browserHistory.push('/forgot');
+  }
+
   success(data) {
     this.resetState();
     $('#login-modal').closeModal();
@@ -40,8 +46,12 @@ class LoginForm extends React.Component {
     );
   }
 
-  error() {
-    this.setState({error: 'Invalid username and password'});
+  error(err) {
+    var errMsg;
+    if (err.status === 401) errMsg = 'Invalid username and password';
+    else errMsg = err.responseText;
+
+    this.setState({error: errMsg});
   }
 
   renderError(error) {
@@ -86,9 +96,10 @@ class LoginForm extends React.Component {
               </div>
               <input type="submit" className='hidden-submit' />
               <div className='modal-footer'>
-                <a onClick={this.handleSubmit} className="waves-effect waves-light btn">
+                <a onClick={this.handleSubmit} className="modal-action waves-effect waves-light btn">
                   Login
                 </a>
+                <a onClick={this.handleForgot}>forgot password?</a>
               </div>
 
             </form>

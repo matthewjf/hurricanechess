@@ -1,8 +1,7 @@
 var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 import User from '../models/user';
 
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use(User.createStrategy());
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });

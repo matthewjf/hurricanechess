@@ -42,13 +42,14 @@ class SignupForm extends React.Component {
   success(data) {
     this.resetState();
     $('#signup-modal').closeModal();
-    Materialize.toast('Welcome, ' + data.username + '!', 2000, 'success-text');
+    Materialize.toast('Email verification sent!', 10000, 'success-text');
   }
 
   error(res) {
     var json = res.responseJSON;
     if (json.errors) this.setState({errors: json.errors});
-    else this.setState({errors: {err: json}});
+    // TODO: better error handling
+    else this.setState({errors: {err: 'unknown error'}});
   }
 
   renderErrors(errors) {
@@ -56,7 +57,7 @@ class SignupForm extends React.Component {
       return Object.keys(errors).map(key =>{
         return (
           <span className='error-text' key={key} >
-            {errors[key].message.replace('Path ', '')}
+            {errors[key]}
           </span>
         );
       });

@@ -1,5 +1,4 @@
 import UserActions from '../actions/user_actions';
-import {browserHistory} from 'react-router';
 
 // TODO: put this somewhere more appropriate
 function forceReconnect() {
@@ -8,8 +7,6 @@ function forceReconnect() {
 };
 
 var UserApi = {
-
-
 	signup: (user, successCB, errorCB) => {
 		$.ajax({
 			url: "/api/users/new",
@@ -71,6 +68,20 @@ var UserApi = {
 			error: ((error) => {
 				UserActions.handleError(error);
 				if (errorCB) { errorCB(error); }
+			})
+		});
+	},
+
+	verifyEmail: (authToken, successCB, errorCB) => {
+		$.ajax({
+			url: '/api/verify',
+			method: 'post',
+			data: {authToken: authToken},
+			success:((res) => {
+				successCB(res);
+			}),
+			error: ((err) => {
+				errorCB(err);
 			})
 		});
 	}

@@ -3,9 +3,20 @@
 .modal {
   max-width: 768px;
   background-color: hsl(0,0%,22%);
+  margin-bottom: 0;
   .modal-footer {
     background-color: hsl(0,0%,22%);
-    padding: 24px;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    align-items: center;
+    .btn {
+      float: none;
+    }
+    a {
+      cursor: pointer;
+    }
   }
   .caret {
     color: #9e9e9e !important;
