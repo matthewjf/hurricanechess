@@ -7,6 +7,7 @@ import Game from './components/game/game';
 import About from './components/about/about';
 import Verify from './components/users/verify';
 import Forgot from './components/users/forgot';
+import Reset from './components/users/reset';
 
 export default (
   <Route component={App}>
@@ -16,5 +17,6 @@ export default (
     <Route path='/about' component={About} />
     <Route path='/verify' component={Verify} />
     <Route path='/forgot' component={Forgot} />
+    <Route path='/reset' component={Reset} />
   </Route>
 );

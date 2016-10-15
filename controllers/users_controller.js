@@ -3,6 +3,7 @@ var router = express.Router();
 var passport = require('passport');
 var sendgrid = require('../config/sendgrid');
 var emailConfirm = require('../helpers/emails/confirm');
+var emailReset = require('../helpers/emails/reset');
 import User from '../models/user';
 
 router.route('/users').get((req, res) => {
@@ -19,11 +20,8 @@ router.route('/users/new').post((req, res) => {
       } else {
         var authUrl = 'https://www.chessx.io/verify?authToken='+ token;
         sendgrid.API(emailConfirm(user.email, authUrl), function(err, json) {
-          if (err) {
-            res.status(422).json(err);
-          } else {
-            res.status(200).json('Email confirmation sent!');
-          }
+          if (err) res.status(422).json(err);
+          else res.status(200).json('Email confirmation sent!');
         });
       }
     }
@@ -37,9 +35,18 @@ router.route('/verify').post(function(req, res) {
   });
 });
 
-router.route('/forgot').post(function(req, res) {
+router.route('/reset').post(function(req, res) {
   User.find({email: req.body.email}, function(err, user) {
+    if (err) return res.status(422).json(err);
+    if (!user) return res.status(404).json('Email not found');
 
+    user.setAuthToken(function(err, user, token) {
+      var authUrl = 'https://www.chessx.io/reset?authToken=' + token;
+      sendgrid.API(emailReset(user.email, authUrl), function(err, json) {
+        if (err) return res.status(422).json(err);
+        res.status(200).json('Password reset email sent!');
+      });
+    });
   });
 });
 

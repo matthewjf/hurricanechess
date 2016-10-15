@@ -84,6 +84,20 @@ var UserApi = {
 				errorCB(err);
 			})
 		});
+	},
+
+	verifyReset: (authToken, successCB, errorCB) => {
+		$.ajax({
+			url: '/api/reset',
+			method: 'post',
+			data: {authToken: authToken},
+			success:((res) => {
+				successCB(res);
+			}),
+			error: ((err) => {
+				errorCB(err);
+			})
+		});
 	}
 };
 
