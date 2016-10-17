@@ -1,5 +1,15 @@
 var sg = require('../../config/sendgrid');
 
+var htmlContent = function(url) {
+  return `
+    <div style="">
+      <a target=_blank style="" href=\"${url}\">
+        Reset your password
+      </a>
+    </div>
+  `;
+};
+
 var reset = function(email, url) {
   return sg.emptyRequest({
     method: 'POST',
@@ -12,20 +22,20 @@ var reset = function(email, url) {
               email: email,
             },
           ],
-          subject: 'Hello World from the SendGrid Node.js Library!',
+          subject: 'ChessX: password reset',
         },
       ],
       from: {
-        email: 'test@example.com',
+        email: 'noreply@chessx.io',
       },
       content: [
         {
           type: 'text/html',
-          value: '<a target=_blank href=\"' + url + '\">Reset your password</a>'
+          value: htmlContent(url)
         },
       ],
     },
   });
 };
 
-module.exports = reset;
+export default reset;

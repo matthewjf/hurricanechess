@@ -91,9 +91,12 @@ class SignupForm extends React.Component {
                   <div className='input-field'>
                     <input id="signup[email]"
                            type="email"
+                           className='validate'
                            value={this.state.email}
                            onChange={this.setEmail} />
-                    <label htmlFor="signup[email]">Email</label>
+                    <label data-error='invalid email' htmlFor="signup[email]">
+                      Email
+                    </label>
                   </div>
                 </div>
 

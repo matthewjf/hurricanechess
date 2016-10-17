@@ -9,6 +9,8 @@ class Reset extends React.Component {
     this.setConfirm = this.setConfirm.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.success = this.success.bind(this);
+    this.error = this.error.bind(this);
+    this.renderError = this.renderError.bind(this);
 
     this.state = {
       currentUser: this.props.currentUser,
@@ -55,14 +57,23 @@ class Reset extends React.Component {
   }
 
   error(err) {
-    // TODO: more descriptive error messages
-    Materialize.toast('Error occurred', 2000, 'success-text');
+    if (err) this.setState({error: err.responseJSON});
+  }
+
+  renderError(error) {
+    if (error)
+      return <span className='error-text'>
+        {error}
+      </span>;
+    else
+      return null;
   }
 
   render() {
     return <div id='reset'>
         <h5 id='reset-title'>Password reset</h5>
         <div className='card-panel'>
+          {this.renderError(this.state.error)}
           <form id='reset-form' onSubmit={this.handleSubmit}>
             <div className='row'>
               <div className='input-field'>

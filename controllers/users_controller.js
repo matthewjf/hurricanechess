@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 var sendgrid = require('../config/sendgrid');
-var emailConfirm = require('../helpers/emails/confirm');
-var emailReset = require('../helpers/emails/reset');
+import emailConfirm from '../helpers/emails/confirm';
+import emailReset from '../helpers/emails/reset';
 import User from '../models/user';
 
 router.route('/users').get((req, res) => {

@@ -1,5 +1,15 @@
 var sg = require('../../config/sendgrid');
 
+var htmlContent = function(url) {
+  return `
+    <div style="background-color: #2e2e2e; height: 100%; width: 100%;">
+      <a target=_blank style="color: #03a9f4;" href=\"${url}\">
+        Confirm your email address
+      </a>
+    </div>
+  `;
+};
+
 var confirm = function(email, url) {
   return sg.emptyRequest({
     method: 'POST',
@@ -12,11 +22,11 @@ var confirm = function(email, url) {
               email: email,
             },
           ],
-          subject: 'Hello World from the SendGrid Node.js Library!',
+          subject: 'chessX: email address confirmation',
         },
       ],
       from: {
-        email: 'test@example.com',
+        email: 'noreply@chessx.io',
       },
       content: [
         {
@@ -28,4 +38,4 @@ var confirm = function(email, url) {
   });
 };
 
-module.exports = confirm;
+export default confirm;

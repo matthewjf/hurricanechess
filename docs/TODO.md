@@ -5,12 +5,6 @@ TODO
   - stop accepting new games
   - delay deploy until active games are complete (max 30 minutes)
 
-- email verification
-  - verification error handling
-  - password resets
-  - remove api key
-  - improve emails
-
 ## Monitoring
 - server memory usage
 - db memory usage

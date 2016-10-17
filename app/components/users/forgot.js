@@ -35,13 +35,12 @@ class Forgot extends React.Component {
   }
 
   success(res) {
-    // Materialize.toast('Email verified!', 2000, 'success-text');
-    // browserHistory.push('/');
-    // if (!this.state.currentUser) $('#login-modal').openModal();
+    Materialize.toast('Password reset email sent!', 2000, 'success-text');
+    browserHistory.push('/');
   }
 
   error(err) {
-
+    Materialize.toast(err, 4000, 'error-text');
   }
 
   render() {
@@ -53,9 +52,10 @@ class Forgot extends React.Component {
               <div className='input-field'>
                 <input id="forgot[email]"
                        type="email"
+                       className='validate'
                        value={this.state.email}
                        onChange={this.setEmail} />
-                <label htmlFor="forgot[email]">Email</label>
+                <label data-error='invalid email' htmlFor="forgot[email]">Email</label>
               </div>
             </div>
             <input id='forgot-submit' type="submit" value="Send reset email" className='btn'/>
