@@ -6,8 +6,10 @@ TODO
   - delay deploy until active games are complete (max 30 minutes)
 
 - email verification
-  - verify failure
+  - verification error handling
   - password resets
+  - remove api key
+  - improve emails
 
 ## Monitoring
 - server memory usage
@@ -26,9 +28,6 @@ TODO
 - account settings
 - gameplay settings tester
 - password change
-- email
-- email confirmation
-- user page
 - store online status (redis)
   - socket connection required
   - add counter

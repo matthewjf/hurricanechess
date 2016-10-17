@@ -38,9 +38,8 @@ UserSchema.statics.register = function(user, password, cb) {
       if (err) return cb(err);
       user.setAuthToken(function(err,user, token) {
         if (err) return cb(err);
-
         user.isAuthenticated = false;
-        user.save(function(err) {
+        user.save(function(err, user) {
           if (err) return cb(err);
           cb(null, user, token);
         });
@@ -50,15 +49,15 @@ UserSchema.statics.register = function(user, password, cb) {
 };
 
 UserSchema.methods.setAuthToken = function (cb) {
-    var user = this;
-    crypto.randomBytes(48, function(err, buf) {
-      if (err) return cb(err);
-      var token = buf.toString('hex');
-      Auth.remove({'user._id': user._id}, function(err, removed) {
-        Auth.create({token: token, user: user}, function(err, auth) {
-          cb(null, user, auth.token);
-        });
+  var user = this;
+  crypto.randomBytes(48, function(err, buf) {
+    if (err) return cb(err);
+    var token = buf.toString('hex');
+    Auth.remove({user: user._id}, function(err, removed) {
+      Auth.create({token: token, user: user}, function(err, auth) {
+        cb(null, user, auth.token);
       });
+    });
   });
 };
 
@@ -69,8 +68,8 @@ UserSchema.statics.verifyEmail = function(authToken, cb) {
     if (err) return cb(err);
     var user = auth.user;
 
-    Auth.remove({'user._id': user._id}, function(err, removed) {
-      user.isAuthenticated = true;
+    user.isAuthenticated = true;
+    Auth.remove({user: user._id}, function(err, removed) {
       user.save(function(err) {
         if (err) return cb(err);
         cb(null, user);
@@ -79,10 +78,31 @@ UserSchema.statics.verifyEmail = function(authToken, cb) {
   });
 };
 
+UserSchema.statics.verifyReset = function(data, cb) {
+  var self = this;
+  var authToken = data.authToken;
+  var password = data.password;
+  if (!password) return cb('Password required');
+  if (password !== data.confirm) return cb("Passwords don't match");
+
+  self.findAuthToken(authToken, function(err, auth) {
+    if (!auth) return cb("Invalid authentication token");
+    if (err) return cb(err);
+    var user = auth.user;
+
+    Auth.remove({user: user._id}, function(err, removed) {
+      user.setPassword(password, function(err, user) {
+        user.save(function(err, user) {
+          if (err) return cb(err);
+          cb(null, user);
+        });
+      });
+    });
+  });
+};
+
 UserSchema.statics.findAuthToken = function(authToken, cb) {
-  var queryParams = {'user._id': this._id, token: authToken};
-  
-  var query = Auth.findOne(queryParams);
+  var query = Auth.findOne({token: authToken});
   query.populate('user');
 
   if (cb) query.exec(cb);

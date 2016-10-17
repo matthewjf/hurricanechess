@@ -74,7 +74,7 @@ var UserApi = {
 
 	verifyEmail: (authToken, successCB, errorCB) => {
 		$.ajax({
-			url: '/api/verify',
+			url: '/api/verify_email',
 			method: 'post',
 			data: {authToken: authToken},
 			success:((res) => {
@@ -86,11 +86,25 @@ var UserApi = {
 		});
 	},
 
-	verifyReset: (authToken, successCB, errorCB) => {
+	sendResetEmail: (email, successCB, errorCB) => {
 		$.ajax({
-			url: '/api/reset',
+			url: 'api/send_reset_email',
 			method: 'post',
-			data: {authToken: authToken},
+			data: {email: email},
+			success: ((res) => {
+				successCB(res);
+			}),
+			error: ((err) => {
+				errorCB(err);
+			})
+		});
+	},
+
+	verifyReset: (data, successCB, errorCB) => {
+		$.ajax({
+			url: '/api/verify_reset',
+			method: 'post',
+			data: data,
 			success:((res) => {
 				successCB(res);
 			}),

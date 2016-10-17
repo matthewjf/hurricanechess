@@ -5,14 +5,15 @@ import UserApi from '../../api/user_api';
 class Forgot extends React.Component {
   constructor(props) {
     super(props);
+    this.setEmail = this.setEmail.bind(this);
     this.success = this.success.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.state = {currentUser: this.props.currentUser};
+    this.state = {email: '', currentUser: this.props.currentUser};
   }
 
   componentDidMount() {
     this.isLoggedIn(this.state.currentUser);
-    UserApi.verifyEmail(this.props.location.query.authToken, this.success, this.error);
   }
 
   componentWillReceiveProps(props) {
@@ -20,21 +21,47 @@ class Forgot extends React.Component {
     this.setState({currentUser: props.currentUser});
   }
 
+  setEmail(e) {
+    this.setState({email: e.currentTarget.value});
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    UserApi.sendResetEmail(this.state.email, this.success, this.error);
+  }
+
   isLoggedIn(user) {
     if (user) browserHistory.push('/');
   }
 
   success(res) {
-    Materialize.toast('Email verified!', 2000, 'success-text');
-    browserHistory.push('/');
-    if (!this.state.currentUser) $('#login-modal').openModal();
+    // Materialize.toast('Email verified!', 2000, 'success-text');
+    // browserHistory.push('/');
+    // if (!this.state.currentUser) $('#login-modal').openModal();
   }
 
   error(err) {
+
   }
 
   render() {
-    return <div/>;
+    return <div id='forgot'>
+        <h5 id='forgot-title'>Forgot your password?</h5>
+        <div className='card-panel'>
+          <form id='forgot-form' onSubmit={this.handleSubmit}>
+            <div className='row'>
+              <div className='input-field'>
+                <input id="forgot[email]"
+                       type="email"
+                       value={this.state.email}
+                       onChange={this.setEmail} />
+                <label htmlFor="forgot[email]">Email</label>
+              </div>
+            </div>
+            <input id='forgot-submit' type="submit" value="Send reset email" className='btn'/>
+          </form>
+        </div>
+      </div>;
   }
 }
 

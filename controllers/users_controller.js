@@ -28,15 +28,15 @@ router.route('/users/new').post((req, res) => {
   );
 });
 
-router.route('/verify').post(function(req, res) {
+router.route('/verify_email').post(function(req, res) {
   User.verifyEmail(req.body.authToken, function(err, user) {
     if (err) res.status(422).json(err);
     else res.status(200).json('Email verified!');
   });
 });
 
-router.route('/reset').post(function(req, res) {
-  User.find({email: req.body.email}, function(err, user) {
+router.route('/send_reset_email').post(function(req, res) {
+  User.findOne({email: req.body.email}, function(err, user) {
     if (err) return res.status(422).json(err);
     if (!user) return res.status(404).json('Email not found');
 
@@ -47,6 +47,14 @@ router.route('/reset').post(function(req, res) {
         res.status(200).json('Password reset email sent!');
       });
     });
+  });
+});
+
+router.route('/verify_reset').post(function(req, res) {
+  User.verifyReset(req.body, function(err, user) {
+    if (err) return res.status(422).json(err);
+    if (!user) return res.status(401).json('Invalid password reset');
+    res.status(200).json('Password reset!');
   });
 });
 

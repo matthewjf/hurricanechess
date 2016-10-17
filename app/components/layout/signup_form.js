@@ -48,8 +48,8 @@ class SignupForm extends React.Component {
   error(res) {
     var json = res.responseJSON;
     if (json.errors) this.setState({errors: json.errors});
-    // TODO: better error handling
-    else this.setState({errors: {err: 'unknown error'}});
+    else this.setState({errors: {err: 'An error occurred'}});
+    // TODO: more descriptive errors
   }
 
   renderErrors(errors) {

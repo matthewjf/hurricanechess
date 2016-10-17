@@ -21,7 +21,7 @@ var reset = function(email, url) {
       content: [
         {
           type: 'text/html',
-          value: '<a target=_blank href=\"' + url + '\">Confirm your email</a>'
+          value: '<a target=_blank href=\"' + url + '\">Reset your password</a>'
         },
       ],
     },
