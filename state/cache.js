@@ -8,7 +8,7 @@ function _del(key){
 
 export default {
   put(key, value, time, timeoutCallback) {
-    if (debug) console.log('caching: %s = %j (@%s)', key, value, time);
+    if (debug) console.info('caching: %s = %j (@%s)', key, value, time);
 
     if (typeof time !== 'undefined' && (typeof time !== 'number' || isNaN(time) || time <= 0)) {
       throw new Error('Cache timeout must be a positive number');
@@ -55,7 +55,7 @@ export default {
 
     if (canDelete) {
       _del(key);
-      if (debug) console.log('deleting: %s = %j', key, oldRecord.value);
+      if (debug) console.info('deleting: %s = %j', key, oldRecord.value);
     }
 
     return canDelete;

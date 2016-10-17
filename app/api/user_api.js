@@ -17,9 +17,9 @@ var UserApi = {
 				UserActions.receiveCurrentUser(data);
 				if (successCB) { successCB(data.user); }
 			}),
-			error: ((error) => {
-				UserActions.handleError(error);
-				if (errorCB) { errorCB(error); }
+			error: ((err) => {
+				UserActions.handleError(err);
+				if (errorCB) { errorCB(err); }
 			})
 		});
 	},
