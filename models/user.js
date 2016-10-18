@@ -33,13 +33,11 @@ UserSchema.statics.register = function(user, password, cb) {
 
     user.setPassword(password, function(err, user) {
       if (err) return cb(err);
-      console.log(err, user);
       user.setAuthToken(function(err,user, token) {
         if (err) return cb(err);
         user.isAuthenticated = false;
         user.save(function(err, user) {
           if (err) return cb(err);
-          console.log(err, user);
           cb(null, user, token);
         });
       });

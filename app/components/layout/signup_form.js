@@ -52,7 +52,6 @@ class SignupForm extends React.Component {
 
   error(err) {
     var json = err.responseJSON;
-    console.log(json);
     if (json.errors) this.setState({errors: json.errors});
     else if (json.code === 11000)
       this.setState({errors: {email: {message: 'Email already in use'}}});

@@ -42,7 +42,6 @@ class Forgot extends React.Component {
   }
 
   error(err) {
-    console.log(err.responseJSON);
     this.setState({error: err.responseJSON});
   }
 
