@@ -1,13 +1,9 @@
 var sg = require('../../config/sendgrid');
+import htmlContent from './content';
 
-var htmlContent = function(url) {
-  return `
-    <div style="">
-      <a target=_blank style="" href=\"${url}\">
-        Reset your password
-      </a>
-    </div>
-  `;
+var content = function(url) {
+  var line = `<a target=_blank style="font-weight: 300; color: #03a9f4;" href=\"${url}\">Reset your password</a>`;
+  return htmlContent(line);
 };
 
 var reset = function(email, url) {
@@ -31,7 +27,7 @@ var reset = function(email, url) {
       content: [
         {
           type: 'text/html',
-          value: htmlContent(url)
+          value: content(url)
         },
       ],
     },

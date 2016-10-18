@@ -17,10 +17,12 @@ class LoginForm extends React.Component {
   }
 
   setUsername(e) {
+    delete this.state.error;
     this.setState({username: e.currentTarget.value});
   }
 
   setPassword(e) {
+    delete this.state.error;
     this.setState({password: e.currentTarget.value});
   }
 
@@ -70,14 +72,15 @@ class LoginForm extends React.Component {
             <form onSubmit={this.handleSubmit}>
 
               <div className="modal-content">
-                {this.renderError(this.state.error)}
                 <div className='row'>
                   <div className='input-field'>
                     <input id="login[username]"
                            type="text"
+                           className={this.state.error ? 'invalid' : ''}
                            value={this.state.username}
                            onChange={this.setUsername} />
                     <label htmlFor="login[username]">Username</label>
+                    <div className='error'>{this.state.error}</div>
                   </div>
                 </div>
 
@@ -85,6 +88,7 @@ class LoginForm extends React.Component {
                   <div className='input-field'>
                     <input id="login[password]"
                            type="password"
+                           className={this.state.error ? 'invalid' : ''}
                            value={this.state.password}
                            onChange={this.setPassword} />
                     <label htmlFor="login[password]">Password</label>

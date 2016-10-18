@@ -1,13 +1,9 @@
 var sg = require('../../config/sendgrid');
+import htmlContent from './content';
 
-var htmlContent = function(url) {
-  return `
-    <div style="background-color: #2e2e2e; height: 100%; width: 100%;">
-      <a target=_blank style="color: #03a9f4;" href=\"${url}\">
-        Confirm your email address
-      </a>
-    </div>
-  `;
+var content = function(url) {
+  var line = `<a target=_blank style="font-weight: 300; color: #03a9f4;" href=\"${url}\">Confirm your email address</a>`;
+  return htmlContent(line);
 };
 
 var confirm = function(email, url) {
@@ -31,7 +27,7 @@ var confirm = function(email, url) {
       content: [
         {
           type: 'text/html',
-          value: '<a target=_blank href=\"' + url + '\">Confirm your email</a>'
+          value: content(url)
         },
       ],
     },
