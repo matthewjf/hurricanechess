@@ -7,6 +7,7 @@ class Forgot extends React.Component {
     super(props);
     this.setEmail = this.setEmail.bind(this);
     this.success = this.success.bind(this);
+    this.error = this.error.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
 
     this.state = {email: '', currentUser: this.props.currentUser};
@@ -22,6 +23,7 @@ class Forgot extends React.Component {
   }
 
   setEmail(e) {
+    delete this.state.error;
     this.setState({email: e.currentTarget.value});
   }
 
@@ -40,7 +42,8 @@ class Forgot extends React.Component {
   }
 
   error(err) {
-    Materialize.toast(err, 4000, 'error-text');
+    console.log(err.responseJSON);
+    this.setState({error: err.responseJSON});
   }
 
   render() {
@@ -52,10 +55,11 @@ class Forgot extends React.Component {
               <div className='input-field'>
                 <input id="forgot[email]"
                        type="email"
-                       className='validate'
+                       className={this.state.error ? 'invalid' : ''}
                        value={this.state.email}
                        onChange={this.setEmail} />
-                <label data-error='invalid email' htmlFor="forgot[email]">Email</label>
+                <label htmlFor="forgot[email]">Email</label>
+                <div className='error'>{this.state.error}</div>
               </div>
             </div>
             <input id='forgot-submit' type="submit" value="Send reset email" className='btn'/>

@@ -1,6 +1,7 @@
 @import 'colors';
 
 .modal {
+  max-height: 100%;
   max-width: 768px;
   background-color: hsl(0,0%,22%);
   margin-bottom: 0;
@@ -42,4 +43,14 @@
 .hidden-submit {
   opacity: 0;
   position: absolute;
+}
+
+.input-field {
+// Custom Error message
+  .error {
+    position: absolute;
+    color: #e51c23;
+    transform: translateY(-90%);
+    font-size: 13px;
+  }
 }

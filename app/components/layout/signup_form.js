@@ -12,21 +12,26 @@ class SignupForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.success = this.success.bind(this);
     this.error = this.error.bind(this);
+    this.errorClass = this.errorClass.bind(this);
+    this.errorText = this.errorText.bind(this);
 
-    this.defaultState = {username: '', password: '', email: ''};
+    this.defaultState = {username: '', password: '', email: '', errors: {}};
 
     this.state = this.defaultState;
   }
 
   setUsername(e) {
+    if (this.state.errors) delete this.state.errors.username;
     this.setState({username: e.currentTarget.value});
   }
 
   setPassword(e) {
+    if (this.state.errors) delete this.state.errors.password;
     this.setState({password: e.currentTarget.value});
   }
 
   setEmail(e) {
+    if (this.state.errors) delete this.state.errors.email;
     this.setState({email: e.currentTarget.value});
   }
 
@@ -45,25 +50,23 @@ class SignupForm extends React.Component {
     Materialize.toast('Email verification sent!', 10000, 'success-text');
   }
 
-  error(res) {
-    var json = res.responseJSON;
+  error(err) {
+    var json = err.responseJSON;
+    console.log(json);
     if (json.errors) this.setState({errors: json.errors});
-    else this.setState({errors: {err: json}});
+    else if (json.code === 11000)
+      this.setState({errors: {email: {message: 'Email already in use'}}});
+    else this.setState({errors: {error: {message: json}}});
     // TODO: more descriptive errors
   }
 
-  renderErrors(errors) {
-    if (errors) {
-      return Object.keys(errors).map(key =>{
-        return (
-          <span className='error-text' key={key} >
-            {errors[key]}
-          </span>
-        );
-      });
-    } else {
-      return null;
-    }
+  errorClass(field) {
+    return this.state.errors[field] ? 'invalid' : '';
+  }
+
+  errorText(field) {
+    var err = this.state.errors[field];
+    return err ? err.message : '';
   }
 
   render() {
@@ -76,14 +79,16 @@ class SignupForm extends React.Component {
             <form onSubmit={this.handleSubmit}>
 
               <div className="modal-content">
-                {this.renderErrors(this.state.errors)}
+                <div className='error-text'>{this.errorText('error')}</div>
                 <div className='row'>
                   <div className='input-field'>
                     <input id="signup[username]"
                            type="text"
+                           className={this.errorClass('username')}
                            value={this.state.username}
                            onChange={this.setUsername} />
                     <label htmlFor="signup[username]">Username</label>
+                    <div className='error'>{this.errorText('username')}</div>
                   </div>
                 </div>
 
@@ -91,12 +96,11 @@ class SignupForm extends React.Component {
                   <div className='input-field'>
                     <input id="signup[email]"
                            type="email"
-                           className='validate'
+                           className={this.errorClass('email')}
                            value={this.state.email}
                            onChange={this.setEmail} />
-                    <label data-error='invalid email' htmlFor="signup[email]">
-                      Email
-                    </label>
+                    <label htmlFor="signup[email]">Email</label>
+                    <div className='error'>{this.errorText('email')}</div>
                   </div>
                 </div>
 
@@ -104,9 +108,11 @@ class SignupForm extends React.Component {
                   <div className='input-field'>
                     <input id="signup[password]"
                            type="password"
+                           className={this.errorClass('password')}
                            value={this.state.password}
                            onChange={this.setPassword} />
                     <label htmlFor="signup[password]">Password</label>
+                    <div className='error'>{this.errorText('password')}</div>
                   </div>
                 </div>
 

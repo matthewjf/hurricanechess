@@ -7,40 +7,39 @@ import Auth from './auth';
 var UserSchema = new Schema({
   username: {
     type: String,
-    required: [true, 'Username is required'],
+    required: [true, 'Username required'],
     minlength: [4, 'Username must be at least 4 characters'],
     unique: true,
     index: true
   },
-  password: {
-    type: String
-  },
   email: {
     type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-    index: true
+    required: [true, 'Email required'],
+    index: {unique: true}
   }
 }, {timestamps: true});
 
-UserSchema.plugin(passportLocalMongooseEmail);
+UserSchema.plugin(passportLocalMongooseEmail, {hashField: 'password'});
+
+UserSchema.add({password: { type: String, required: [true, 'Password required'] } });
 
 UserSchema.statics.register = function(user, password, cb) {
   if (!(user instanceof this)) user = new this(user);
-  if (!user.username) return cb('Username is required');
 
   var self = this;
   self.findByUsername(user.username, function(err, existingUser) {
     if (err) return cb(err);
-    if (existingUser) return cb('Username taken');
+    if (existingUser) return cb({errors: {username: {message: 'Username taken'}}});
 
     user.setPassword(password, function(err, user) {
       if (err) return cb(err);
+      console.log(err, user);
       user.setAuthToken(function(err,user, token) {
         if (err) return cb(err);
         user.isAuthenticated = false;
         user.save(function(err, user) {
           if (err) return cb(err);
+          console.log(err, user);
           cb(null, user, token);
         });
       });
@@ -107,6 +106,26 @@ UserSchema.statics.findAuthToken = function(authToken, cb) {
 
   if (cb) query.exec(cb);
   else return query;
+};
+
+UserSchema.methods.setPassword = function (password, cb) {
+  var self = this;
+
+  crypto.randomBytes(32, function(err, buf) {
+    if (err) return cb(err);
+    var salt = buf.toString('hex');
+    if (password) {
+      crypto.pbkdf2(password, salt, 25000, 512, 'SHA1', function(err, hashRaw) {
+        if (err) return cb(err);
+        self.set('password', new Buffer(hashRaw, 'binary').toString('hex'));
+        self.set('salt', salt);
+
+        cb(null, self);
+      });
+    } else {
+      cb(null, self);
+    }
+  });
 };
 
 export default mongoose.model('User', UserSchema);

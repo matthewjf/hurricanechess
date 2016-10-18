@@ -36,6 +36,7 @@ router.route('/verify_email').post(function(req, res) {
 });
 
 router.route('/send_reset_email').post(function(req, res) {
+  if (!req.body.email) return res.status(401).json('Email required');
   User.findOne({email: req.body.email}, function(err, user) {
     if (err) return res.status(422).json(err);
     if (!user) return res.status(404).json('Email not found');

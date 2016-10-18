@@ -47,10 +47,7 @@ class LoginForm extends React.Component {
   }
 
   error(err) {
-    var errMsg;
-    if (err.status === 401) errMsg = 'Invalid username and password';
-    else errMsg = err.responseText;
-
+    var errMsg = 'Invalid username and password';
     this.setState({error: errMsg});
   }
 

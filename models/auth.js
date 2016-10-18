@@ -6,12 +6,12 @@ var AuthSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
+    required: [true, 'User required'],
     unique: true
   },
   token: {
     type: String,
-    required: true,
+    required: [true, 'Token required'],
     index: true
   },
   createdAt: {
