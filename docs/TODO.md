@@ -1,4 +1,4 @@
-TODO
+# TODO
 
 ## Critical
 - handle deployment with active games
@@ -21,15 +21,8 @@ TODO
 ## User Features
 - account settings
 - gameplay settings tester
-- password change
-- store online status (redis)
-  - socket connection required
-  - add counter
-  - make searchable
+- make searchable
 - google and facebook auth
-
-## Mobile Support
-- improve mobile performance
 
 ## Add Index Features
 - filtering
@@ -64,12 +57,12 @@ TODO
 
 ## Player ranks
 - Store player stats
-- [internal ranking package](https://www.npmjs.com/package/glicko2)
+- [internal ranking package](https://www.npmjs.com/package/elo-rating)
 - External rank badges
 
 ## Competitive Matchmaking
-- Matchmaking for competitive games
 - Add competitive game mode
+- Matchmaking for competitive games
 
 ## Chat
 - live in game chat
@@ -88,4 +81,3 @@ TODO
 - joining mid-game will set timers to full
   - do not want to track timer progress, too slow
   - maybe show empty instead?
-- login/logout shows socket error message on safari
