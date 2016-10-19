@@ -2,7 +2,9 @@ var sg = require('../../config/sendgrid');
 import htmlContent from './content';
 
 var content = function(url) {
-  var line = `<a target=_blank style="font-weight: 300; color: #03a9f4;" href=\"${url}\">Confirm your email address</a>`;
+  var line = `<a href=\"${url}\" target=_blank style="text-decoration: none; font-weight: 300; color: #03a9f4;">
+      Confirm your email address
+    </a>`;
   return htmlContent(line);
 };
 
