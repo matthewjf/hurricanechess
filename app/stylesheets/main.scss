@@ -13,44 +13,12 @@
 @import 'replay';
 @import 'users';
 @import 'about';
-
-* {
-  box-shadow: none !important;
-}
-
-html {
-  font-family: 'Open Sans', sans-serif;
-  background-color: $dark-1;
-  color: white;
-}
+@import 'base';
 
 #root {
   display: flex;
   justify-content: center;
   flex-direction: column;
-}
-
-input:active, input:focus, a:active, a:hover {
-  outline: 0;
-}
-
-main {
-  padding: 1rem;
-  font-size: 16px;
-  display: flex;
-  justify-content: center;
-}
-
-h2 {
-  margin: 1rem 0;
-  font-size: 1.5rem;
-  color: color('grey', 'lighten-1');
-}
-
-h3 {
-  margin: 1rem 0;
-  font-size: 1.25rem;
-  color: color('grey', 'base');
 }
 
 .primary-content {
@@ -78,12 +46,31 @@ h3 {
   color: white;
 }
 
-form {
-  .input-field label {
-    display: block;
-  }
+// CSS CONTROLS
+
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* Internet Explorer/Edge */
+  user-select: none;
 }
 
+.paused{
+    -webkit-animation-play-state: paused;
+    -moz-animation-play-state: paused;
+    -ms-animation-play-state: paused;
+    animation-play-state: paused;
+}
+
+.no-transition {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -ms-transition: none !important;
+  transition: none !important;
+}
+
+// BASE COLOR CLASSES
 .btn-success {
   background-color: $success-color;
   &:hover {
@@ -132,26 +119,4 @@ form {
 
 .secondary-color {
   background-color: $secondary-color;
-}
-
-.no-select {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Chrome/Safari/Opera */
-  -moz-user-select: none;      /* Firefox */
-  -ms-user-select: none;       /* Internet Explorer/Edge */
-  user-select: none;
-}
-
-.paused{
-    -webkit-animation-play-state: paused;
-    -moz-animation-play-state: paused;
-    -ms-animation-play-state: paused;
-    animation-play-state: paused;
-}
-
-.no-transition {
-  -webkit-transition: none !important;
-  -moz-transition: none !important;
-  -ms-transition: none !important;
-  transition: none !important;
 }

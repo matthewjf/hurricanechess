@@ -1,5 +1,11 @@
 @import 'colors';
 
+form {
+  .input-field label {
+    display: block;
+  }
+}
+
 .modal {
   max-height: 100%;
   max-width: 768px;

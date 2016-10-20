@@ -68,6 +68,7 @@ class Header extends React.Component {
     if (this.state.currentUser) {
 			return (
         <ul id={id} className={className}>
+          <li><a onClick={this.home}>HOME</a></li>
           <li><a onClick={this.about}>ABOUT</a></li>
           <li><a id='logout' onClick={this.logout}>LOG OUT</a></li>
         </ul>
@@ -75,6 +76,7 @@ class Header extends React.Component {
 		} else {
       return (
         <ul id={id} className={className}>
+          <li><a onClick={this.home}>HOME</a></li>
           <li><a onClick={this.about}>ABOUT</a></li>
   				<li><a onClick={this.openSignup} className="modal-trigger">
   					SIGN UP
