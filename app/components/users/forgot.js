@@ -47,7 +47,7 @@ class Forgot extends React.Component {
 
   render() {
     return <div id='forgot'>
-        <h5 id='forgot-title'>Forgot your password?</h5>
+        <h2 id='forgot-title'>Forgot your password?</h2>
         <div className='card-panel'>
           <form id='forgot-form' onSubmit={this.handleSubmit}>
             <div className='row'>

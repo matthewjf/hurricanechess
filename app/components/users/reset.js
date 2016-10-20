@@ -71,7 +71,7 @@ class Reset extends React.Component {
 
   render() {
     return <div id='reset'>
-        <h5 id='reset-title'>Password reset</h5>
+        <h2 id='reset-title'>Password reset</h2>
         <div className='card-panel'>
           {this.renderError(this.state.error)}
           <form id='reset-form' onSubmit={this.handleSubmit}>

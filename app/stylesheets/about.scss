@@ -1,4 +1,15 @@
+@import "colors";
+@import "./colors";
+
 #about {
+  h2 {
+    color: $secondary-color;
+  }
+
+  .table-of-contents a {
+    color: color('grey', 'lighten-1');
+  }
+
   width: 100%;
   max-width: 1024px;
   display: flex;
