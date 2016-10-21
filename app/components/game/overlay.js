@@ -128,7 +128,7 @@ class Overlay extends React.Component {
           <div id='board-status' ref='status' className='z-depth-1'>
             <span>{this.state.statusText}</span>
             <span id='win-text' className='grey-text'>
-              {this.state.winner && this.state.winner !== 'draw' ? this.state.winner + ' won' : ''}
+              {this.state.winner && this.state.winner === 'draw' ? 'draw' : this.state.winner + ' won' }
             </span>
           </div>
         </div>

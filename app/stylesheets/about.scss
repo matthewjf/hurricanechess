@@ -2,13 +2,22 @@
 
 #about {
   color: color('grey', 'lighten-2');
-  
+  width: 100%;
+  max-width: 1024px;
+  display: flex;
+  justify-content: space-around;
+
   h2 {
     margin: 1.5rem 0;
     color: $secondary-color;
   }
   h3 {
     margin: 2rem 0 1.5rem;
+  }
+  img {
+    display: block;
+    margin: auto;
+    max-width: 100%;
   }
   .table-of-contents {
     position: fixed;
@@ -17,9 +26,8 @@
   .table-of-contents a {
     color: color('grey', 'lighten-1');
   }
-
-  width: 100%;
-  max-width: 1024px;
-  display: flex;
-  justify-content: space-around;
+  .material-icons {
+    color: $primary-color;
+    font-size: 1.2rem;
+  }
 }

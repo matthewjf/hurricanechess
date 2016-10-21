@@ -19,9 +19,9 @@ var UserSchema = new Schema({
   }
 }, {timestamps: true});
 
-UserSchema.plugin(passportLocalMongooseEmail, {hashField: 'password'});
+UserSchema.plugin(passportLocalMongooseEmail);
 
-UserSchema.add({password: { type: String, required: [true, 'Password required'] } });
+UserSchema.add({hash: { type: String, required: [true, 'Password required'] } });
 
 UserSchema.statics.register = function(user, password, cb) {
   if (!(user instanceof this)) user = new this(user);
@@ -115,7 +115,7 @@ UserSchema.methods.setPassword = function (password, cb) {
     if (password) {
       crypto.pbkdf2(password, salt, 25000, 512, 'SHA1', function(err, hashRaw) {
         if (err) return cb(err);
-        self.set('password', new Buffer(hashRaw, 'binary').toString('hex'));
+        self.set('hash', new Buffer(hashRaw, 'binary').toString('hex'));
         self.set('salt', salt);
 
         cb(null, self);

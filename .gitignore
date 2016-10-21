@@ -41,3 +41,7 @@ public/js/*
 .eslintrc.json
 dump.rdb
 sendgrid.env
+
+# Cert
+server.crt
+server.key

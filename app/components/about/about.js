@@ -1,6 +1,11 @@
 import React from 'react';
 
 class About extends React.Component {
+  signup(e) {
+    e.preventDefault();
+    $('.button-collapse', '#header').sideNav('hide');
+    $('#signup-modal').openModal();
+  }
   componentDidMount() {
     $(document).ready(function(){
       $('.scrollspy').scrollSpy();
@@ -17,8 +22,10 @@ class About extends React.Component {
             <p>
               It's realtime chess without turns.
               Any available piece can be moved at any time.
-              After a piece moves, it becomes unavailable for 10 seconds.
+              After a piece moves, it's unavailable for 10 seconds.
               The game ends when either king is captured or 10 minutes elapses.
+              Games are meant to be fast and furious.
+              If you're not taking pieces, you could be doing it wrong.
             </p>
             <p>
               INSERT GIF
@@ -28,23 +35,24 @@ class About extends React.Component {
             <h2>GETTING STARTED</h2>
             <h3>Sign up!</h3>
             <p>
-              Your account helps keep games secure.
+              Your account helps keep games safe from those hackers.
               An email is required in case you forget your password.
-              Your email is not used for any other purpose and won't be given out.
+              Emails are not toys.
+              It won't be given out or used for any other purpose.
             </p>
             <p>
-              Sign up using the menu in the header.
+              Sign up using the menu in the header or by clicking <a href='#' onClick={this.signup}>here</a>.
             </p>
             <h3>Get in a game</h3>
             <p>
-              The fastest way to play is by click on a game with a player already waiting.
+              The fastest way to play is by clicking on a game with a player already waiting.
               You can also start a game with the <code>new game</code> button on the home page.
             </p>
             <h3>Spectate</h3>
             <p>
-              If you're not sure what to do, you can watch a game first.
-              You can join any games that are already in progress.
-              You'll be able to watch the game but not make any moves.
+              If you're not sure what to do, watch a game first.
+              You can watch any games that are in progress.
+              Spectators aren't allowed to make moves.
             </p>
           </div>
 
@@ -56,17 +64,15 @@ class About extends React.Component {
               The game starts when the countdown ends.
               If either player leaves during the countdown, the game won't start.
               Once a game starts, it will continue until either king is captured or 10 minutes elapses.
-              If you leave during a game, the game won't wait for you.
+              If you leave during a game, no one's going to wait for you.
             </p>
             <h3>Moves</h3>
             <p>
-              To make a move, select a one of your own pieces that is not on delay.
+              To make a move, select a one of your own pieces that's not on cooldown.
               The positions available to that piece will be highlighted in green.
-              Clicking on any of the available positions will attempt to perform a move.
+              Click on any of the available positions to perform a move.
             </p>
-            <p>
-              INSERT IMAGE
-            </p>
+            <img src="/images/moves.png"/>
             <p>
               Pieces can be intercepted during their move.
               If a piece takes another piece in the middle of its move, its move will end.
@@ -76,19 +82,23 @@ class About extends React.Component {
             </p>
             <h3>Advanced</h3>
             <p>
-              Knights: They cannot be intercepted.
+              Knights: They can't be intercepted.
               They are off the board for a brief period of time during their move.
             </p>
             <p>
-              Pawn promotion: Parns are automatically promoted to queens when they reach the opposite end of the board.
+              Pawn promotion: Pawns are automatically promoted to queens when they reach the opposite end of the board.
+              You don't get to choose. Sorry.
             </p>
             <p>
               En passant: It doesn't exist in ChessX, since you can capture a pawn during its move.
             </p>
             <p>
               Castling: It occurs immediately and cannot be intercepted.
-              You can castle if the king and target rook have not moved, and there aren't pieces between.
-              Since the concept of check does not exist, it's not part of the castling requirement.
+              You can castle if the king and target rook haven't moved yet, and there aren't pieces between.
+              Since check doesn't exist, it's not part of the castling requirement.
+            </p>
+            <p>
+              Draws: If 10 minutes elapses, the game is considered a draw and ends.
             </p>
           </div>
 
@@ -103,11 +113,27 @@ class About extends React.Component {
             <h2>MISCELLANEOUS</h2>
             <h3>Replays</h3>
             <p>
-              INSERT IMAGE
+              Once a game ends, you get access to the replay feature.
+              You can play back the entire game or skip to just the parts you want.
+            </p>
+            <p>
+              INSERT GIF
             </p>
             <h3>Settings</h3>
             <p>
-              INSERT IMAGE
+              When you're in a game, you can change the board settings by clicking
+              the <i className="material-icons settings-icon">settings</i> icon
+              in the upper right hand corner.
+            </p>
+            <img src="/images/settings.png"/>
+          </div>
+
+          <div id="contact" className="section scrollspy">
+            <h2>CONTACT US</h2>
+            <h3>Email</h3>
+            <p>
+              For any questions or concerns, or if you just want someone to talk to,
+              shoot us an email at <a href="mailto:contact@chessx.io">contact@chessx.io</a>
             </p>
           </div>
         </div>
@@ -119,6 +145,7 @@ class About extends React.Component {
             <li><a href="#gameplay">Gameplay</a></li>
             <li><a href="#competitive">Competitive</a></li>
             <li><a href="#miscellaneous">Miscellaneous</a></li>
+            <li><a href="#contact">Contact Us</a></li>
           </ul>
         </div>
       </div>
