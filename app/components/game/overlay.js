@@ -15,6 +15,7 @@ class Overlay extends React.Component {
     this.waiting = this.waiting.bind(this);
     this.starting = this.starting.bind(this);
     this.archived = this.archived.bind(this);
+    this.winnerText = this.winnerText.bind(this);
 
     this.state = { status: this.props.status, winner: this.props.winner, playbackStatus: Playback.status() };
   }
@@ -94,6 +95,13 @@ class Overlay extends React.Component {
     }
   }
 
+  winnerText() {
+    if (this.state.winner)
+      return this.state.winner === 'draw' ? 'draw' : this.state.winner + ' won';
+    else
+      return '';
+  }
+
   performCountdown() {
     if (this.countdown) {
       this.countdown -= 1;
@@ -128,7 +136,7 @@ class Overlay extends React.Component {
           <div id='board-status' ref='status' className='z-depth-1'>
             <span>{this.state.statusText}</span>
             <span id='win-text' className='grey-text'>
-              {this.state.winner && this.state.winner === 'draw' ? 'draw' : this.state.winner + ' won' }
+              { this.winnerText() }
             </span>
           </div>
         </div>

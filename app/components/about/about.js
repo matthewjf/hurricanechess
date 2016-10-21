@@ -50,7 +50,7 @@ class About extends React.Component {
             </p>
             <h3>Spectate</h3>
             <p>
-              If you're not sure what to do, watch a game first.
+              If you're not sure what to do, try watching a game.
               You can watch any games that are in progress.
               Spectators aren't allowed to make moves.
             </p>

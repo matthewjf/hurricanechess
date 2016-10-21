@@ -1,5 +1,5 @@
 import React from 'react';
-const COLORS = ['cool', 'natural', 'candy'];
+const COLORS = ['cool', 'natural', 'storm'];
 
 class BoardSettings extends React.Component {
   constructor(props) {

@@ -109,12 +109,12 @@
     }
   }
 
-  &.candy-board {
+  &.storm-board {
     .white-square {
-      background-color: $candy-white;
+      background-color: $storm-white;
     }
     .black-square {
-      background-color: $candy-black;
+      background-color: $storm-black;
     }
   }
 }

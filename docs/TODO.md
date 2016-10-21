@@ -4,6 +4,8 @@
 - handle deployment with active games
   - stop accepting new games
   - delay deploy until active games are complete (max 30 minutes)
+- CSRF
+- Intro
 
 ## Monitoring
 - server memory usage
@@ -33,6 +35,7 @@
 ## Game Features
 - rematch
 - start new game
+- single player
 
 ## About Page
 - Getting started
