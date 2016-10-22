@@ -43,7 +43,7 @@ class Onboard extends React.Component {
         <p>
           ChessX is realtime chess without turns.
           Move your pieces at any time.
-          Dodge your opponent and intercept their pieces.
+          Dodge your opponent and intercept their moves.
           If this is your first visit,
           check out the <a onClick={this.about}>about page</a>.
         </p>
