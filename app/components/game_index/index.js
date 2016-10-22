@@ -9,6 +9,7 @@ import GameIndexActions from '../../actions/game_index_actions';
 import GameIndexItem from './index_item';
 import NewGameForm from './new_game_form';
 import OnlineStats from './online_stats';
+import Onboard from '../about/onboard';
 
 class GameIndex extends React.Component {
   constructor(props) {
@@ -58,32 +59,33 @@ class GameIndex extends React.Component {
   render() {
     return(
       <div id='index-wrapper'>
-      <div id='game-index' className='primary-content'>
-        <div className='split'>
-          <h2>GAMES</h2>
+        <div id='game-index' className='primary-content'>
+          <Onboard currentUser={this.state.currentUser} />
+          <div className='split'>
+            <h2>GAMES</h2>
 
-          <a className="waves-effect waves-light btn modal-trigger"
-             onClick={this.openNewGameForm}>
-            new game
-          </a>
+            <a className="waves-effect waves-light btn modal-trigger"
+               onClick={this.openNewGameForm}>
+              new game
+            </a>
 
-          <div id="new-game-modal" className="modal">
-            <NewGameForm />
+            <div id="new-game-modal" className="modal">
+              <NewGameForm />
+            </div>
           </div>
+
+          <ul id='game-list'>
+            <VelocityTransitionGroup
+                enter={{animation: 'slideDown', stagger: '50ms', duration: '50ms'}}
+                leave={{animation: 'slideUp', duration: '500ms'}} >
+              {this.gameList(this.state.games)}
+            </VelocityTransitionGroup>
+          </ul>
         </div>
 
-        <ul id='game-list'>
-          <VelocityTransitionGroup
-              enter={{animation: 'slideDown', stagger: '50ms', duration: '50ms'}}
-              leave={{animation: 'slideUp', duration: '500ms'}} >
-            {this.gameList(this.state.games)}
-          </VelocityTransitionGroup>
-        </ul>
-      </div>
-
-      <div className='secondary-content'>
-        <OnlineStats />
-      </div>
+        <div className='secondary-content'>
+          <OnlineStats />
+        </div>
       </div>
     );
   }

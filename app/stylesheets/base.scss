@@ -29,6 +29,10 @@ h3 {
   color: color('grey', 'base');
 }
 
+a {
+  cursor: pointer;
+}
+
 input:active, input:focus, a:active, a:hover {
   outline: 0;
 }

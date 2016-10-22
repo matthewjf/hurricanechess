@@ -1,0 +1,29 @@
+@import 'colors';
+
+#onboard {
+  font-size: 1rem;
+  background-color: hsl(0, 0%, 22%);
+  color: color('grey', 'lighten-3');
+
+  .welcome {
+    font-size: 1.25rem;
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .btn-flat {
+    padding: 0 1rem;
+  }
+
+  .close {
+    color: $primary-color;
+  }
+
+  .stop {
+    color: color('grey', 'base');
+  }
+}

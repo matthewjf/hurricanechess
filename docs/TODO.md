@@ -4,7 +4,6 @@
 - handle deployment with active games
   - stop accepting new games
   - delay deploy until active games are complete (max 30 minutes)
-- CSRF
 - Intro
 
 ## Monitoring
@@ -25,6 +24,7 @@
 - gameplay settings tester
 - make searchable
 - google and facebook auth
+- JWT auth
 
 ## Add Index Features
 - filtering
@@ -36,20 +36,6 @@
 - rematch
 - start new game
 - single player
-
-## About Page
-- Getting started
-- How to play
-- Advanced mechanics
-
-## Onboarding
-- improve onboard experience
-- a dismissable welcome banner
-- possibly a walkthrough (forget what these are called)
-- hint at about page
-
-## Style
-- component transitions
 
 ## Gameplay Options
 - Settings store
