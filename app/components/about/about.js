@@ -27,9 +27,7 @@ class About extends React.Component {
               Games are meant to be fast and furious.
               If you're not taking pieces, you could be doing it wrong.
             </p>
-            <p>
-              INSERT GIF
-            </p>
+            <img src="/images/gameplay.gif"/>
           </div>
           <div id="getting-started" className="section scrollspy">
             <h2>GETTING STARTED</h2>
@@ -77,9 +75,6 @@ class About extends React.Component {
               Pieces can be intercepted during their move.
               If a piece takes another piece in the middle of its move, its move will end.
             </p>
-            <p>
-              INSERT GIF
-            </p>
             <h3>Advanced</h3>
             <p>
               Knights: They can't be intercepted.
@@ -116,9 +111,7 @@ class About extends React.Component {
               Once a game ends, you get access to the replay feature.
               You can play back the entire game or skip to just the parts you want.
             </p>
-            <p>
-              INSERT GIF
-            </p>
+            <img src="/images/replay.gif"/>
             <h3>Settings</h3>
             <p>
               When you're in a game, you can change the board settings by clicking
