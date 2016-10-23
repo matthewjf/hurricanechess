@@ -50,7 +50,7 @@
 .btn.btn-flat {
   color: $primary-color;
   padding: 0 0.5rem;
-  background-color: $dark-1;
+  background-color: transparent;
   &:hover {
     background-color: hover($dark-1);
   }

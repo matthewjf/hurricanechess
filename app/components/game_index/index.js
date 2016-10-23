@@ -69,6 +69,9 @@ class GameIndex extends React.Component {
                  onClick={this.openNewGameForm}>
                 new game
               </a>
+              {/* <a id='filter-btn' className='btn btn-flat waves-effect waves-light'>
+                <i className="material-icons sort-icon">sort</i>
+              </a> */}
             </div>
 
             <div id="new-game-modal" className="modal">
