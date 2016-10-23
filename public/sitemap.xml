@@ -6,8 +6,10 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url>
   <loc>https://www.chessx.io/</loc>
+  <changefreq>weekly</changefreq>
 </url>
 <url>
   <loc>https://www.chessx.io/about</loc>
+  <changefreq>weekly</changefreq>
 </url>
 </urlset>

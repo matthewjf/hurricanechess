@@ -28,6 +28,21 @@ class About extends React.Component {
               If you're not taking pieces, you could be doing it wrong.
             </p>
             <img src="/images/gameplay.gif"/>
+            <h3>History</h3>
+            <p>
+              ChessX is an attempt to recreate <a href='https://en.wikipedia.org/wiki/Kung-Fu_Chess'>Kung-Fu Chess</a>.
+              There are other versions of the game, which you can find <a href='https://en.wikipedia.org/wiki/Kung-Fu_Chess#Other_Projects'>
+              here</a>. The most popular alternative that's available today is built
+              on silverlight, which has limited browser support and is being phased out.
+            </p>
+            <p>
+              The hosting and maintenance of this site isn't free.
+              I'm not interested in making money from this site,
+              but it wouldn't be terrible if it cost slightly less.
+              If you'd like to donate or contribute to development,
+              feel free to send an email to <a href="mailto:contact@chessx.io">contact@chessx.io</a>.
+              100% of donations will go towards hosting costs.
+            </p>
           </div>
           <div id="getting-started" className="section scrollspy">
             <h2>GETTING STARTED</h2>
@@ -36,7 +51,7 @@ class About extends React.Component {
               Your account helps keep games safe from those hackers.
               An email is required in case you forget your password.
               Emails are not toys.
-              It won't be given out or used for any other purpose.
+              They won't be given out or used for any other purpose.
             </p>
             <p>
               Sign up using the menu in the header or by clicking <a href='#' onClick={this.signup}>here</a>.
