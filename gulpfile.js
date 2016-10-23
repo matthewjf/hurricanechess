@@ -12,7 +12,6 @@ var babelify = require('babelify');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var uglify = require('gulp-uglify');
-var gzip = require('gulp-gzip');
 var sourcemaps = require('gulp-sourcemaps');
 
 var production = process.env.NODE_ENV === 'production';
@@ -37,7 +36,6 @@ gulp.task('vendor', function() {
     './bower_components/velocity/velocity.js'
   ]).pipe(concat('vendor.js'))
     .pipe(gulpif(production, uglify({ mangle: false })))
-    .pipe(gzip())
     .pipe(gulp.dest('public/js'));
 });
 
@@ -53,7 +51,6 @@ gulp.task('browserify-vendor', function() {
     .pipe(source('vendor.bundle.js'))
     .pipe(buffer())
     .pipe(gulpif(production, uglify({ mangle: false })))
-    .pipe(gzip())
     .pipe(gulp.dest('public/js'));
 });
 
@@ -72,7 +69,6 @@ gulp.task('browserify', ['browserify-vendor'], function() {
     .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(gulpif(production, uglify({ mangle: false })))
     .pipe(sourcemaps.write('.'))
-    .pipe(gzip())
     .pipe(gulp.dest('public/js'));
 });
 
@@ -101,7 +97,6 @@ gulp.task('browserify-watch', ['browserify-vendor'], function() {
       .pipe(buffer())
       .pipe(sourcemaps.init({ loadMaps: true }))
       .pipe(sourcemaps.write('.'))
-      .pipe(gzip())
       .pipe(gulp.dest('public/js/'));
   }
 });
@@ -121,7 +116,6 @@ gulp.task('styles', function() {
       ]
     })).pipe(autoprefixer())
     .pipe(gulpif(production, cssmin()))
-    .pipe(gzip())
     .pipe(gulp.dest('public/css'));
 });
 

@@ -11,12 +11,14 @@ var config = require('./config/config');
 var passport = require('./config/passport');
 var session = require('./config/session');
 var enforce = require('express-sslify');
+var compress = require('compression');
 
 // APP
 app.set('port', config.port);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(compress());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session);
 app.use(passport.initialize());
