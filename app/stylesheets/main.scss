@@ -47,6 +47,18 @@
   color: white;
 }
 
+.btn.btn-flat {
+  color: $primary-color;
+  padding: 0 0.5rem;
+  background-color: $dark-1;
+  &:hover {
+    background-color: hover($dark-1);
+  }
+  & > i {
+    font-size: 2rem;
+  }
+}
+
 // CSS CONTROLS
 
 .no-select {

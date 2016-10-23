@@ -16,18 +16,6 @@
 .settings {
   display: flex;
   justify-content: flex-end;
-  .btn.settings-btn {
-    padding: 0 0.5rem;
-    background-color: $dark-1;
-    &:hover {
-      background-color: hover($dark-1);
-    }
-  }
-
-  .settings-icon {
-    font-size: 2rem;
-    color: $primary-color;
-  }
 }
 
 #game{

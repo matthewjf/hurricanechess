@@ -16,8 +16,7 @@ var GameSubscription = {
 
     socket.on('errors', (errors) => {
       browserHistory.push("/");
-      if (errorCB)
-        errorCB(errors);
+      if (errorCB) errorCB(errors);
     });
 
     socket.emit('create-game', data);
@@ -25,8 +24,7 @@ var GameSubscription = {
 
   join(id, errorCB) {
     socket.on('errors', (data) => {
-      if (errorCB)
-        errorCB(data);
+      if (errorCB) errorCB(data);
     });
 
     socket.on('game', GameActions.receiveGame);

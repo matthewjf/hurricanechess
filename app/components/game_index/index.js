@@ -64,10 +64,12 @@ class GameIndex extends React.Component {
           <div className='split'>
             <h2>GAMES</h2>
 
-            <a className="waves-effect waves-light btn modal-trigger"
-               onClick={this.openNewGameForm}>
-              new game
-            </a>
+            <div id='index-controls'>
+              <a className="waves-effect waves-light btn modal-trigger"
+                 onClick={this.openNewGameForm}>
+                new game
+              </a>
+            </div>
 
             <div id="new-game-modal" className="modal">
               <NewGameForm />

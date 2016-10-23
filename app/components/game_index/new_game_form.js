@@ -77,7 +77,6 @@ class NewGameForm extends React.Component {
 
   submitError(error) {
     if (error.login) {
-      // not logged in
       $('#new-game-modal').closeModal();
       ErrorUtil.loginRequired();
     } else {
