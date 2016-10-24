@@ -9,6 +9,7 @@ import GameIndexActions from '../../actions/game_index_actions';
 import GameIndexItem from './index_item';
 import NewGameForm from './new_game_form';
 import OnlineStats from './online_stats';
+import Filter from './filter';
 import Onboard from '../about/onboard';
 
 class GameIndex extends React.Component {
@@ -16,9 +17,10 @@ class GameIndex extends React.Component {
     super(props);
     this.openNewGameForm = this.openNewGameForm.bind(this);
     this.getGames = this.getGames.bind(this);
+    this.toggleFilter = this.toggleFilter.bind(this);
     this.gameList = this.gameList.bind(this);
 
-    this.state = { currentUser: this.props.currentUser, games: [] };
+    this.state = { currentUser: this.props.currentUser, games: [], showFilter: false };
   }
 
   getGames() {
@@ -47,6 +49,11 @@ class GameIndex extends React.Component {
       ErrorUtil.loginRequired();
   }
 
+  toggleFilter() {
+    if (this.state.showFilter) this.setState({showFilter: false});
+    else this.setState({showFilter: true});
+  }
+
   gameList(games) {
     return games.map(game => {
       return <GameIndexItem
@@ -69,16 +76,18 @@ class GameIndex extends React.Component {
                  onClick={this.openNewGameForm}>
                 new game
               </a>
-              {/* <a id='filter-btn' className='btn btn-flat waves-effect waves-light'>
+              <a id='filter-btn'
+                className={'btn btn-flat waves-effect waves-light ' + (this.state.showFilter ? 'active' : '')}
+                onClick={this.toggleFilter}>
                 <i className="material-icons sort-icon">sort</i>
-              </a> */}
+              </a>
             </div>
 
             <div id="new-game-modal" className="modal">
               <NewGameForm />
             </div>
           </div>
-
+          <Filter show={this.state.showFilter} />
           <ul id='game-list'>
             <VelocityTransitionGroup
                 enter={{animation: 'slideDown', stagger: '50ms', duration: '50ms'}}

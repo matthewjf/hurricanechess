@@ -15,6 +15,7 @@
 @import 'about';
 @import 'base';
 @import 'onboard';
+@import 'filter';
 
 #root {
   display: flex;
@@ -51,9 +52,15 @@
   color: $primary-color;
   padding: 0 0.5rem;
   background-color: transparent;
+
+  &.active {
+    background-color: $dark-0;
+  }
+
   &:hover {
     background-color: hover($dark-1);
   }
+
   & > i {
     font-size: 2rem;
   }

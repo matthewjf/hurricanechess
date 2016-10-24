@@ -33,9 +33,13 @@
     }
   }
 
-  .game-name {
+  .name-col {
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .time-col {
+    white-space: nowrap;
   }
 
   #filter-btn {

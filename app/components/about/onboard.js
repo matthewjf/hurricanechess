@@ -36,7 +36,7 @@ class Onboard extends React.Component {
 
   renderOnboard() {
     if (!this.state.closed && !this.state.currentUser)
-      return <div id='onboard' className='card-panel z-depth-1'>
+      return <div id='onboard' className='card-panel'>
         <div className='welcome'>
           <span>Welcome!</span>
         </div>

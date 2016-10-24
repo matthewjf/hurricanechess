@@ -1,6 +1,8 @@
 import React from 'react';
 import {browserHistory} from 'react-router';
+import TimeAgo from 'react-timeago';
 import ErrorUtil from '../../utils/error_util';
+import formatter from '../../utils/formatter';
 
 class GameIndexItem extends React.Component {
   constructor(props) {
@@ -59,14 +61,22 @@ class GameIndexItem extends React.Component {
     return(
       <li className="row card-panel clickable waves-effect game"
           onClick={this.handleClick}>
-        <div className='col s7 game-name'>
-          {game.name}
+        <div className='split col s12 m8 l9'>
+          <div className='name-col'>
+            {game.name}
+          </div>
+          <div className={`${this.playerColor(game)} count-col`}>
+            {this.playerCount(game) + '/2'}
+          </div>
         </div>
-        <div className={this.playerColor(game) + ' col s2 right-align'}>
-          {this.playerCount(game) + '/2'}
-        </div>
-        <div className={this.statusColor(game.status) + ' col s3 right-align'}>
-          {game.status}
+
+        <div className='split col s12 m4 l3'>
+          <div className={`${this.statusColor(game.status)} status-col`}>
+            {game.status}
+          </div>
+          <div className='time-col'>
+            <TimeAgo date={game.updatedAt} formatter={formatter} minPeriod={60} />
+          </div>
         </div>
       </li>
     );
