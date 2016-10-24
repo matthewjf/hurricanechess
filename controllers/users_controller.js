@@ -5,6 +5,7 @@ var sendgrid = require('../config/sendgrid');
 import emailConfirm from '../helpers/emails/confirm';
 import emailReset from '../helpers/emails/reset';
 import User from '../models/user';
+import Auth from '../models/auth';
 
 router.route('/users').get((req, res) => {
   res.status(200).json({ a: "user route" });
@@ -20,8 +21,13 @@ router.route('/users/new').post((req, res) => {
       } else {
         var authUrl = 'https://www.chessx.io/verify?authToken='+ token;
         sendgrid.API(emailConfirm(user.email, authUrl), function(err, json) {
-          if (err) res.status(422).json(err);
-          else res.status(200).json('Email confirmation sent!');
+          if (err) {
+            Auth.remove({user: user._id}, function() {
+              User.findByIdAndRemove(user._id, function() {
+                res.status(422).json(err);
+              });
+            });
+          } else res.status(200).json('Email confirmation sent!');
         });
       }
     }

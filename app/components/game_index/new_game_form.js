@@ -34,6 +34,7 @@ class NewGameForm extends React.Component {
     $(this.refs.color).on('change', this.handleColorChange);
     $(document).ready(function() {
       $('select').material_select();
+      $('#game-name').attr('length', 50).characterCounter();
     });
   }
 
@@ -95,12 +96,11 @@ class NewGameForm extends React.Component {
     if (this.state.private) {
       return (
         <div className='input-field'>
-          <input name="game[password]"
-                 id="game_password"
+          <input id="game-password"
                  type="password"
                  value={this.state.password}
                  onChange={this.handlePasswordChange} />
-          <label htmlFor="game_password" >Password</label>
+          <label htmlFor="game-password" >Password</label>
         </div>
       );
     } else {
@@ -121,12 +121,12 @@ class NewGameForm extends React.Component {
           <div className="modal-content">
             <div className='row'>
               <div className='input-field'>
-                <input id="game[name]"
+                <input id="game-name"
                        type="text"
                        className={this.state.errors.name ? 'invalid' : ''}
                        value={this.state.name}
                        onChange={this.handleNameChange} />
-                <label htmlFor="game[name]">Name</label>
+                <label htmlFor="game-name">Name</label>
                 <div className='error'>{this.errorText('name')}</div>
               </div>
             </div>
@@ -142,21 +142,21 @@ class NewGameForm extends React.Component {
 
             <p>
               <input type="radio"
-                     id="public[game]"
+                     id="public-game"
                      onChange={this.handlePublicChange}
                      checked={!this.state.private}
                      value='false' />
-              <label htmlFor="public[game]">Public</label>
+              <label htmlFor="public-game">Public</label>
             </p>
 
             <p>
               <input type="radio"
-                     id="private[game]"
+                     id="private-game"
                      onChange={this.handlePrivateChange}
                      checked={this.state.private}
                      value='true'
                      disabled />
-              <label htmlFor="private[game]">Private</label>
+              <label htmlFor="private-game">Private</label>
             </p>
 
 

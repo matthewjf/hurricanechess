@@ -9,7 +9,8 @@ var GameSchema = new Schema({
   name:     {
     type: String,
     required: [true, 'Name is required'],
-    minlength: [4, 'Name must be at least 4 characters'],
+    minlength: [4, 'Name min length 4 characters'],
+    maxlength: [50, 'Name max length 50 characters'],
     index: true
   },
   private:  { type: Boolean,                 default: false                 },

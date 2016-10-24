@@ -55,8 +55,7 @@ class SignupForm extends React.Component {
     if (json.errors) this.setState({errors: json.errors});
     else if (json.code === 11000)
       this.setState({errors: {email: {message: 'Email already in use'}}});
-    else this.setState({errors: {error: {message: json}}});
-    // TODO: more descriptive errors
+    else this.setState({errors: {error: {message: json.message}}});
   }
 
   errorClass(field) {
@@ -81,37 +80,37 @@ class SignupForm extends React.Component {
                 <div className='error-text'>{this.errorText('error')}</div>
                 <div className='row'>
                   <div className='input-field'>
-                    <input id="signup[username]"
+                    <input id="signup-username"
                            type="text"
                            className={this.errorClass('username')}
                            value={this.state.username}
                            onChange={this.setUsername} />
-                    <label htmlFor="signup[username]">Username</label>
+                    <label htmlFor="signup-username">Username</label>
                     <div className='error'>{this.errorText('username')}</div>
                   </div>
                 </div>
 
                 <div className='row'>
                   <div className='input-field'>
-                    <input id="signup[email]"
+                    <input id="signup-email"
                            type="email"
                            className={this.errorClass('email')}
                            value={this.state.email}
                            onChange={this.setEmail} />
-                    <label htmlFor="signup[email]">Email</label>
+                    <label htmlFor="signup-email">Email</label>
                     <div className='error'>{this.errorText('email')}</div>
                   </div>
                 </div>
 
                 <div className='row'>
                   <div className='input-field'>
-                    <input id="signup[password]"
+                    <input id="signup-password"
                            type="password"
                            className={this.errorClass('password')}
                            value={this.state.password}
                            onChange={this.setPassword} />
-                    <label htmlFor="signup[password]">Password</label>
-                    <div className='error'>{this.errorText('password')}</div>
+                    <label htmlFor="signup-password">Password</label>
+                    <div className='error'>{this.errorText('hash')}</div>
                   </div>
                 </div>
 

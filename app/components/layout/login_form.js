@@ -74,24 +74,24 @@ class LoginForm extends React.Component {
               <div className="modal-content">
                 <div className='row'>
                   <div className='input-field'>
-                    <input id="login[username]"
+                    <input id="login-username"
                            type="text"
                            className={this.state.error ? 'invalid' : ''}
                            value={this.state.username}
                            onChange={this.setUsername} />
-                    <label htmlFor="login[username]">Username</label>
+                    <label htmlFor="login-username">Username</label>
                     <div className='error'>{this.state.error}</div>
                   </div>
                 </div>
 
                 <div className='row'>
                   <div className='input-field'>
-                    <input id="login[password]"
+                    <input id="login-password"
                            type="password"
                            className={this.state.error ? 'invalid' : ''}
                            value={this.state.password}
                            onChange={this.setPassword} />
-                    <label htmlFor="login[password]">Password</label>
+                    <label htmlFor="login-password">Password</label>
                   </div>
                 </div>
               </div>
