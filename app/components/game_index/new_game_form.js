@@ -11,24 +11,30 @@ class NewGameForm extends React.Component {
       private: false,
       password: '',
       black: false,
-      errors: null
+      errors: {}
     };
 
     this.resetState = this.resetState.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
-    this.handleWhiteChange = this.handleWhiteChange.bind(this);
-    this.handleBlackChange = this.handleBlackChange.bind(this);
-    this.handlePrivateChange = this.handlePrivateChange.bind(this);
-    this.handlePublicChange = this.handlePublicChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.submitData = this.submitData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.submitError = this.submitError.bind(this);
     this.submitSuccess = this.submitSuccess.bind(this);
+    this.errorText = this.errorText.bind(this);
     this.setPassword = this.setPassword.bind(this);
-    this.renderErrors = this.renderErrors.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handlePrivateChange = this.handlePrivateChange.bind(this);
+    this.handlePublicChange = this.handlePublicChange.bind(this);
+    this.handleColorChange = this.handleColorChange.bind(this);
 
     this.state = this.blankAttrs;
+  }
+
+  componentDidMount() {
+    $(this.refs.color).on('change', this.handleColorChange);
+    $(document).ready(function() {
+      $('select').material_select();
+    });
   }
 
   resetState() {
@@ -36,15 +42,12 @@ class NewGameForm extends React.Component {
   }
 
   handleNameChange(e) {
-    this.setState({ name: e.currentTarget.value, errors: null });
+    this.setState({ name: e.currentTarget.value, errors: {} });
   }
 
-  handleWhiteChange(e) {
-    this.setState({ black: false });
-  }
-
-  handleBlackChange(e) {
-    this.setState({ black: true });
+  handleColorChange(e) {
+    e.preventDefault();
+    this.setState({black: e.currentTarget.value === 'black' });
   }
 
   handlePrivateChange(e) {
@@ -105,18 +108,9 @@ class NewGameForm extends React.Component {
     }
   }
 
-  renderErrors(errors) {
-    if (errors) {
-      return Object.keys(errors).map(key =>{
-        return (
-          <span className='error-text' key={key} >
-            {errors[key].message.replace('Path ', '')}
-          </span>
-        );
-      });
-    } else {
-      return null;
-    }
+  errorText(field) {
+    var err = this.state.errors[field];
+    return err ? err.message : '';
   }
 
   render() {
@@ -125,35 +119,47 @@ class NewGameForm extends React.Component {
         <form onSubmit={this.handleSubmit}>
 
           <div className="modal-content">
-            {this.renderErrors(this.state.errors)}
             <div className='row'>
               <div className='input-field'>
-                <input id="game_name"
+                <input id="game[name]"
                        type="text"
+                       className={this.state.errors.name ? 'invalid' : ''}
                        value={this.state.name}
                        onChange={this.handleNameChange} />
-                <label htmlFor="game_name">Name</label>
+                <label htmlFor="game[name]">Name</label>
+                <div className='error'>{this.errorText('name')}</div>
               </div>
             </div>
 
+            <div className='input-field'>
+              <select onChange={this.colorChange} id='color' ref='color'>
+                <option value="white">White</option>
+                <option value="black">Black</option>
+              </select>
+              <label>Play as</label>
+            </div>
+
+
             <p>
               <input type="radio"
-                     id="public_game"
+                     id="public[game]"
                      onChange={this.handlePublicChange}
                      checked={!this.state.private}
                      value='false' />
-              <label htmlFor="public_game">Public</label>
+              <label htmlFor="public[game]">Public</label>
             </p>
 
             <p>
               <input type="radio"
-                     id="private_game"
+                     id="private[game]"
                      onChange={this.handlePrivateChange}
                      checked={this.state.private}
                      value='true'
                      disabled />
-              <label htmlFor="private_game">Private</label>
+              <label htmlFor="private[game]">Private</label>
             </p>
+
+
             {this.setPassword()}
 
           </div>
