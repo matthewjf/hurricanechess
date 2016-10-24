@@ -38,6 +38,20 @@
     text-overflow: ellipsis;
   }
 
+  .count-col {
+    text-align: right;
+    @include lg-width {
+      text-align: center;
+    }
+  }
+
+  .status-col {
+    text-align: left;
+    @include lg-width {
+      text-align: center;
+    }
+  }
+
   .time-col {
     white-space: nowrap;
   }

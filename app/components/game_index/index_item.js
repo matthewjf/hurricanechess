@@ -61,22 +61,21 @@ class GameIndexItem extends React.Component {
     return(
       <li className="row card-panel clickable waves-effect game"
           onClick={this.handleClick}>
-        <div className='split col s12 m8 l9'>
-          <div className='name-col'>
-            {game.name}
-          </div>
-          <div className={`${this.playerColor(game)} count-col`}>
-            {this.playerCount(game) + '/2'}
-          </div>
+
+        <div className='col s10 m7 game-name name-col'>
+          {game.name}
         </div>
 
-        <div className='split col s12 m4 l3'>
-          <div className={`${this.statusColor(game.status)} status-col`}>
-            {game.status}
-          </div>
-          <div className='time-col'>
-            <TimeAgo date={game.updatedAt} formatter={formatter} minPeriod={60} />
-          </div>
+        <div className={`${this.playerColor(game)} col s2 m1 count-col`}>
+          {this.playerCount(game) + '/2'}
+        </div>
+
+        <div className={`${this.statusColor(game.status)} col s6 m2 status-col`}>
+          {game.status}
+        </div>
+
+        <div className='col s6 m2 right-align time-col'>
+          <TimeAgo date={game.updatedAt} formatter={formatter} minPeriod={60} />
         </div>
       </li>
     );
