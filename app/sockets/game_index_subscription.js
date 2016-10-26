@@ -8,7 +8,12 @@ var GameIndexSubscription = {
     socket.on('game', GameIndexActions.receiveGame);
     socket.on('remove', GameIndexActions.removeGame);
     socket.on('user-count', OnlineStatsActions.receiveUserCount);
-    SocketManager.join(ROOM, {}, GameIndexActions.receiveGames);
+    socket.on('games', GameIndexActions.receiveGames);
+    SocketManager.join(ROOM, {});
+  },
+
+  getIndex(filters) {
+    socket.emit('get-index', filters);
   },
 
   leave() {
@@ -16,6 +21,7 @@ var GameIndexSubscription = {
     socket.off("userCount");
     socket.off("joined-index");
     socket.off("remove");
+    socket.off("games");
     socket.off("game");
   }
 };

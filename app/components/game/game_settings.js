@@ -40,9 +40,9 @@ class BoardSettings extends React.Component {
     }.bind(select));
   }
 
-  handleColorChange(event) {
-    event.preventDefault();
-    this.setBoardColor(event.currentTarget.value);
+  handleColorChange(e) {
+    e.preventDefault();
+    this.setBoardColor(e.currentTarget.value);
   }
 
   setBoardColor(color) {

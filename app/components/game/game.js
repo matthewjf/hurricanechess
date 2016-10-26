@@ -113,7 +113,7 @@ class Game extends React.Component {
       <div id='game-wrapper'>
         <div className='settings secondary-content'>
           <a onClick={this.openGameSettings}
-          className="waves-effect waves-light btn modal-trigger btn-flat">
+          className="waves-effect btn modal-trigger btn-flat">
             <i className="material-icons settings-icon">settings</i>
           </a>
         </div>

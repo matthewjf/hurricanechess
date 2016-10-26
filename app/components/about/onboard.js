@@ -48,10 +48,10 @@ class Onboard extends React.Component {
           check out the <a onClick={this.about}>about page</a>.
         </p>
         <div className='footer'>
-          <a onClick={this.hide} className='btn btn-flat stop waves-effect waves-light'>
+          <a onClick={this.hide} className='btn btn-flat stop waves-effect'>
             stop showing this
           </a>
-          <a onClick={this.close} className='btn btn-flat close waves-effect waves-light'>
+          <a onClick={this.close} className='btn btn-flat close waves-effect'>
             close
           </a>
         </div>

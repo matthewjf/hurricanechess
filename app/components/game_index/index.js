@@ -77,7 +77,7 @@ class GameIndex extends React.Component {
                 new game
               </a>
               <a id='filter-btn'
-                className={'btn btn-flat waves-effect waves-light ' + (this.state.showFilter ? 'active' : '')}
+                className={'btn btn-flat waves-effect ' + (this.state.showFilter ? 'active' : '')}
                 onClick={this.toggleFilter}>
                 <i className="material-icons sort-icon">sort</i>
               </a>
@@ -87,11 +87,11 @@ class GameIndex extends React.Component {
               <NewGameForm />
             </div>
           </div>
-          <Filter show={this.state.showFilter} />
+          <Filter show={this.state.showFilter} toggleFilter={this.toggleFilter} />
           <ul id='game-list'>
             <VelocityTransitionGroup
                 enter={{animation: 'slideDown', stagger: '50ms', duration: '50ms'}}
-                leave={{animation: 'slideUp', duration: '500ms'}} >
+                leave={{animation: 'slideUp', stagger: '50ms', duration: '500ms'}} >
               {this.gameList(this.state.games)}
             </VelocityTransitionGroup>
           </ul>

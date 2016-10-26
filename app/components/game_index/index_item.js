@@ -75,7 +75,7 @@ class GameIndexItem extends React.Component {
         </div>
 
         <div className='col s6 m2 right-align time-col'>
-          <TimeAgo date={game.updatedAt} formatter={formatter} minPeriod={60} />
+          <TimeAgo date={game.createdAt} formatter={formatter} minPeriod={60} />
         </div>
       </li>
     );

@@ -33,7 +33,7 @@ class NewGameForm extends React.Component {
   componentDidMount() {
     $(this.refs.color).on('change', this.handleColorChange);
     $(document).ready(function() {
-      $('select').material_select();
+      $('select', '#new-game-modal').material_select();
       $('#game-name').attr('length', 50).characterCounter();
     });
   }
@@ -133,8 +133,8 @@ class NewGameForm extends React.Component {
 
             <div className='input-field'>
               <select onChange={this.colorChange} id='color' ref='color'>
-                <option value="white">White</option>
-                <option value="black">Black</option>
+                <option value="white">white</option>
+                <option value="black">black</option>
               </select>
               <label>Play as</label>
             </div>
