@@ -8,7 +8,6 @@ const DEFAULT_STATUSES = ['waiting', 'active'];
 class Filter extends React.Component {
   constructor(props) {
     super(props);
-    this.setFilters = this.setFilters.bind(this);
     this.updateSort = this.updateSort.bind(this);
     this.updateStatuses = this.updateStatuses.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
@@ -19,7 +18,19 @@ class Filter extends React.Component {
   }
 
   componentDidMount() {
-    this.setFilters();
+    var statuses = DEFAULT_STATUSES;
+    if (localStorage && localStorage.statuses)
+      statuses = localStorage.statuses.split(',');
+
+    if (statuses.indexOf('active') >= 0 && statuses.indexOf('starting') < 0)
+      statuses.push('starting');
+
+    var sort = localStorage.sort || 'newest';
+
+    this.setState({sort: sort, statuses: statuses});
+    GameIndexActions.setSort(sort);
+    GameIndexActions.setStatuses(statuses);
+    GameIndexSubscription.getIndex({statuses: statuses});
   }
 
   componentWillReceiveProps(props) {
@@ -39,22 +50,6 @@ class Filter extends React.Component {
       $(this.refs.statuses).off('change');
     }
     this.setState({ show: props.show });
-  }
-
-  setFilters() {
-    var statuses = DEFAULT_STATUSES;
-    if (localStorage && localStorage.statuses)
-      statuses = localStorage.statuses.split(',');
-
-    if (statuses.indexOf('active') >= 0 && statuses.indexOf('starting') < 0)
-      statuses.push('starting');
-
-    var sort = localStorage.sort || 'newest';
-
-    this.setState({sort: sort, statuses: statuses});
-    GameIndexActions.setSort(sort);
-    GameIndexActions.setStatuses(statuses);
-    GameIndexSubscription.getIndex({statuses: statuses});
   }
 
   updateSort(sort) {

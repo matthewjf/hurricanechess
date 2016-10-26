@@ -3,6 +3,8 @@ import OnlineStatus from '../helpers/online_status';
 export default function(client, joined) {
   client.on("join-index", function(_){
     client.join("index", function() {
+      joined({room: 'index'});
+      
       OnlineStatus.getCount((count) => {
         client.emit('user-count', count);
       });
