@@ -32,6 +32,8 @@ function _clearState() {
   _endState = undefined;
   _endTime = undefined;
   _frames = undefined;
+  _elapsed = 0;
+  _frameIdx = -1;
 }
 
 function _getLastFrame(startIdx = -1) {
