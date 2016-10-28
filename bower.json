@@ -3,7 +3,7 @@
   "dependencies": {
     "jquery": "^3.1.0",
     "materialize": "^0.97.7",
-    "velocity": "^1.2.3"
+    "velocity": "https://github.com/matthewjf/velocity/tarball/master"
   },
   "homepage": "https://github.com/matthewjf/chessx",
   "authors": [
