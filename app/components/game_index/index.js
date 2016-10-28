@@ -12,6 +12,19 @@ import OnlineStats from './online_stats';
 import Filter from './filter';
 import Onboard from '../about/onboard';
 
+var enterAnimation = {
+  animation: 'slideDown',
+  stagger: '50ms',
+  duration: '50ms',
+  style: { display: 'none' }
+};
+
+var leaveAnimation = {
+  animation: 'slideUp',
+  duration: '500ms',
+  stagger: '500ms'
+};
+
 class GameIndex extends React.Component {
   constructor(props) {
     super(props);
@@ -54,8 +67,8 @@ class GameIndex extends React.Component {
     else this.setState({showFilter: true});
   }
 
-  gameList(games) {
-    return games.map(game => {
+  gameList() {
+    return this.state.games.map(game => {
       return <GameIndexItem
                 game={game}
                 key={game._id}
@@ -89,10 +102,8 @@ class GameIndex extends React.Component {
           </div>
           <Filter show={this.state.showFilter} toggleFilter={this.toggleFilter} />
           <ul id='game-list'>
-            <VelocityTransitionGroup
-                enter={{animation: 'slideDown', stagger: '50ms', duration: '50ms'}}
-                leave={{animation: 'slideUp', stagger: '250ms', duration: '500ms'}} >
-              {this.gameList(this.state.games)}
+            <VelocityTransitionGroup enter={enterAnimation} leave={leaveAnimation}>
+              {this.gameList()}
             </VelocityTransitionGroup>
           </ul>
         </div>

@@ -123,7 +123,6 @@ class GameIndexStore extends EventEmitter {
         break;
       case GameIndexConstants.STATUSES:
         _setStatuses(payload.statuses);
-        this.emitChange();
         break;
     }
   }

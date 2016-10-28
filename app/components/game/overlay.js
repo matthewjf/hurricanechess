@@ -1,7 +1,7 @@
 import React from 'react';
 import Playback from '../../utils/playback';
 import GameConfig from '../../../config/game';
-import {VelocityTransitionGroup, VelocityComponent} from 'velocity-react';
+import {VelocityTransitionGroup} from 'velocity-react';
 
 class Overlay extends React.Component {
   constructor(props) {
@@ -21,8 +21,6 @@ class Overlay extends React.Component {
   }
 
   componentDidMount() {
-    require('velocity-animate');
-    require('velocity-animate/velocity.ui');
     this.updateStatusText();
     Playback.addChangeListener(this.getPlaybackStatus);
   }
