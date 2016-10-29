@@ -137,9 +137,11 @@ class Playback extends EventEmitter {
     if (!_elapsed) return _sendFrame('init');
     if (_elapsed > _endTime) return this.end();
 
-    _frameIdx = _getLastFrame();
-    _sendFrame();
-
+    var newIdx = _getLastFrame(_frameIdx); // find next frame
+    if (newIdx) { // update current frame and send state if next frame
+      _frameIdx = newIdx;
+      _sendFrame(newIdx);
+    }
 
     setTimeout(() => {
       $('.piece-wrapper', '#pieces').removeClass('no-transition');

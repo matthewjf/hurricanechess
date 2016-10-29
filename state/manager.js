@@ -209,6 +209,5 @@ var _emitStateData = function(gameId, action, data) {
 export default {
   init: init,
   movePiece: movePiece,
-  getState: getState,
-  gameOver: _gameOver
+  getState: getState
 };

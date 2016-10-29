@@ -2,6 +2,7 @@ import Game from '../models/game';
 import History from '../models/history';
 import User from '../models/user';
 import GameManager from '../state/manager';
+import io from '../config/socketio';
 
 const gameData = (data, user) => {
   if (data.black)
@@ -74,11 +75,18 @@ export default (client, joined) => {
     });
   });
 
-  client.on("game-state", (gameId) => {
+  client.on("game-state", gameId => {
     client.emit('game-state', GameManager.getState(gameId));
   });
 
   client.on("game-move", data => {
     GameManager.movePiece(data.gameId, userId, data.pieceId, data.pos);
+  });
+
+  client.on("game-chat", data => {
+    if (data && data.gameId && data.message)
+      validateUser(userId, user => {
+        io.to(data.gameId).emit('message', {username: user.username, message: data.message});
+      });
   });
 };

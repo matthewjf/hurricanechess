@@ -4,7 +4,6 @@
 - handle deployment with active games
   - stop accepting new games
   - delay deploy until active games are complete (max 30 minutes)
-- Intro
 
 ## Monitoring
 - server memory usage
@@ -27,8 +26,6 @@
 - JWT auth
 
 ## Add Index Features
-- filtering
-- sorting
 - searching
 - private games
 

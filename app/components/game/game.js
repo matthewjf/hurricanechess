@@ -8,6 +8,7 @@ import Pieces from './pieces';
 import Overlay from './overlay';
 import Player from './player';
 import Replay from './replay';
+import Chat from './chat';
 
 class Game extends React.Component {
   constructor(props) {
@@ -63,13 +64,15 @@ class Game extends React.Component {
   }
 
   playerStatus() {
-    var game = this.state.game;
-    if (game.white && game.white._id === this.state.currentUser._id)
+    var game = this.state.game, user = this.state.currentUser;
+    if (game && user) {
+      if (game.white && game.white._id === this.state.currentUser._id)
       return 'white';
-    else if (game.black && game.black._id === this.state.currentUser._id)
+      else if (game.black && game.black._id === this.state.currentUser._id)
       return 'black';
-    else
-      return 'spectator';
+    }
+
+    return 'spectator';
   }
 
   whiteOnBottom() {
@@ -127,6 +130,7 @@ class Game extends React.Component {
           </div>
           <Player data={this.botCard()} />
         </section>
+        <Chat />
       </div>
     );
   }
