@@ -2,6 +2,7 @@ import SocketManager from './socket_manager';
 import GameActions from '../actions/game_actions';
 import PieceActions from '../actions/piece_actions';
 import Playback from '../utils/playback';
+import ChatActions from '../actions/chat_actions';
 import {browserHistory} from 'react-router';
 const ROOM = 'game';
 
@@ -33,6 +34,7 @@ var GameSubscription = {
     socket.on('game-state', PieceActions.receiveState);
     socket.on('game-end', PieceActions.receiveState);
     socket.on('game-history', Playback.receiveHistory.bind(Playback));
+    socket.on('game-chat', ChatActions.receiveChat);
     SocketManager.join(ROOM, {id: id}, GameActions.receiveGame);
   },
 
@@ -42,6 +44,10 @@ var GameSubscription = {
 
   requestGameState(gameId) {
     socket.emit('game-state', gameId);
+  },
+
+  sendChat(data) {
+    socket.emit('game-chat', data);
   },
 
   leave() {
@@ -54,6 +60,7 @@ var GameSubscription = {
     socket.off('game-move');
     socket.off('game-state');
     socket.off('game-end');
+    socket.off('game-chat');
   }
 };
 

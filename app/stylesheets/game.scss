@@ -5,6 +5,9 @@
 #game-wrapper {
   display: flex;
   flex-direction: column;
+  @include xx-width {
+    flex-direction: row;
+  }
   .secondary-content {
     @include xl-width {
       position: absolute;

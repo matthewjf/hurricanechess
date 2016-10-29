@@ -76,7 +76,6 @@ class Game extends React.Component {
   }
 
   whiteOnBottom() {
-    let game = this.state.game;
     return this.playerStatus() !== 'black';
   }
 
@@ -112,6 +111,8 @@ class Game extends React.Component {
   }
 
   render() {
+    var game = this.state.game;
+
     return (
       <div id='game-wrapper'>
         <div className='settings secondary-content'>
@@ -130,7 +131,7 @@ class Game extends React.Component {
           </div>
           <Player data={this.botCard()} />
         </section>
-        <Chat />
+        <Chat white={game.white} black={game.black} gameId={this.state.gameId}/>
       </div>
     );
   }

@@ -46,3 +46,8 @@ code {
   font-size: 0.8rem;
   white-space: nowrap;
 }
+
+::-webkit-input-placeholder { color: color('grey', 'darken-1'); }
+:-moz-placeholder { color: color('grey', 'darken-1'); }
+::-moz-placeholder { color: color('grey', 'darken-1'); }
+:-ms-input-placeholder { color: color('grey', 'darken-1'); }

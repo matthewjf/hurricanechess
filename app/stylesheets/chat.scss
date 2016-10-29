@@ -1,6 +1,69 @@
 @import 'colors';
 @import 'queries';
 
+#chat-wrapper {
+  position: relative;
+  ::-webkit-scrollbar {
+      width: 0.5rem;
+      background: transparent;
+  }
+  /* optional: show position indicator in red */
+  ::-webkit-scrollbar-thumb {
+      background: $dark-2;
+      border-radius: 2px;
+  }
+}
+
 #chat {
-  background-color: $dark-3;
+  background-color: $dark-0;
+  height: 200px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @include xx-width {
+    margin: 109px 0 0 1rem;
+    width: 400px;
+    height: 600px;
+  }
+  @include xxx-width {
+    position: absolute;
+    top: 100px;
+    margin: 0.5rem 1rem;
+  }
+
+  .message-text {
+    color: color('grey', 'lighten-1');
+  }
+
+  .username {
+    color: color('grey', 'darken-1');
+    &.white-player {
+      color: red;
+    }
+    &.black-player {
+      color: blue;
+    }
+  }
+}
+
+#chat-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#chat-input {
+  width: calc(100% - 75px);
+  margin-bottom: 0;
+  &:focus {
+     border-bottom: 1px solid color('light-blue', 'lighten-1');
+     box-shadow: 0 1px 0 0 color('light-blue', 'lighten-1');
+   }
+}
+
+#chat-messages {
+  height: 100%;
+  word-wrap: break-word;
+  overflow-y: scroll;
 }

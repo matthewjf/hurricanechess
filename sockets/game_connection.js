@@ -54,6 +54,8 @@ export default (client, joined) => {
                 if (err) {
                   client.emit('errors', err.errors);
                 } else {
+                  joined({room: game._id});
+                  client.join(game._id);
                   client.emit('game-history', history);
                 }
               });
@@ -86,7 +88,8 @@ export default (client, joined) => {
   client.on("game-chat", data => {
     if (data && data.gameId && data.message)
       validateUser(userId, user => {
-        io.to(data.gameId).emit('message', {username: user.username, message: data.message});
+        let chat = {user: user, message: data.message, time: new Date()};
+        io.to(data.gameId).emit('game-chat', chat);
       });
   });
 };
