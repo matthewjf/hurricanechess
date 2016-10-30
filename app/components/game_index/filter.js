@@ -1,5 +1,5 @@
 import React from 'react';
-import {VelocityTransitionGroup} from 'velocity-react';
+import {VelocityComponent} from 'velocity-react';
 import GameIndexActions from '../../actions/game_index_actions';
 import GameIndexSubscription from '../../sockets/game_index_subscription';
 
@@ -8,6 +8,7 @@ const DEFAULT_STATUSES = ['waiting', 'active'];
 class Filter extends React.Component {
   constructor(props) {
     super(props);
+    this.onMount = this.onMount.bind(this);
     this.updateSort = this.updateSort.bind(this);
     this.updateStatuses = this.updateStatuses.bind(this);
     this.handleSortChange = this.handleSortChange.bind(this);
@@ -31,25 +32,30 @@ class Filter extends React.Component {
     GameIndexActions.setSort(sort);
     GameIndexActions.setStatuses(statuses);
     GameIndexSubscription.getIndex({statuses: statuses});
+
+    this.onMount();
   }
 
   componentWillReceiveProps(props) {
-    if (props.show && !this.state.show) {
-      $(document).ready(function() {
-        $(this.refs.sort).on('change', this.handleSortChange);
-        $('select', '#filter').material_select();
-        $(this.refs.sort).siblings('input.select-dropdown').attr('value', this.state.sort);
-        var lis = $(this.refs.statuses).siblings('ul.dropdown-content').children();
-        this.state.statuses.forEach(function(status) {
-          lis.has(`span:contains('${status}')`).click();
-        });
-        $(this.refs.statuses).on('change', this.handleStatusChange);
-      }.bind(this));
-    } else if (!props.show && this.state.show) {
-      $(this.refs.sort).off('change');
-      $(this.refs.statuses).off('change');
-    }
     this.setState({ show: props.show });
+  }
+
+  componentWillUnmount() {
+    $(this.refs.sort).off('change');
+    $(this.refs.statuses).off('change');
+  }
+
+  onMount() {
+    $(document).ready(function() {
+      $(this.refs.sort).on('change', this.handleSortChange);
+      $('select', '#filter').material_select();
+      $(this.refs.sort).siblings('input.select-dropdown').attr('value', this.state.sort);
+      var lis = $(this.refs.statuses).siblings('ul.dropdown-content').children();
+      this.state.statuses.forEach(function(status) {
+        lis.has(`span:contains('${status}')`).click();
+      });
+      $(this.refs.statuses).on('change', this.handleStatusChange);
+    }.bind(this));
   }
 
   updateSort(sort) {
@@ -85,7 +91,7 @@ class Filter extends React.Component {
   }
 
   renderFilter() {
-    return <div id='filter' className='card-panel row'>
+    return <div id='filter' ref='filter' className='card-panel row' style={{display: 'none'}}>
       <div className='input-field col m5 s6'>
         <select id='statuses' ref='statuses' multiple>
           <option value="waiting">waiting</option>
@@ -109,11 +115,11 @@ class Filter extends React.Component {
   }
 
   render() {
-    return <VelocityTransitionGroup
-          enter={{animation: 'slideDown', duration: '500ms'}}
-          leave={{animation: 'slideUp', duration: '500ms'}} >
-        {this.state.show ? this.renderFilter() : null}
-      </VelocityTransitionGroup>;
+    return  <VelocityComponent
+              animation={this.state.show ? 'slideDown' : 'slideUp' }
+              duration={500}>
+        {this.renderFilter()}
+      </VelocityComponent>;
   }
 }
 
