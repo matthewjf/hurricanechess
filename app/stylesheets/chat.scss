@@ -54,6 +54,10 @@
       color: color('red', 'lighten-3');
     }
   }
+
+  .game-message {
+    color: $primary-color;
+  }
 }
 
 #chat-form {

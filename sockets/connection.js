@@ -19,18 +19,20 @@ io.on('connection', client => {
     Game.findById(gameId)
       .populate('white')
       .populate('black')
-      .exec(function(err, game){
+      .exec(function(err, game) {
         if (err) {
           client.emit('errors', err.errors);
         } else if (game) {
           User.findById(userId, function(_, user){
             if (user)
               game.leave(user, function(err, game){
-                if (err)
-                  client.emit('errors', err.errors);
-                else
+                if (err) client.emit('errors', err.errors);
+                else {
                   client.emit('left-game', game);
+                }
               });
+              let msg = {message: `${user.username} left`, time: new Date()};
+              io.to(game._id).emit('game-chat', msg);
           });
         }
       });

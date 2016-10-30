@@ -3,6 +3,9 @@ import ChatStore from '../../stores/chat_store';
 import ChatActions from '../../actions/chat_actions';
 import GameSubscription from '../../sockets/game_subscription';
 
+var autoScroll = true;
+var ticking = false;
+
 class Chat extends React.Component {
   constructor(props) {
     super(props);
@@ -23,13 +26,11 @@ class Chat extends React.Component {
 
   componentDidMount() {
     ChatStore.addChangeListener(this.getChats);
-    this.refs.messages.autoScroll = true;
-    this.refs.messages.addEventListener('scroll', this.handleAutoScroll);
+    this.refs.messages.addEventListener('scroll', this.handleScroll);
   }
 
   componentDidUpdate() {
-    if (this.refs.messages.autoScroll)
-      this.refs.messages.scrollTop = this.refs.messages.scrollHeight;
+    if (autoScroll) this.refs.messages.scrollTop = this.refs.messages.scrollHeight;
   }
 
   componentWillUnmount() {
@@ -41,11 +42,16 @@ class Chat extends React.Component {
     this.setState({ gameId: props.gameId, white: props.white, black: props.black });
   }
 
-  handleAutoScroll() {
-    if (this.scrollTop + this.offsetHeight === this.scrollHeight)
-      this.autoScroll = true;
-    else
-      this.autoScroll = false;
+  handleScroll() {
+    var lastDiff = this.scrollTop + this.offsetHeight - this.scrollHeight;
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        if (lastDiff === 0) autoScroll = true;
+        else autoScroll = false;
+        ticking = false;
+      });
+    }
+    ticking = true;
   }
 
   handleInputChange(e) {
@@ -72,12 +78,17 @@ class Chat extends React.Component {
 
   renderChats() {
     return this.state.chats.map(chat => {
-      return <div key={chat.time}>
-        <span className={'username ' + this.usernameClass(chat.user)}>
-          {chat.user.username}
-        </span>
-        <span className='message-text'>: {chat.message}</span>
-      </div>;
+      if (chat.user)
+        return <div key={chat.time}>
+          <span className={'username ' + this.usernameClass(chat.user)}>
+            {chat.user.username}
+          </span>
+          <span className='message-text'>: {chat.message}</span>
+        </div>;
+      else
+        return <div key={chat.time}>
+          <em className='game-message'>{chat.message}</em>
+        </div>;
     });
   }
 

@@ -57,6 +57,8 @@ export default (client, joined) => {
                   joined({room: game._id});
                   client.join(game._id);
                   client.emit('game-history', history);
+                  let msg = {message: `${user.username} joined`, time: new Date()};
+                  io.to(game._id).emit('game-chat', msg);
                 }
               });
             } else {
@@ -67,6 +69,8 @@ export default (client, joined) => {
                   joined({room: game._id});
                   client.join(game._id);
                   client.emit('game-state', GameManager.getState(game._id));
+                  let msg = {message: `${user.username} joined`, time: new Date()};
+                  io.to(game._id).emit('game-chat', msg);
                 }
               });
             }

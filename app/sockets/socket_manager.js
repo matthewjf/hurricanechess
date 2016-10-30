@@ -9,9 +9,9 @@ var SocketManager = {
       socket.emit('join-' + room, payload);
     };
 
-    socket.on('connect', this.connect);
-
     socket.emit('join-' + room, payload);
+
+    setTimeout(function() {socket.on('connect', this.connect);}.bind(this));
   },
 
   leave(room){
