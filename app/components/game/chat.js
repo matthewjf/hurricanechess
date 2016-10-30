@@ -23,6 +23,13 @@ class Chat extends React.Component {
 
   componentDidMount() {
     ChatStore.addChangeListener(this.getChats);
+    this.refs.messages.autoScroll = true;
+    this.refs.messages.addEventListener('scroll', this.handleAutoScroll);
+  }
+
+  componentDidUpdate() {
+    if (this.refs.messages.autoScroll)
+      this.refs.messages.scrollTop = this.refs.messages.scrollHeight;
   }
 
   componentWillUnmount() {
@@ -34,6 +41,13 @@ class Chat extends React.Component {
     this.setState({ gameId: props.gameId, white: props.white, black: props.black });
   }
 
+  handleAutoScroll() {
+    if (this.scrollTop + this.offsetHeight === this.scrollHeight)
+      this.autoScroll = true;
+    else
+      this.autoScroll = false;
+  }
+
   handleInputChange(e) {
     this.setState({ input: e.currentTarget.value });
   }
@@ -42,7 +56,8 @@ class Chat extends React.Component {
     this.setState({chats: ChatStore.all()});
   }
 
-  sendChat() {
+  sendChat(e) {
+    e.preventDefault();
     GameSubscription.sendChat({gameId: this.state.gameId, message: this.state.input});
     this.setState({input: ''});
   }
@@ -69,10 +84,10 @@ class Chat extends React.Component {
   render() {
     return <div id='chat-wrapper'>
         <section id='chat' className='card-panel'>
-          <div id='chat-messages'>
+          <div id='chat-messages' ref='messages'>
             {this.renderChats()}
           </div>
-          <div id='chat-form'>
+          <form id='chat-form' onSubmit={this.sendChat}>
             <input id='chat-input' placeholder="chat here" type="text"
               value={this.state.input}
               onChange={this.handleInputChange}/>
@@ -80,7 +95,7 @@ class Chat extends React.Component {
               onClick={this.sendChat}>
               send
             </a>
-          </div>
+          </form>
         </section>
       </div>;
   }

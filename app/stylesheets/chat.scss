@@ -21,6 +21,15 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @include sm-width {
+    height: 120px;
+  }
+  @include md-width {
+    height: 150px;
+  }
+  @include lg-width {
+    height: 180px;
+  }
   @include xx-width {
     margin: 109px 0 0 1rem;
     width: 400px;
@@ -39,10 +48,10 @@
   .username {
     color: color('grey', 'darken-1');
     &.white-player {
-      color: red;
+      color: color('green', 'lighten-3');
     }
     &.black-player {
-      color: blue;
+      color: color('red', 'lighten-3');
     }
   }
 }

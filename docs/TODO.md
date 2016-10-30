@@ -50,9 +50,6 @@
 - Add competitive game mode
 - Matchmaking for competitive games
 
-## Chat
-- live in game chat
-
 ## Friends
 - live private chat with friends
 
