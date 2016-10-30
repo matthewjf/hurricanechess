@@ -14,8 +14,7 @@ class Filter extends React.Component {
     this.handleSortChange = this.handleSortChange.bind(this);
     this.handleStatusChange = this.handleStatusChange.bind(this);
     this.save = this.save.bind(this);
-
-    this.state = { show: this.props.show };
+    this.show = false;
   }
 
   componentDidMount() {
@@ -37,7 +36,11 @@ class Filter extends React.Component {
   }
 
   componentWillReceiveProps(props) {
-    this.setState({ show: props.show });
+    if (this.show === props.show) return;
+    var $el = $(this.refs.filter).velocity('finish');
+    if (props.show) $el.velocity('slideDown');
+    else $el.velocity('slideUp');
+    this.show = props.show;
   }
 
   componentWillUnmount() {
@@ -90,7 +93,7 @@ class Filter extends React.Component {
     };
   }
 
-  renderFilter() {
+  render() {
     return <div id='filter' ref='filter' className='card-panel row' style={{display: 'none'}}>
       <div className='input-field col m5 s6'>
         <select id='statuses' ref='statuses' multiple>
@@ -112,14 +115,6 @@ class Filter extends React.Component {
         <a onClick={this.save} className='btn-flat btn waves-effect'>save</a>
       </div>
     </div>;
-  }
-
-  render() {
-    return  <VelocityComponent
-              animation={this.state.show ? 'slideDown' : 'slideUp' }
-              duration={500}>
-        {this.renderFilter()}
-      </VelocityComponent>;
   }
 }
 
