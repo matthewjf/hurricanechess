@@ -57,7 +57,7 @@ export default (client, joined) => {
                   joined({room: game._id});
                   client.join(game._id);
                   client.emit('game-history', history);
-                  let msg = {message: `${user.username} joined`, time: new Date()};
+                  let msg = {user: user, type: 'join', time: new Date()};
                   io.to(game._id).emit('game-chat', msg);
                 }
               });
@@ -69,7 +69,7 @@ export default (client, joined) => {
                   joined({room: game._id});
                   client.join(game._id);
                   client.emit('game-state', GameManager.getState(game._id));
-                  let msg = {message: `${user.username} joined`, time: new Date()};
+                  let msg = {user: user, type: 'join', time: new Date()};
                   io.to(game._id).emit('game-chat', msg);
                 }
               });
@@ -92,7 +92,7 @@ export default (client, joined) => {
   client.on("game-chat", data => {
     if (data && data.gameId && data.message)
       validateUser(userId, user => {
-        let chat = {user: user, message: data.message, time: new Date()};
+        let chat = {type: 'message', user: user, message: data.message, time: new Date()};
         io.to(data.gameId).emit('game-chat', chat);
       });
   });

@@ -41,22 +41,26 @@
     margin: 0.5rem 1rem;
   }
 
-  .message-text {
+  .message {
     color: color('grey', 'lighten-1');
+
+    &.join {
+      color: color("grey", 'darken-2');
+    }
+
+    &.leave {
+      color: color("grey", 'darken-2');
+    }
   }
 
   .username {
     color: color('grey', 'darken-1');
     &.white-player {
-      color: color('green', 'lighten-3');
+      color: color('green', 'lighten-2');
     }
     &.black-player {
-      color: color('red', 'lighten-3');
+      color: color('red', 'lighten-2');
     }
-  }
-
-  .game-message {
-    color: $primary-color;
   }
 }
 

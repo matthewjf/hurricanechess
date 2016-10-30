@@ -78,16 +78,18 @@ class Chat extends React.Component {
 
   renderChats() {
     return this.state.chats.map(chat => {
-      if (chat.user)
+      if (chat.type === 'message')
         return <div key={chat.time}>
           <span className={'username ' + this.usernameClass(chat.user)}>
             {chat.user.username}
           </span>
-          <span className='message-text'>: {chat.message}</span>
+          <span className='message'>: {chat.message}</span>
         </div>;
       else
         return <div key={chat.time}>
-          <em className='game-message'>{chat.message}</em>
+          <em className={'message ' + chat.type}>
+            {chat.user.username + ' ' + (chat.type === 'join' ? 'joined' : 'left')}
+          </em>
         </div>;
     });
   }

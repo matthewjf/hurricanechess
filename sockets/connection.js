@@ -32,7 +32,7 @@ io.on('connection', client => {
                   client.emit('left-game', game);
                 }
               });
-              let msg = {message: `${user.username} left`, time: new Date()};
+              let msg = {type: 'leave', user: user, time: new Date()};
               io.to(game._id).emit('game-chat', msg);
           });
         }
