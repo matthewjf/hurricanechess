@@ -33,6 +33,7 @@
 - rematch
 - start new game
 - single player
+- spectators list
 
 ## Gameplay Options
 - Settings store
