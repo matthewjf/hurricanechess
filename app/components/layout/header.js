@@ -30,11 +30,11 @@ class Header extends React.Component {
 
   logout(e) {
     e.preventDefault();
-    this.home();
-    UserApi.logout(() => {
+    UserApi.logout(function() {
       closeSideNav();
+      this.home();
       Materialize.toast('Logged out', 2000, 'error-text');
-    });
+    }.bind(this));
   }
 
 	home() {

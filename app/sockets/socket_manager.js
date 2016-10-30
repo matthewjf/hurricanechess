@@ -11,7 +11,9 @@ var SocketManager = {
 
     socket.emit('join-' + room, payload);
 
-    setTimeout(function() {socket.on('connect', this.connect);}.bind(this));
+    setTimeout(function() {
+      socket.on('connect', this.connect);
+    }.bind(this), 100);
   },
 
   leave(room){
