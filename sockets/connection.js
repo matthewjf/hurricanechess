@@ -9,7 +9,6 @@ import Game from '../models/game';
 import OnlineStatus from '../helpers/online_status';
 
 io.on('connection', client => {
-  console.log('client conneted');
   var currentRoom;
   var userId = (client.handshake.session.passport || {}).user || client.id;
   OnlineStatus.set(userId);
@@ -41,7 +40,6 @@ io.on('connection', client => {
 
   // JOIN SUCCESS
   const joined = data => {
-    console.log('client joining', data.room);
     if (!currentRoom || currentRoom.toString() !== data.room.toString()) {
       client.leave(currentRoom, function(){
         if (currentRoom && currentRoom !== 'index') {

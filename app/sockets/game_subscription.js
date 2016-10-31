@@ -24,6 +24,8 @@ var GameSubscription = {
   },
 
   join(id, errorCB) {
+    this.leave();
+
     socket.on('errors', (data) => {
       if (errorCB) errorCB(data);
     });

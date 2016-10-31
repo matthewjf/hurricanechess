@@ -2,7 +2,7 @@ import React from 'react';
 import {IndexRoute, Route} from 'react-router';
 import App from './components/app';
 
-import GameIndex from './components/game_index/index';
+import GameIndex from './components/index/index';
 import Game from './components/game/game';
 import About from './components/about/about';
 import Verify from './components/users/verify';

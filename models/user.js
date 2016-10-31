@@ -24,6 +24,17 @@ UserSchema.plugin(passportLocalMongooseEmail);
 
 UserSchema.add({hash: { type: String, required: [true, 'Password required'] } });
 
+UserSchema.set('toJSON', {
+  transform: function(doc, ret, options) {
+    delete ret.email;
+    delete ret.salt;
+    delete ret.hash;
+    delete ret.isAuthenticated;
+
+    return ret;
+  }
+});
+
 UserSchema.statics.register = function(user, password, cb) {
   if (!(user instanceof this)) user = new this(user);
 

@@ -55,7 +55,7 @@ class GameStore extends EventEmitter {
         _setError(payload.error);
         this.emitChange();
         break;
-      case GameConstants.GAME_REMOVED:
+      case GameConstants.CLEAR_GAME:
         _removeGame();
         this.emitChange();
         break;

@@ -96,9 +96,7 @@ class GameIndex extends React.Component {
               </a>
             </div>
 
-            <div id="new-game-modal" className="modal">
-              <NewGameForm />
-            </div>
+            <NewGameForm />
           </div>
           <Filter show={this.state.showFilter} toggleFilter={this.toggleFilter} />
           <ul id='game-list'>

@@ -1,9 +1,13 @@
 import UserActions from '../actions/user_actions';
 
-// TODO: put this somewhere more appropriate
 function forceReconnect() {
+	function connectOnce() {
+		socket.connect();
+		socket.removeListener('disconnect', connectOnce);
+	};
+
+	socket.on('disconnect', connectOnce);
 	socket.disconnect();
-	setTimeout(()=>{socket.connect();}, 100);
 };
 
 var UserApi = {

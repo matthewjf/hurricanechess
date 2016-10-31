@@ -53,28 +53,25 @@ GameSchema.methods.isArchived = function() {
 };
 
 GameSchema.methods.join = function(user, color, callback) {
-  if (this.isInGame(user) || this.isFull()) {
-    callback(null, this);
-    return;
-  }
+  if (this.isInGame(user) || this.isFull()) return callback(null, this);
 
-  if (!this.white) {
-    this.white = user;
-  } else {
-    this.black = user;
-  }
+  if (!this.white) this.white = user;
+  else this.black = user;
+
   this.save(callback);
 };
 
 GameSchema.methods.leave = function(user, callback) {
-  if (this.status === 'waiting' || this.status === 'starting') {
+  if (this.status === 'active') {
+    callback({errors: "can't leave game"}, this);
+  } else if (this.status === 'archived') {
+    this.save(callback);
+  } else {
     if (user.equals(this.white))
       this.white = undefined;
     if (user.equals(this.black))
       this.black = undefined;
     this.save(callback);
-  } else {
-    callback({errors: "can't leave game"}, this);
   }
 };
 
@@ -157,7 +154,6 @@ GameSchema.pre('save', function(next) {
 
 GameSchema.post('save', (game, next) => {
   io.to('index').emit('game', game);
-  io.to(game._id).emit('game', game);
   next();
 });
 

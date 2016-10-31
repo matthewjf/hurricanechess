@@ -5,6 +5,10 @@
   - stop accepting new games
   - delay deploy until active games are complete (max 30 minutes)
 
+- player list
+- ingame new game form
+- ???
+
 ## Monitoring
 - server memory usage
 - db memory usage

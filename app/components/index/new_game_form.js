@@ -1,4 +1,7 @@
 import React from 'react';
+import GameActions from '../../actions/game_actions';
+import PieceActions from '../../actions/piece_actions';
+import ChatActions from '../../actions/chat_actions';
 import GameSubscription from '../../sockets/game_subscription';
 import GameIndexSubscription from '../../sockets/game_index_subscription';
 import ErrorUtil from '../../utils/error_util';
@@ -89,6 +92,9 @@ class NewGameForm extends React.Component {
   }
 
   submitSuccess() {
+    // ChatActions.removeChats();
+    // GameActions.removeGame();
+    // PieceActions.removeState();
     $('#new-game-modal').closeModal();
   }
 
@@ -115,62 +121,64 @@ class NewGameForm extends React.Component {
 
   render() {
     return (
-      <div className='row'>
-        <form onSubmit={this.handleSubmit}>
+      <div id="new-game-modal" className="modal">
+        <div className='row'>
+          <form onSubmit={this.handleSubmit}>
 
-          <div className="modal-content">
-            <div className='row'>
-              <div className='input-field'>
-                <input id="game-name"
-                       type="text"
-                       className={this.state.errors.name ? 'invalid' : ''}
-                       value={this.state.name}
-                       onChange={this.handleNameChange} />
-                <label htmlFor="game-name">Name</label>
-                <div className='error'>{this.errorText('name')}</div>
+            <div className="modal-content">
+              <div className='row'>
+                <div className='input-field'>
+                  <input id="game-name"
+                         type="text"
+                         className={this.state.errors.name ? 'invalid' : ''}
+                         value={this.state.name}
+                         onChange={this.handleNameChange} />
+                  <label htmlFor="game-name">Name</label>
+                  <div className='error'>{this.errorText('name')}</div>
+                </div>
               </div>
+
+              <div className='input-field'>
+                <select onChange={this.colorChange} id='color' ref='color'>
+                  <option value="white">white</option>
+                  <option value="black">black</option>
+                </select>
+                <label>Play as</label>
+              </div>
+
+
+              <p>
+                <input type="radio"
+                       id="public-game"
+                       onChange={this.handlePublicChange}
+                       checked={!this.state.private}
+                       value='false' />
+                <label htmlFor="public-game">Public</label>
+              </p>
+
+              <p>
+                <input type="radio"
+                       id="private-game"
+                       onChange={this.handlePrivateChange}
+                       checked={this.state.private}
+                       value='true'
+                       disabled />
+                <label htmlFor="private-game">Private</label>
+              </p>
+
+
+              {this.setPassword()}
+
+            </div>
+            <input type="submit" className='hidden-submit' />
+            <div className='modal-footer'>
+              <a onClick={this.handleSubmit} className="waves-effect waves-light btn">
+                create
+              </a>
             </div>
 
-            <div className='input-field'>
-              <select onChange={this.colorChange} id='color' ref='color'>
-                <option value="white">white</option>
-                <option value="black">black</option>
-              </select>
-              <label>Play as</label>
-            </div>
-
-
-            <p>
-              <input type="radio"
-                     id="public-game"
-                     onChange={this.handlePublicChange}
-                     checked={!this.state.private}
-                     value='false' />
-              <label htmlFor="public-game">Public</label>
-            </p>
-
-            <p>
-              <input type="radio"
-                     id="private-game"
-                     onChange={this.handlePrivateChange}
-                     checked={this.state.private}
-                     value='true'
-                     disabled />
-              <label htmlFor="private-game">Private</label>
-            </p>
-
-
-            {this.setPassword()}
-
-          </div>
-          <input type="submit" className='hidden-submit' />
-          <div className='modal-footer'>
-            <a onClick={this.handleSubmit} className="waves-effect waves-light btn">
-              create
-            </a>
-          </div>
-
-        </form>
+          </form>
+        </div>
       </div>
     );
   }

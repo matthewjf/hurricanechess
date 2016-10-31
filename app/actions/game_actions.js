@@ -25,7 +25,7 @@ var GameActions = {
 
   removeGame: () => {
     AppDispatcher.dispatch({
-      actionType: GameConstants.GAME_REMOVED
+      actionType: GameConstants.CLEAR_GAME
     });
   }
 };
