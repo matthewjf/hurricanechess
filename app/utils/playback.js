@@ -57,6 +57,14 @@ function _sendFrame(id) {
   }
 }
 
+function _sendLastNewFrame(id) {
+  var newIdx = _getLastFrame(id); // find next frame
+  if (Number.isInteger(newIdx)) { // update current frame and send state if next frame
+    _frameIdx = newIdx;
+    _sendFrame(newIdx);
+  }
+}
+
 class Playback extends EventEmitter {
   constructor() {
     super();
@@ -97,11 +105,7 @@ class Playback extends EventEmitter {
 
     var lastFrame = _frames[_frameIdx]; // increment elapsed and return if elapsed is before last frame sent
     if (lastFrame && _elapsed <= lastFrame.elapsed) return;
-    var newIdx = _getLastFrame(_frameIdx); // find next frame
-    if (newIdx) { // update current frame and send state if next frame
-      _frameIdx = newIdx;
-      _sendFrame(newIdx);
-    }
+    _sendLastNewFrame(_frameIdx);
   }
 
   pause() {
@@ -137,11 +141,7 @@ class Playback extends EventEmitter {
     if (!_elapsed) return _sendFrame('init');
     if (_elapsed > _endTime) return this.end();
 
-    var newIdx = _getLastFrame(_frameIdx); // find next frame
-    if (newIdx) { // update current frame and send state if next frame
-      _frameIdx = newIdx;
-      _sendFrame(newIdx);
-    }
+    _sendLastNewFrame(_frameIdx);
 
     setTimeout(() => {
       $('.piece-wrapper', '#pieces').removeClass('no-transition');
