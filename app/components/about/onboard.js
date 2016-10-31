@@ -62,7 +62,7 @@ class Onboard extends React.Component {
 
   render() {
     return <VelocityTransitionGroup
-          enter={{animation: 'slideDown', duration: '500ms'}}
+          enter={{animation: 'slideDown', duration: '500ms', delay: '100'}}
           leave={{animation: 'slideUp', duration: '500ms'}} >
         {this.renderOnboard()}
       </VelocityTransitionGroup>;

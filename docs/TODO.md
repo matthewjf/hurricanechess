@@ -5,6 +5,7 @@
   - stop accepting new games
   - delay deploy until active games are complete (max 30 minutes)
 
+- fix render of onboard
 - spectator list
 - ingame new game form
 
