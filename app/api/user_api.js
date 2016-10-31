@@ -1,14 +1,20 @@
 import UserActions from '../actions/user_actions';
 
-function forceReconnect() {
-	function connectOnce() {
-		socket.connect();
-		socket.removeListener('disconnect', connectOnce);
-	};
+// function forceReconnect() {
+// 	function connectOnce() {
+// 		socket.connect();
+// 		socket.removeListener('disconnect', connectOnce);
+// 	};
+//
+// 	socket.on('disconnect', connectOnce);
+// 	socket.disconnect();
+// };
 
-	socket.on('disconnect', connectOnce);
+function forceReconnect() {
 	socket.disconnect();
+	setTimeout(()=>{socket.connect();}, 100);
 };
+
 
 var UserApi = {
 	signup: (user, successCB, errorCB) => {
