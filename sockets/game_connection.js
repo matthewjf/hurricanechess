@@ -71,7 +71,7 @@ export default (client, joined) => {
                   client.emit('game-state', GameManager.getState(game._id));
                   let msg = {user: user, type: 'join', time: new Date()};
                   io.to(game._id).emit('game-chat', msg);
-                  io.to(game._id).emit('game', game);
+                  client.emit('game', game);
                 }
               });
             }

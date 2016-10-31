@@ -154,6 +154,7 @@ GameSchema.pre('save', function(next) {
 
 GameSchema.post('save', (game, next) => {
   io.to('index').emit('game', game);
+  io.to(game._id).emit('game', game);
   next();
 });
 
