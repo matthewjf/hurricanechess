@@ -12,6 +12,7 @@ var CHANGE_EVENT = 'change';
 var STEP = 10;
 var JUMP = 10;
 
+
 // initialize
 function _setState(history) {
   _clearState();
@@ -132,16 +133,17 @@ class Playback extends EventEmitter {
 
   jumpBackward() {
     _elapsed = _elapsed - (JUMP * 1000) < 0 ? 0 : _elapsed - (JUMP * 1000);
+    _frameIdx = -1;
     this.jumpComplete();
   }
 
   jumpComplete() {
     $('.piece-wrapper', '#pieces').addClass('no-transition');
 
-    if (!_elapsed) return _sendFrame('init');
+    if (!_elapsed) _sendFrame('init');
     if (_elapsed > _endTime) return this.end();
 
-    _sendLastNewFrame(_frameIdx);
+    _sendLastNewFrame();
 
     setTimeout(() => {
       $('.piece-wrapper', '#pieces').removeClass('no-transition');
