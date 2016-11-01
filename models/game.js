@@ -55,8 +55,8 @@ GameSchema.methods.isArchived = function() {
 GameSchema.methods.join = function(user, color, callback) {
   if (this.isInGame(user) || this.isFull()) return callback(null, this);
 
-  if (!this.white) this.white = user;
-  else this.black = user;
+  if (!this.white) this.white = user._id;
+  else this.black = user._id;
 
   this.save(callback);
 };
@@ -153,9 +153,11 @@ GameSchema.pre('save', function(next) {
 });
 
 GameSchema.post('save', (game, next) => {
-  io.to('index').emit('game', game);
-  io.to(game._id).emit('game', game);
-  next();
+  game.populate('white black', function(err, g) {
+    io.to('index').emit('game', g);
+    io.to(g).emit('game', g);
+    next();
+  });
 });
 
 GameSchema.post('remove', (game, next) => {

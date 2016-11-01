@@ -17,6 +17,9 @@ class GameIndexItem extends React.Component {
     if (this.props.currentUser) {
       browserHistory.push('/games/' + this.props.game._id);
     } else {
+      $(this.refs.item)
+        .velocity({scale: 1.25}, {duration: 100, easing: 'swing'})
+        .velocity('reverse');
       ErrorUtil.loginRequired();
     }
   }
@@ -59,7 +62,7 @@ class GameIndexItem extends React.Component {
   render() {
     let game = this.props.game;
     return(
-      <li className="row card-panel clickable waves-effect game"
+      <li ref='item' className="row card-panel clickable waves-effect game"
           onClick={this.handleClick}>
 
         <div className='col s10 m7 game-name name-col'>

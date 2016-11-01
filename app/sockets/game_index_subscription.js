@@ -2,6 +2,12 @@ import SocketManager from './socket_manager';
 import GameIndexActions from '../actions/game_index_actions';
 import OnlineStatsActions from '../actions/online_stats_actions';
 
+var _filters;
+
+function _getIndex() {
+  socket.emit('get-index', _filters);
+}
+
 const ROOM = 'index';
 var GameIndexSubscription = {
   join() {
@@ -13,7 +19,10 @@ var GameIndexSubscription = {
   },
 
   getIndex(filters) {
-    socket.emit('get-index', filters);
+    _filters = filters;
+    socket.off("connect", _getIndex);
+    socket.on("connect", _getIndex);
+    _getIndex();
   },
 
   leave() {
@@ -23,6 +32,7 @@ var GameIndexSubscription = {
     socket.off("remove");
     socket.off("games");
     socket.off("game");
+    socket.off("connect", _getIndex);
   }
 };
 

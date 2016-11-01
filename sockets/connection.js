@@ -17,8 +17,7 @@ io.on('connection', client => {
   const cleanupGame = gameId => {
     var userId = (client.handshake.session.passport || {}).user;
     Game.findById(gameId)
-      .populate('white')
-      .populate('black')
+      .populate('white black')
       .exec(function(err, game) {
         if (err) {
           client.emit('errors', err.errors);
@@ -27,12 +26,8 @@ io.on('connection', client => {
             if (user)
               game.leave(user, function(err, game){
                 if (err) client.emit('errors', err.errors);
-                else {
-                  client.emit('left-game', game);
-                }
+                else client.emit('left-game', game);
               });
-              let msg = {type: 'leave', user: user, time: new Date()};
-              io.to(game._id).emit('game-chat', msg);
           });
         }
       });

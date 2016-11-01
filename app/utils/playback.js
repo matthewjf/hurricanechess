@@ -12,7 +12,6 @@ var CHANGE_EVENT = 'change';
 var STEP = 10;
 var JUMP = 10;
 
-
 // initialize
 function _setState(history) {
   _clearState();

@@ -9,7 +9,7 @@ var UserSchema = new Schema({
     type: String,
     required: [true, 'Username required'],
     minlength: [4, 'Username min length 4 characters'],
-    maxlength: [50, 'Username max length 50 characters'],
+    maxlength: [32, 'Username max length 32 characters'],
     unique: true,
     index: true
   },
