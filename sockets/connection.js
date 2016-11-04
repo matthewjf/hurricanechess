@@ -26,7 +26,10 @@ io.on('connection', client => {
             if (user)
               game.leave(user, function(err, game){
                 if (err) client.emit('errors', err.errors);
-                else client.emit('left-game', game);
+                else {
+                  let msg = {user: user, type: 'leave', time: new Date()};
+                  io.to(game._id).emit('game-chat', msg);
+                }
               });
           });
         }
