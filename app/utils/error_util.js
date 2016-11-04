@@ -1,8 +1,14 @@
 /* global Materialize */
 
+var _showing = false;
+
 var ErrorUtil = {
   loginRequired() {
-    Materialize.toast('Login required!', 2000, 'error-text');
+    if (!_showing) {
+      Materialize.toast('Login required!', 2000, 'error-text');
+      _showing = true;
+      setTimeout(function() { _showing = false; }, 2000);
+    } 
   },
 
   gameRejected(data) {

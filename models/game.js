@@ -155,7 +155,7 @@ GameSchema.pre('save', function(next) {
 GameSchema.post('save', (game, next) => {
   game.populate('white black', function(err, g) {
     io.to('index').emit('game', g);
-    io.to(g).emit('game', g);
+    io.to(g._id).emit('game', g);
     next();
   });
 });

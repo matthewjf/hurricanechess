@@ -5,9 +5,12 @@
   - stop accepting new games
   - delay deploy until active games are complete (max 30 minutes)
 
-- fix render of onboard
 - spectator list
 - ingame new game form
+
+## Add Index Features
+- searching
+- private games
 
 ## Monitoring
 - server memory usage
@@ -28,10 +31,6 @@
 - make searchable
 - google and facebook auth
 - JWT auth
-
-## Add Index Features
-- searching
-- private games
 
 ## Game Features
 - rematch
