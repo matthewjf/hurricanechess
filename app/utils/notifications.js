@@ -6,7 +6,7 @@ function checkNotifications() {
 function sendGameNotification() {
   if (document && !document.hasFocus()) {
     let title = 'Your game is starting!';
-    let options = {body: 'click here to go there now'};
+    let options = {body: 'CLICK to go there now'};
     var n = new Notification(title, options);
 
     n.onclick = function() {
