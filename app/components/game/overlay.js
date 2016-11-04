@@ -2,6 +2,7 @@ import React from 'react';
 import Playback from '../../utils/playback';
 import GameConfig from '../../../config/game';
 import {VelocityTransitionGroup} from 'velocity-react';
+import {checkNotifications, sendGameNotification} from '../../utils/notifications';
 
 class Overlay extends React.Component {
   constructor(props) {
@@ -45,6 +46,7 @@ class Overlay extends React.Component {
   }
 
   waiting() {
+    checkNotifications();
     clearInterval(this.interval);
     this.countdown = undefined;
     $(this.refs.status).velocity('finish')
@@ -54,6 +56,7 @@ class Overlay extends React.Component {
 
   starting() {
     if (!Number.isInteger(this.countdown)) {
+      sendGameNotification();
       this.setState({statusText: 'starting'});
       this.countdown = GameConfig.startDelay / 1000;
       this.performCountdown();
