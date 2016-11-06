@@ -4,8 +4,10 @@ import GameConfig from '../../../config/game';
 import PieceActions from '../../actions/piece_actions';
 import GameActions from '../../actions/game_actions';
 import InitialPieces from '../../../helpers/initial_pieces';
+import Computer from './computer';
 
 var _timers = new Set();
+var _computer;
 
 // GAME SETUP
 
@@ -32,6 +34,7 @@ function _getInitialState() {
 function _startGame() {
   GameActions.receiveGame(Object.assign({status: 'active'}, _players));
   PieceActions.receiveState(Object.assign(_getInitialState(), _players));
+  _computer.start();
 };
 
 // MOVES
@@ -126,6 +129,7 @@ function _turnOffDelay(state) {
 };
 
 function _gameOver(state) {
+  _computer.end();
   _turnOffDelay(state);
   PieceActions.receiveState(state);
   let winner = Board.getWinner(state);
@@ -136,6 +140,7 @@ function _gameOver(state) {
 var SoloManager = {
   join(color='white') {
     _players = _getPlayers(color);
+    _computer = new Computer(color === 'white' ? 'black' : 'white');
     GameActions.receiveGame(Object.assign({status: 'starting'}, _players));
     this.startTimeout = setTimeout(_startGame, 10 * 1000);
   },
@@ -146,11 +151,15 @@ var SoloManager = {
 
   leave() {
     if (this.startTimeout) clearTimeout(this.startTimeout);
+    _timers.forEach((id) => {
+      clearTimeout(id);
+    });
+    _computer.end();
   },
 
   movePiece(pieceId, targetPos) {
     var state = PieceStore.get();
-
+    var pieceId = parseInt(pieceId);
     if (Board.canMovePiece(pieceId, targetPos, state)) {
       var type = Board.getPiece(pieceId, state).type;
       if (type === 4)
