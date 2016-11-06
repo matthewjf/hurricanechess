@@ -26,10 +26,12 @@ function _getState() {
 }
 
 function _setMove(data) {
-  if (data.moveId < _moveId)
+  if (_moveId && data.moveId < _moveId) {
     GameSubscription.requestGameState(_gameId);
-  else
+  } else {
+    _moveId = data.moveId;
     State.updatePiece(data.pieceId, data.newData, _getState());
+  }
 }
 
 function _removeState() {
@@ -37,6 +39,7 @@ function _removeState() {
   _pieces = {};
   _grid = [];
   _reserved = [];
+  _moveId = undefined;
 }
 
 function _setError(error) {

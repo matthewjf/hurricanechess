@@ -10,7 +10,7 @@ class ClickHandler extends React.Component {
     this.squareClass = this.squareClass.bind(this);
     this.renderTiles = this.renderTiles.bind(this);
     this.handleClick = this.handleClick.bind(this);
-    this.isInValidMoves = this.isInValidMoves.bind(this);
+    this.isValidMove = this.isValidMove.bind(this);
     this.buildState = this.buildState.bind(this);
     this.getGameState = this.getGameState.bind(this);
 
@@ -51,7 +51,7 @@ class ClickHandler extends React.Component {
     this.setState({selected: undefined, validMoves: []});
   }
 
-  isInValidMoves(pos) {
+  isValidMove(pos) {
     for (var i = 0; i < this.state.validMoves.length; i++) {
       var curr = this.state.validMoves[i];
       if (curr[0] === pos[0] && curr[1] === pos[1]) return true;
@@ -71,7 +71,7 @@ class ClickHandler extends React.Component {
         validMoves: BoardHelper.getMoves(targetId, this.state)
       });
     else {
-      if (this.isInValidMoves(targetPos))
+      if (this.isValidMove(targetPos))
         GameSubscription.requestMove({
           gameId: this.state.gameId,
           pieceId: this.state.selected,
@@ -89,7 +89,7 @@ class ClickHandler extends React.Component {
       var piece = this.state.pieces[selectedId];
       if (piece && piece.pos[0] === pos[0] && piece.pos[1] === pos[1])
         return 'selected';
-      else if (this.isInValidMoves(pos))
+      else if (this.isValidMove(pos))
         return 'highlight';
     }
     return '';

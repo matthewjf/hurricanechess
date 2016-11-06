@@ -2,6 +2,7 @@ import React from 'react';
 import {browserHistory} from 'react-router';
 import ErrorUtil from '../../utils/error_util';
 import GameSubscription from '../../sockets/game_subscription';
+import GameActions from '../../actions/game_actions';
 import GameStore from '../../stores/game_store';
 import Board from './board';
 import Pieces from './pieces';
@@ -48,6 +49,7 @@ class Game extends React.Component {
 
   componentWillUnmount() {
     GameStore.removeChangeListener(this.getGame);
+    GameActions.removeGame();
     GameSubscription.leave();
   }
 

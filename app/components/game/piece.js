@@ -29,9 +29,9 @@ class Piece extends React.Component {
   }
 
   style() {
-    var scale = this.state.whiteOnBottom ? '' : 'scale(-1, -1)';
-    var transSpeed = this.state.type === 4 ? GameConfig.speed * 2 : GameConfig.speed;
-    var transition = "top "+transSpeed+"ms linear, left "+transSpeed+"ms linear";
+    let scale = this.state.whiteOnBottom ? '' : 'scale(-1, -1)';
+    let transSpeed = 50 + (this.state.type === 4 ? GameConfig.speed * 2 : GameConfig.speed);
+    let transition = `top ${transSpeed}ms linear, left ${transSpeed}ms linear`;
 
     return {
       fontSize: (this.state.tileSize * 4 / 5) + 'px', // css
