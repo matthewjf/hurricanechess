@@ -94,7 +94,7 @@ class Computer {
 
   findMove() {
     var move;
-    var maxValue = -0.1;
+    var maxValue = 0;
     var moves = this.moves;
     for (var pieceId in moves) {
       if (this.isOwnPiece(pieceId) && pieceId != this.getKing().id) {
