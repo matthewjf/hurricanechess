@@ -152,6 +152,7 @@ const _targetPos = function(target, state) {
 };
 
 const _canTakeTarget = function(piece, target, state) {
+  if (state.protecting) return true;
   let targetId = _targetPos(target, state);
   return _isEmpty(target, state) || _diffColor(piece.id, targetId);
 };

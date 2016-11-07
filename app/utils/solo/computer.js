@@ -57,10 +57,9 @@ class Computer {
 
     var pieces = this.pieces();
     for (var pieceId in pieces) {
-      var availMoves = Piece.getMoves(pieceId, this.state);
-      var piece = pieces[pieceId];
-      if (piece && piece.status === 0) this.moves[pieceId] = availMoves;
-      availMoves.forEach(function(move) {
+      this.moves[pieceId] = Board.getMoves(pieceId, this.state);
+
+      Piece.getMoves(pieceId, this.state, true).forEach(function(move) {
         this.targets[move[0]][move[1]].push(pieceId);
       }.bind(this));
     }
@@ -117,7 +116,7 @@ class Computer {
 
   moveValue(pieceId, target) {
     var net = 0;
-    if (!this.isSafe(target)) {
+    if (!this.isSafe(target)) { // TODO: account for opponent protection
       net -= value(this.pieces()[pieceId]);
       if (this.isProtected(target)) net += 1;
     };

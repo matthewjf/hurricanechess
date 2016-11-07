@@ -34,14 +34,6 @@ class About extends React.Component {
               here</a>. The most popular alternative that's available today is built
               on silverlight, which has limited browser support and is being phased out.
             </p>
-            {/* <p>
-              The hosting and maintenance of this site isn't free.
-              I'm not interested in making money from this site,
-              but it wouldn't be terrible if it cost slightly less.
-              If you'd like to donate or contribute to development,
-              feel free to send an email to <a href="mailto:contact@chessx.io">contact@chessx.io</a>.
-              100% of donations will go towards hosting costs.
-            </p> */}
           </div>
           <div id="getting-started" className="section scrollspy">
             <h2>GETTING STARTED</h2>
@@ -49,7 +41,7 @@ class About extends React.Component {
             <p>
               Your account helps keep games safe from those hackers.
               An email is required in case you forget your password.
-              Emails are not toys.
+              Emails aren't toys.
               They won't be given out or used for bad things.
             </p>
             <p>
@@ -58,8 +50,10 @@ class About extends React.Component {
             <h3>Get in a game</h3>
             <p>
               The fastest way to play is by clicking on a game with a player already waiting.
-              You can also start a game with the <code>new game</code> button on the home page.
+              You can also start a game with the <code className='code-btn'>new game</code> button on the home page.
+              Click <code className='code-btn'>create</code> to start a multiplayer game, or <code>single player</code> to play against the computer.
             </p>
+            <img src="/images/newgame.png"/>
             <h3>Spectate</h3>
             <p>
               If you're not sure what to do, try watching a game.

@@ -5,9 +5,9 @@ import moves from './moves';
 // const pieceTypes = ['king', 'queen', 'rook', 'bishop', 'knight', 'pawn'];
 // const pieceTypeId = {king: 0, queen: 1, rook: 2, bishop: 3, knight: 4, pawn: 5};
 
-var _getMoves = function(pieceId, state) {
+var _getMoves = function(pieceId, state, protecting=false) {
   var piece = state.pieces[pieceId];
-  return moves(Object.assign(state, {piece: piece}));
+  return moves(Object.assign(state, {piece: piece, protecting: protecting}));
 };
 
 var _getNextPos = function(pieceId, targetPos, state) {
