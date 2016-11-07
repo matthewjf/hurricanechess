@@ -73,6 +73,13 @@ class Computer {
     }.bind(this));
   }
 
+  isProtected(pos) {
+    var pieceIds = this.targets[pos[0]][pos[1]];
+    return pieceIds.length === 0 || pieceIds.some(function(id) {
+      return this.isOwnPiece(id);
+    }.bind(this));
+  }
+
   piecesCanTake(pos) {
     return this.targets[pos[0]][pos[1]].filter(function(id) {
       return this.isOwnPiece(id);
@@ -87,16 +94,16 @@ class Computer {
 
   findMove() {
     var move;
-    var maxValue = 0;
+    var maxValue = -0.1;
     var moves = this.moves;
     for (var pieceId in moves) {
-      if (this.isOwnPiece(pieceId)) {
+      if (this.isOwnPiece(pieceId) && pieceId != this.getKing().id) {
         var pieceMoves = moves[pieceId];
         for (var i = 0; i < pieceMoves.length; i++) {
           var target = pieceMoves[i];
           if (target) {
             var moveValue = this.moveValue(pieceId, target);
-            if (moveValue > maxValue || (!maxValue && Math.random() < 0.15 && moveValue >= maxValue)) {
+            if (moveValue > maxValue) {
               move = {id: pieceId, target: target};
               maxValue = moveValue;
             }
@@ -110,11 +117,19 @@ class Computer {
 
   moveValue(pieceId, target) {
     var net = 0;
-    if (!this.isSafe(target)) net -= value(this.pieces()[pieceId]);
+    if (!this.isSafe(target)) {
+      net -= value(this.pieces()[pieceId]);
+      if (this.isProtected(target)) net += 1;
+    };
 
     var tarId = this.grid()[target[0]][target[1]];
     if (tarId) net += value(this.pieces()[tarId]);
-    // TODO: consider board position in move value
+
+    var colVal = (3.5 - Math.abs(3.5 - target[1])) / 30;
+    net += colVal;
+
+    if (Math.random() < 0.1)
+      net += this.color === 'white' ? ((7 - target[0]) / 70) : (target[0] / 70);
 
     return net;
   }

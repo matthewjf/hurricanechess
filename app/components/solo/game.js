@@ -31,6 +31,10 @@ class Solo extends Game {
     return this.color;
   }
 
+  playAgain() {
+    SoloManager.join(this.color);
+  }
+
   render() {
     var game = this.state.game;
 
