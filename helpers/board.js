@@ -47,10 +47,11 @@ var _getPiece = function(pieceId, state) {
 };
 
 var _isCastleMove = function(pieceId, targetPos, state) {
-  var piece = state.pieces[pieceId];
-  var row = piece.id < 16 ? 7 : 0;
-  var lCol = 2, rCol = 6;
-  return targetPos[0] === row && (targetPos[1] === rCol || targetPos[1] === lCol);
+  let piece = state.pieces[pieceId];
+  let row = piece.id < 16 ? 7 : 0;
+  let lCol = 2, rCol = 6;
+  let currCol = piece.pos[1];
+  return currCol === 4 && targetPos[0] === row && (targetPos[1] === rCol || targetPos[1] === lCol);
 };
 
 var _shouldPromote = function(pieceId, state) {

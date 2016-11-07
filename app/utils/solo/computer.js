@@ -19,6 +19,7 @@ class Computer {
     this.moveInterval = setInterval(function() {
       this.setMoves();
       this.protectKing();
+      this.makeMove();
     }.bind(this), this.speed);
   }
 
@@ -38,6 +39,10 @@ class Computer {
     if (this.state) return this.state.pieces;
   }
 
+  grid() {
+    if (this.state) return this.state.grid;
+  }
+
   isOwnPiece(id) {
     return (this.color === 'white' && id < 16) || (this.color === 'black' && id > 15);
   }
@@ -52,8 +57,9 @@ class Computer {
 
     var pieces = this.pieces();
     for (var pieceId in pieces) {
-      let availMoves = Piece.getMoves(pieceId, this.state); // ignore cooldown
-      this.moves[pieceId] = availMoves;
+      var availMoves = Piece.getMoves(pieceId, this.state);
+      var piece = pieces[pieceId];
+      if (piece && piece.status === 0) this.moves[pieceId] = availMoves;
       availMoves.forEach(function(move) {
         this.targets[move[0]][move[1]].push(pieceId);
       }.bind(this));
@@ -73,7 +79,47 @@ class Computer {
     }.bind(this));
   }
 
-  // king helpers
+  // piece logic
+  makeMove() {
+    var move = this.findMove();
+    if (move) this.performMove(move);
+  }
+
+  findMove() {
+    var move;
+    var maxValue = 0;
+    var moves = this.moves;
+    for (var pieceId in moves) {
+      if (this.isOwnPiece(pieceId)) {
+        var pieceMoves = moves[pieceId];
+        for (var i = 0; i < pieceMoves.length; i++) {
+          var target = pieceMoves[i];
+          if (target) {
+            var moveValue = this.moveValue(pieceId, target);
+            if (moveValue > maxValue || (!maxValue && Math.random() < 0.15 && moveValue >= maxValue)) {
+              move = {id: pieceId, target: target};
+              maxValue = moveValue;
+            }
+          }
+        }
+      }
+    }
+
+    return move;
+  }
+
+  moveValue(pieceId, target) {
+    var net = 0;
+    if (!this.isSafe(target)) net -= value(this.pieces()[pieceId]);
+
+    var tarId = this.grid()[target[0]][target[1]];
+    if (tarId) net += value(this.pieces()[tarId]);
+    // TODO: consider board position in move value
+
+    return net;
+  }
+
+  // king logic
   protectKing() {
     var king = this.getKing();
     var threats = this.kingThreats();
@@ -99,9 +145,10 @@ class Computer {
 
   kingSafePos() {
     var kingMoves = this.moves[this.getKing().id];
-    for (var i = 0; i < kingMoves.length; i++) {
-      if (this.isSafe(kingMoves[i])) return kingMoves[i];
-    }
+    if (kingMoves)
+      for (var i = 0; i < kingMoves.length; i++) {
+        if (this.isSafe(kingMoves[i])) return kingMoves[i];
+      }
   }
 
   takeKingThreats(threats) {

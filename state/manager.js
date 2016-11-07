@@ -55,7 +55,7 @@ var movePiece = function(gameId, userId, pieceId, targetPos) {
     var type = Board.getPiece(pieceId, state).type;
     if (type === 4)
       _performKnightMove(pieceId, targetPos, state);
-    else if ( type === 0 && Board.isCastleMove(pieceId, targetPos, state))
+    else if (type === 0 && Board.isCastleMove(pieceId, targetPos, state))
       _performCastleMove(pieceId, targetPos, state);
     else
       _performMove(pieceId, targetPos, state);

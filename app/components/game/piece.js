@@ -30,7 +30,7 @@ class Piece extends React.Component {
 
   style() {
     let scale = this.state.whiteOnBottom ? '' : 'scale(-1, -1)';
-    let transSpeed = 50 + (this.state.type === 4 ? GameConfig.speed * 2 : GameConfig.speed);
+    let transSpeed = 25 + (this.state.type === 4 ? GameConfig.speed * 2 : GameConfig.speed);
     let transition = `top ${transSpeed}ms linear, left ${transSpeed}ms linear`;
 
     return {
