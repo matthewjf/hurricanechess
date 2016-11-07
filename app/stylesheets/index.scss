@@ -56,7 +56,13 @@
     white-space: nowrap;
   }
 
-  #filter-btn {
-    margin-left: 0.5rem;
+  #index-controls {
+    white-space: nowrap;
+    a {
+      margin-right: 0.5rem;
+    }
+    #filter-btn {
+      margin-right: 0;
+    }
   }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import {browserHistory} from 'react-router';
 import GameActions from '../../actions/game_actions';
 import PieceActions from '../../actions/piece_actions';
 import ChatActions from '../../actions/chat_actions';
@@ -11,7 +12,6 @@ class NewGameForm extends React.Component {
     super();
     this.blankAttrs = {
       name: '',
-      private: false,
       password: '',
       black: false,
       errors: {}
@@ -19,16 +19,13 @@ class NewGameForm extends React.Component {
 
     this.resetState = this.resetState.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleColorChange = this.handleColorChange.bind(this);
     this.submitData = this.submitData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.submitError = this.submitError.bind(this);
     this.submitSuccess = this.submitSuccess.bind(this);
     this.errorText = this.errorText.bind(this);
-    this.setPassword = this.setPassword.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handlePrivateChange = this.handlePrivateChange.bind(this);
-    this.handlePublicChange = this.handlePublicChange.bind(this);
-    this.handleColorChange = this.handleColorChange.bind(this);
+    this.solo = this.solo.bind(this);
 
     this.state = this.blankAttrs;
   }
@@ -45,40 +42,31 @@ class NewGameForm extends React.Component {
     this.setState(this.blankAttrs);
   }
 
+  handleColorChange(e) {
+    this.setState({ black: e.currentTarget.value === 'black' });
+  }
+
   handleNameChange(e) {
     this.setState({ name: e.currentTarget.value, errors: {} });
-  }
-
-  handleColorChange(e) {
-    e.preventDefault();
-    this.setState({black: e.currentTarget.value === 'black' });
-  }
-
-  handlePrivateChange(e) {
-    this.setState({ private: true });
-  }
-
-  handlePublicChange(e) {
-    this.setState({ private: false, password: '' });
-  }
-
-  handlePasswordChange(e) {
-    this.setState({ password: e.currentTarget.value });
   }
 
   submitData() {
     return {
       game: {
-        name: this.state.name,
-        private: this.state.private,
-        password: this.state.password
+        name: this.state.name
       },
       black: this.state.black
     };
   }
 
+  solo(e) {
+    if(e) e.preventDefault();
+    this.submitSuccess();
+    browserHistory.push(`/solo${this.state.black ? '?c=b' : ''}`);
+  }
+
   handleSubmit(e) {
-    if(e) { e.preventDefault(); }
+    if(e) e.preventDefault();
     GameSubscription.create(this.submitData(), this.submitSuccess, this.submitError);
   }
 
@@ -92,26 +80,7 @@ class NewGameForm extends React.Component {
   }
 
   submitSuccess() {
-    // ChatActions.removeChats();
-    // GameActions.removeGame();
-    // PieceActions.removeState();
     $('#new-game-modal').closeModal();
-  }
-
-  setPassword() {
-    if (this.state.private) {
-      return (
-        <div className='input-field'>
-          <input id="game-password"
-                 type="password"
-                 value={this.state.password}
-                 onChange={this.handlePasswordChange} />
-          <label htmlFor="game-password" >Password</label>
-        </div>
-      );
-    } else {
-      return null;
-    }
   }
 
   errorText(field) {
@@ -126,6 +95,7 @@ class NewGameForm extends React.Component {
           <form onSubmit={this.handleSubmit}>
 
             <div className="modal-content">
+
               <div className='row'>
                 <div className='input-field'>
                   <input id="game-name"
@@ -146,34 +116,14 @@ class NewGameForm extends React.Component {
                 <label>Play as</label>
               </div>
 
-
-              <p>
-                <input type="radio"
-                       id="public-game"
-                       onChange={this.handlePublicChange}
-                       checked={!this.state.private}
-                       value='false' />
-                <label htmlFor="public-game">Public</label>
-              </p>
-
-              <p>
-                <input type="radio"
-                       id="private-game"
-                       onChange={this.handlePrivateChange}
-                       checked={this.state.private}
-                       value='true'
-                       disabled />
-                <label htmlFor="private-game">Private</label>
-              </p>
-
-
-              {this.setPassword()}
-
             </div>
             <input type="submit" className='hidden-submit' />
             <div className='modal-footer'>
               <a onClick={this.handleSubmit} className="waves-effect waves-light btn">
                 create
+              </a>
+              <a onClick={this.solo} className='waves-effect btn btn-flat'>
+                single player
               </a>
             </div>
 
