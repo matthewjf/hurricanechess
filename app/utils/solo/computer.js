@@ -126,18 +126,16 @@ class Computer {
 
     var tarId = this.grid()[target[0]][target[1]];
 
-    // value current pos
+    // CURRENT POSITION
     if (!currIsSafe) {
       if (tarIsSafe) net += pieceVal; // MOVE OUT OF DANGER
       if (currIsProtected && !tarIsProtected && !tarIsSafe) net -= 1; // DONT MOVE AWAY FROM PROTECTION
     }
 
-    if (!tarIsSafe) net -= pieceVal;
-
-    if (tarIsProtected) net += 1.1;
-
-    // TARGET VALUE
-    if (tarId) net += value(this.pieces()[tarId]);
+    // TARGET POSITION
+    if (tarId) net += value(this.pieces()[tarId]); // TAKE HIGH VALUE PIECES
+    if (!tarIsSafe) net -= pieceVal; // MAKE GOOD TRADES
+    if (tarIsProtected) net += 1.1; // INCENTIVE TO TAKE PIECES
 
     // MOVE RISK: -0.5 MAX
     let [currRow, currCol] = this.pieces()[pieceId].pos;
@@ -146,10 +144,10 @@ class Computer {
     net += (1 - dist) / 14;
 
     // POSITIONAL VALUE
-    if (Math.random() < 0.5)
-      net += (3.5 - Math.abs(3.5 - target[1])) / 15; // COL VALUE: 0.2 MAX, 0.1 AVG MAX
-    if (Math.random() < 0.5)
-      net += this.color === 'white' ? ((7 - target[0]) / 35) : (target[0] / 35); // ROW VAL: 0.2 MAX, 0.1 AVG MAX
+    if (Math.random() < 0.25)
+      net += (3.5 - Math.abs(3.5 - target[1])) / 15; // COL VALUE: 0.2 MAX
+    if (Math.random() < 0.25)
+      net += this.color === 'white' ? ((7 - target[0]) / 35) : (target[0] / 35); // ROW VAL: 0.2 MAX
 
     return net;
   }
