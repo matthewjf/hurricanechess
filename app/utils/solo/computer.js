@@ -146,8 +146,10 @@ class Computer {
     net += (1 - dist) / 14;
 
     // POSITIONAL VALUE
-    net += (3.5 - Math.abs(3.5 - target[1])) / 30; // COL VALUE: 0.1 MAX
-    net += this.color === 'white' ? ((7 - target[0]) / 70) : (target[0] / 70); // ROW VAL: 0.1 MAX
+    if (Math.random() < 0.5)
+      net += (3.5 - Math.abs(3.5 - target[1])) / 15; // COL VALUE: 0.2 MAX, 0.1 AVG MAX
+    if (Math.random() < 0.5)
+      net += this.color === 'white' ? ((7 - target[0]) / 35) : (target[0] / 35); // ROW VAL: 0.2 MAX, 0.1 AVG MAX
 
     return net;
   }
