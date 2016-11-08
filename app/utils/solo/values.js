@@ -9,7 +9,7 @@ const typeMap = {
 };
 
 const valueMap = {
-  'king':   1000,
+  'king':   100,
   'queen':  9,
   'rook':   5,
   'bishop': 3,

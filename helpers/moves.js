@@ -81,9 +81,9 @@ const _pawnMoves = function(data) {
   var rDiag = [piece.pos[0] + dir, piece.pos[1] + 1];
   var lDiag = [piece.pos[0] + dir, piece.pos[1] - 1];
 
-  if (_inRangePos(rDiag) && _hasPiece(rDiag, data) && _canTakeTarget(piece, rDiag, data) && !_ownReserved(piece, rDiag, data))
+  if (_inRangePos(rDiag) && (data.protecting || (_hasPiece(rDiag, data) && _canTakeTarget(piece, rDiag, data) && !_ownReserved(piece, rDiag, data))))
     moves.push(rDiag);
-  if (_inRangePos(lDiag) && _hasPiece(lDiag, data) && _canTakeTarget(piece, lDiag, data) && !_ownReserved(piece, lDiag, data))
+  if (_inRangePos(lDiag) && (data.protecting || (_hasPiece(lDiag, data) && _canTakeTarget(piece, lDiag, data) && !_ownReserved(piece, lDiag, data))))
     moves.push(lDiag);
 
   return moves;

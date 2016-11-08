@@ -110,25 +110,44 @@ class Computer {
         }
       }
     }
-
     return move;
   }
 
   moveValue(pieceId, target) {
     var net = 0;
-    if (!this.isSafe(target)) { // TODO: account for opponent protection
-      net -= value(this.pieces()[pieceId]);
-      if (this.isProtected(target)) net += 1;
-    };
+    var piece = this.pieces()[pieceId];
+    var pieceVal = value(piece);
+
+    var currIsSafe = this.isSafe(piece.pos);
+    var tarIsSafe = this.isSafe(target);
+
+    var currIsProtected = this.isProtected(piece.pos);
+    var tarIsProtected = this.isProtected(target);
 
     var tarId = this.grid()[target[0]][target[1]];
+
+    // value current pos
+    if (!currIsSafe) {
+      if (tarIsSafe) net += pieceVal; // MOVE OUT OF DANGER
+      if (currIsProtected && !tarIsProtected && !tarIsSafe) net -= 1; // DONT MOVE AWAY FROM PROTECTION
+    }
+
+    if (!tarIsSafe) net -= pieceVal;
+
+    if (tarIsProtected) net += 1.1;
+
+    // TARGET VALUE
     if (tarId) net += value(this.pieces()[tarId]);
 
-    var colVal = (3.5 - Math.abs(3.5 - target[1])) / 30;
-    net += colVal;
+    // MOVE RISK: -0.5 MAX
+    let [currRow, currCol] = this.pieces()[pieceId].pos;
+    let [tarRow, tarCol] = target;
+    let dist = Math.max(Math.abs(currRow - tarRow), Math.abs(currCol, tarCol));
+    net += (1 - dist) / 14;
 
-    if (Math.random() < 0.1)
-      net += this.color === 'white' ? ((7 - target[0]) / 70) : (target[0] / 70);
+    // POSITIONAL VALUE
+    net += (3.5 - Math.abs(3.5 - target[1])) / 30; // COL VALUE: 0.1 MAX
+    net += this.color === 'white' ? ((7 - target[0]) / 70) : (target[0] / 70); // ROW VAL: 0.1 MAX
 
     return net;
   }
