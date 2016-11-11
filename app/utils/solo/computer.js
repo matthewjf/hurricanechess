@@ -81,7 +81,8 @@ class Computer {
 
   piecesCanTake(pos) {
     return this.targets[pos[0]][pos[1]].filter(function(id) {
-      return this.isOwnPiece(id);
+      let attacking = this.pieces()[id];
+      return this.isOwnPiece(id) && attacking && attacking.status == 0;
     }.bind(this));
   }
 
@@ -162,8 +163,9 @@ class Computer {
       var protectingMoves = this.takeKingThreats(threats);
       if (protectingMoves && protectingMoves.length > 0)
         this.performMoves(protectingMoves);
-      else if (king.status === 0 && safePos)
+      else if (king.status === 0 && safePos) {
         this.performMove({id: king.id, target: safePos});
+      }
     }
   }
 
@@ -173,7 +175,9 @@ class Computer {
 
   kingThreats() {
     var kingPos = this.getKing().pos;
-    return this.targets[kingPos[0]][kingPos[1]];
+    return this.targets[kingPos[0]][kingPos[1]].filter(function(id) {
+      return !this.isOwnPiece(id);
+    }.bind(this));;
   }
 
   kingSafePos() {
