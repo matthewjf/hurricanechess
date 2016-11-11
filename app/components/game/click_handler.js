@@ -121,7 +121,7 @@ class ClickHandler extends React.Component {
 
   render() {
     return (
-      <div id='click-handler' onMouseDown={this.handleClick}>
+      <div id='click-handler' onMouseDown={this.handleClick} onClick={()=>{}}>
         {this.renderTiles()}
       </div>
     );
