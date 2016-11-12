@@ -1,6 +1,8 @@
 @import 'queries';
+@import 'util/ios';
 
 #click-handler {
+  @extend .no-tap;
   width: 100%; height: 100%;
   padding: 0;
   flex-shrink: 0;
