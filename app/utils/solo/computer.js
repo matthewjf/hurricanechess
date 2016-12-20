@@ -177,7 +177,7 @@ class Computer {
     var kingPos = this.getKing().pos;
     return this.targets[kingPos[0]][kingPos[1]].filter(function(id) {
       return !this.isOwnPiece(id);
-    }.bind(this));;
+    }.bind(this));
   }
 
   kingSafePos() {
@@ -196,7 +196,7 @@ class Computer {
       var takingPieces = this.piecesCanTake(threat.pos);
       if (takingPieces && takingPieces.length > 0) {
         for (var j = 0; j < takingPieces.length; j++) {
-          if (parseInt(j) === parseInt(this.getKing().id)) continue;
+          if (j == this.getKing().id) continue;
           if (takingIds.has(takingPieces[j])) continue;
           takingIds.add(takingPieces[j]);
           moves.push({id: takingPieces[j], target: threat.pos});
